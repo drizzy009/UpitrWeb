@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">            
-            <button
+            <!-- <button
               type="button"
               class="
                 inline-flex
@@ -85,7 +85,13 @@
                 aria-hidden="true"
               />
               My Activities
-            </button>
+            </button> -->
+            <IconButton label="My Activities">
+              <CalendarIcon
+                class="flex-shrink-0 mr-1.5 h-5 w-5 text-white"
+                aria-hidden="true"
+              />
+            </IconButton>
           </div>
         </div>
       </div>

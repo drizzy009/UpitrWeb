@@ -119,8 +119,8 @@
         <div class="flex-1 items-center flex-shrink-0 px-4">
           <img
             class="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/easywire-logo-cyan-300-mark-white-text.svg"
-            alt="Easywire logo"
+            src="@/assets/images/rainoil-logo.png"
+            alt="rain-oil logo"
           />
         </div>
         <nav
@@ -208,7 +208,7 @@
                       text-gray-900
                       sm:leading-9 sm:truncate
                     ">
-              Manage Vacancies
+              {{appStore.pageTitle}}
             </h1>
           </div>
           <div class="ml-4 flex items-center md:ml-6">
@@ -282,6 +282,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { useAppStore } from "@/stores/app.js";
 import {
   Dialog,
   DialogPanel,
@@ -306,6 +307,8 @@ import {
   OfficeBuildingIcon,
 } from "@heroicons/vue/outline";
 
+
+
 const navigation = [
   { name: "Home", href: "/dashboard", icon: HomeIcon, current: true },
   {
@@ -314,14 +317,16 @@ const navigation = [
     icon: BriefcaseIcon,
     current: false,
   },
-  { name: "Candidates", href: "#", icon: UserGroupIcon, current: false },
+  { name: "Candidates", href: "/candidate/all", icon: UserGroupIcon, current: false },
   { name: "Activities", href: "#", icon: ClockIcon, current: false },
-  { name: "Departments", href: "#", icon: OfficeBuildingIcon, current: false },
+  { name: "Departments", href: "/department/all", icon: OfficeBuildingIcon, current: false },
   { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
 ];
 const secondaryNavigation = [
   { name: "Settings", href: "#", icon: CogIcon },
   { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
 ];
+
+const appStore = useAppStore();
 const sidebarOpen = ref(false);
 </script>

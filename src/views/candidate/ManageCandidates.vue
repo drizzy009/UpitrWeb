@@ -1,6 +1,6 @@
 <template>
   <main class="flex-1 pb-8">
-    <!-- Page header -->
+     <!-- Page header -->
     <div class="bg-white shadow">
       <div class="px-4 sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-8">
         <div
@@ -22,7 +22,7 @@
                   id="search-field"
                   name="search-field"
                   class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
-                  placeholder="Search Vacancies"
+                  placeholder="Search Candidates"
                   type="search"
                 />
               </div>
@@ -33,7 +33,7 @@
           <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
             <button
               type="button"
-              @click="goto('CreateVacancy')"
+              @click="goto('CreateCandidate')"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
@@ -78,202 +78,75 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-<<<<<<< HEAD
-      <div class="
-            align-middle
-            min-w-full
-            overflow-x-auto
-            shadow
-            overflow-hidden
-            sm:rounded-lg
-          ">
+      <div class="flex flex-col mt-2">
+        <div
+          class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
+        >
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
               <tr>
                 <th
                   scope="col"
-                  class="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                >Vacancy</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Type</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Location</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Due Date</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Status</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Level</th>
-                <th
-                  scope="col"
-                  class="relative py-3 pl-3 pr-4 sm:pr-6"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Title
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Role
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <tr
-                v-for="job in jobs"
-                :key="job.id"
-              >
+              <tr v-for="person in people" :key="person.email">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
-                      <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200">
-                        <span class="text-xl font-medium leading-none text-indigo-700">{{ job.position[0] }}</span>
-                      </span>
+                      <img
+                        class="h-10 w-10 rounded-full"
+                        :src="person.image"
+                        alt=""
+                      />
                     </div>
-                    <div class="ml-3">
-                      <div class="font-medium text-gray-900">{{ job.position }}</div>
-                      <div class="text-gray-500">{{ job.department }}</div>
+                    <div class="ml-4">
+                      <div class="font-medium text-gray-900">
+                        {{ person.name }}
+                      </div>
+                      <div class="text-gray-500">{{ person.email }}</div>
                     </div>
                   </div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="text-gray-900"><span class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800">{{ job.type }}</span></div>
+                  <div class="text-gray-900">{{ person.title }}</div>
+                  <div class="text-gray-500">{{ person.department }}</div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                    <LocationMarkerIcon
-                      class="flex-shrink-0 mr-1 w-4 text-gray-400"
-                      aria-hidden="true"
-                    />{{ job.location }}
-=======
-      <div
-        class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
-      >
-        <table class="min-w-full divide-y divide-gray-300">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                class="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                SN
-              </th>
-              <th
-                scope="col"
-                class="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Vacancy
-              </th>
-              <th
-                scope="col"
-                class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-              >
-                Type
-              </th>
-              <th
-                scope="col"
-                class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-              >
-                Location
-              </th>
-              <th
-                scope="col"
-                class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-              >
-                Due Date
-              </th>
-              <th
-                scope="col"
-                class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-              >
-                Status
-              </th>
-              <th
-                scope="col"
-                class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-              >
-                Level
-              </th>
-              <th scope="col" class="relative py-3 pl-3 pr-4 sm:pr-6">
-                <span class="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 bg-white">
-            <tr v-for="job in jobs" :key="job.id">
-              <td
-                class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:pl-6"
-              >
-                {{ job.id }}
-              </td>
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                <div class="flex items-center">
-                  <div class="h-10 w-10 flex-shrink-0">
-                    <span
-                      class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200"
-                    >
-                      <span
-                        class="text-xl font-medium leading-none text-indigo-700"
-                        >{{ job.position[0] }}</span
-                      >
-                    </span>
->>>>>>> f293f6f5d7674755bfd4f6a947f9dde83366302d
-                  </div>
-                  <div class="ml-4">
-                    <div class="font-medium text-gray-900">
-                      {{ job.position }}
-                    </div>
-                    <div class="text-gray-500">{{ job.department }}</div>
-                  </div>
-                </div>
-              </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                <div class="text-gray-900">
                   <span
-                    class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800"
-                    >{{ job.type }}</span
+                    class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
+                    >Active</span
                   >
-                </div>
-              </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                <div
-                  class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
-                >
-                  <LocationMarkerIcon
-                    class="flex-shrink-0 mr-1 w-4 text-gray-400"
-                    aria-hidden="true"
-                  />{{ job.location }}
-                </div>
-              </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                <div
-                  class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
-                >
-                  <CalendarIcon
-                    class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <p>
-                    Closing in
-                    {{ " " }}
-                    <time :datetime="job.duedate">{{ job.deadline }}</time>
-                  </p>
-                </div>
-              </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                <span
-                  class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
-                  >Active</span
-                >
-              </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                {{ job.level }}
-              </td>
-              <td
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  {{ person.role }}
+                </td>
+                <td
                 class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
               >
                 <Menu as="div" class="relative inline-block text-left">
@@ -317,7 +190,7 @@
                         </MenuItem>
                         <MenuItem v-slot="{ active }">
                           <a
-                            href="/vacancy/detail"
+                            href="/candidate/detail"
                             :class="[
                               active
                                 ? 'bg-gray-100 text-gray-900'
@@ -372,51 +245,52 @@
                     </MenuItems>
                   </transition>
                 </Menu>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- Pagination -->
-        <nav
-          class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
-          aria-label="Pagination"
-        >
-          <div class="hidden sm:block">
-            <p class="text-sm text-gray-700">
-              Showing
-              {{ " " }}
-              <span class="font-medium">1</span>
-              {{ " " }}
-              to
-              {{ " " }}
-              <span class="font-medium">10</span>
-              {{ " " }}
-              of
-              {{ " " }}
-              <span class="font-medium">20</span>
-              {{ " " }}
-              results
-            </p>
-          </div>
-          <div class="flex-1 flex justify-between sm:justify-end">
-            <a
-              href="#"
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Previous
-            </a>
-            <a
-              href="#"
-              class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Next
-            </a>
-          </div>
-        </nav>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Pagination -->
+          <nav
+            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+            aria-label="Pagination"
+          >
+            <div class="hidden sm:block">
+              <p class="text-sm text-gray-700">
+                Showing
+                {{ " " }}
+                <span class="font-medium">1</span>
+                {{ " " }}
+                to
+                {{ " " }}
+                <span class="font-medium">10</span>
+                {{ " " }}
+                of
+                {{ " " }}
+                <span class="font-medium">20</span>
+                {{ " " }}
+                results
+              </p>
+            </div>
+            <div class="flex-1 flex justify-between sm:justify-end">
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Previous
+              </a>
+              <a
+                href="#"
+                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Next
+              </a>
+            </div>
+          </nav>
+        </div>
       </div>
     </div>
-  </main>
-  <TransitionRoot as="template" :show="open">
+
+    <TransitionRoot as="template" :show="open">
     <Dialog as="div" class="relative z-10" @close="open = false">
       <div class="fixed inset-0" />
 
@@ -444,7 +318,7 @@
                     <div class="px-4 sm:px-6">
                       <div class="flex items-start justify-between">
                         <DialogTitle class="text-lg font-medium text-gray-900">
-                          Filter Vacancies
+                          Filter Candidates
                         </DialogTitle>
                         <div class="ml-3 flex h-7 items-center">
                           <button
@@ -460,7 +334,7 @@
                     </div>
                     <div class="relative mt-6 flex-1 px-4 sm:px-6">
                       <div class="flex flex-col">
-                        <FormInput placeholder="Search by vacancy name"></FormInput>
+                        <FormInput placeholder="Search by candidate name"></FormInput>
                         
                         <div>
                           <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
@@ -508,23 +382,9 @@
       </div>
     </Dialog>
   </TransitionRoot>
+  </main>
 </template>
 <script setup>
-import {
-  CalendarIcon,
-  LocationMarkerIcon,
-  PlusCircleIcon,
-  RefreshIcon,
-  FilterIcon,
-  DownloadIcon,
-  DuplicateIcon,
-  PencilAltIcon,
-  TrashIcon,
-  SearchIcon,
-} from "@heroicons/vue/solid";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { DotsVerticalIcon, ClipboardListIcon } from "@heroicons/vue/solid";
 import {
   Dialog,
   DialogPanel,
@@ -536,45 +396,53 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
+import {
+  CalendarIcon,
+  LocationMarkerIcon,
+  PlusCircleIcon,
+  RefreshIcon,
+  FilterIcon,
+  DownloadIcon,
+  DuplicateIcon,
+  PencilAltIcon,
+  TrashIcon,
+  SearchIcon,
+  DotsVerticalIcon,
+  ClipboardListIcon
+} from "@heroicons/vue/solid";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { XIcon } from "@heroicons/vue/outline";
-
-const open = ref(false);
-
-const jobs = [
+const people = [
   {
-    position: "Fullstack Developer",
-    department: "Engineering Department",
-    code: "ROV-001",
-    level: "Senior Developer",
-    duedate: "2020-01-07",
-    deadline: "5 Days",
-    location: "Lagos",
-    type: "Full time",
-    id: 1,
+    name: "Lindsay Walton",
+    title: "Front-end Developer",
+    department: "Optimization",
+    email: "lindsay.walton@example.com",
+    role: "Member",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    position: "Frontend Developer",
-    department: "Engineering Department",
-    code: "ROV-002",
-    level: "Senior Developer",
-    duedate: "2020-01-07",
-    deadline: "5 Days",
-    location: "Lagos",
-    type: "Full time",
-    id: 2,
+    name: "Lindsay Walton",
+    title: "Front-end Developer",
+    department: "Optimization",
+    email: "lindsay.walton@example.com",
+    role: "Member",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    position: "Backend Developer",
-    department: "Engineering Department",
-    code: "ROV-003",
-    level: "Senior Developer",
-    duedate: "2020-01-07",
-    deadline: "5 Days",
-    location: "Remote",
-    type: "Full time",
-    id: 3,
+    name: "Lindsay Walton",
+    title: "Front-end Developer",
+    department: "Optimization",
+    email: "lindsay.walton@example.com",
+    role: "Member",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
 ];
+const open = ref(false);
 const router = useRouter();
 
 function goto(name) {

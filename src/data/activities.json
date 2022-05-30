@@ -1,0 +1,56 @@
+[
+    {
+      "title": "General Meeting",
+      "type": "Call",
+      "relatedTo": "Management Meeting",
+      "date": "24/10/2022",
+      "time": "12:19 PM",
+      "attendees": "Ade, Seyi, Ola",
+      "assignees": "John Doe"
+    },
+    {
+      "title": "Job Interview",
+      "type": "Interview",
+      "relatedTo": "Accountant Candidate",
+      "date": "02/10/2021",
+      "time": "6:01 PM",
+      "attendees": "Don Jon",
+      "assignees": "Dayo Dayo"
+    },
+    {
+      "title": "Prepare Account Record",
+      "type": "Task",
+      "relatedTo": "Task",
+      "date": "28/01/2022",
+      "time": "4:48 AM",
+      "attendees": "",
+      "assignees": "Manager"
+    },
+    {
+      "title": "Job Interview",
+      "type": "Interview",
+      "relatedTo": "Accountant Candidate",
+      "date": "02/10/2021",
+      "time": "6:01 PM",
+      "attendees": "Don Jon",
+      "assignees": "Dayo Dayo"
+    },
+    {
+      "title": "General Meeting",
+      "type": "Call",
+      "relatedTo": "Management Meeting",
+      "date": "24/10/2022",
+      "time": "12:19 PM",
+      "attendees": "Ade, Seyi, Ola",
+      "assignees": "John Doe"
+    },
+    {
+      "title": "Reminder Email",
+      "type": "Task",
+      "relatedTo": "Reminder Email",
+      "date": "05/01/2022",
+      "time": "4:16 PM",
+      "assignees": "CEO"
+    }
+  ]
+  
