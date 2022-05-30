@@ -106,10 +106,6 @@
                 <th
                   scope="col"
                   class="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                >SN</th>
-                <th
-                  scope="col"
-                  class="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >Vacancy</th>
                 <th
                   scope="col"
@@ -144,9 +140,6 @@
                 v-for="job in jobs"
                 :key="job.id"
               >
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:pl-6">
-                  {{ job.id }}
-                </td>
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
@@ -154,7 +147,7 @@
                         <span class="text-xl font-medium leading-none text-indigo-700">{{ job.position[0] }}</span>
                       </span>
                     </div>
-                    <div class="ml-4">
+                    <div class="ml-3">
                       <div class="font-medium text-gray-900">{{ job.position }}</div>
                       <div class="text-gray-500">{{ job.department }}</div>
                     </div>

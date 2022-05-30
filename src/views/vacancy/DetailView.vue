@@ -2,7 +2,7 @@
   <header class="bg-gray-100 pt-3">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between">
       <div class="flex-1 min-w-0">
-        <h1 class="mt-2 text-xl font-bold leading-7 text-gray-900 sm:text-xl sm:truncate">Back End Developer</h1>
+        <h1 class="mt-2 text-xl font-medium leading-7 uppercase text-gray-700 sm:text-xl sm:truncate">Back End Developer</h1>
         <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-8">
           <div class="mt-2 flex items-center text-sm text-gray-500">
             <BriefcaseIcon

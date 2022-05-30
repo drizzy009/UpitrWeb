@@ -26,7 +26,7 @@
                   <h1 class="
                       ml-3
                       text-2xl
-                      font-bold
+                      font-medium
                       leading-7
                       text-gray-900
                       sm:leading-9 sm:truncate
@@ -53,22 +53,6 @@
                       aria-hidden="true"
                     />
                     Duke street studio
-                  </dd>
-                  <dt class="sr-only">Account status</dt>
-                  <dd class="
-                      mt-3
-                      flex
-                      items-center
-                      text-sm text-gray-500
-                      font-medium
-                      sm:mr-6 sm:mt-0
-                      capitalize
-                    ">
-                    <CheckCircleIcon
-                      class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                      aria-hidden="true"
-                    />
-                    Verified account
                   </dd>
                 </dl>
               </div>
@@ -110,30 +94,30 @@
     <div class="mt-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-lg leading-6 font-medium text-gray-900">Overview</h2>
-        <div class="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Card -->
           <div
             v-for="card in cards"
             :key="card.name"
-            class="bg-white overflow-hidden shadow rounded-lg"
+            class="bg-white overflow-hidden shadow-lg rounded-xl"
           >
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
                   <component
                     :is="card.icon"
-                    class="h-6 w-6 text-gray-400"
+                    class="h-10 w-10 text-indigo-400"
                     aria-hidden="true"
                   />
                 </div>
                 <div class="ml-5 w-0 flex-1">
                   <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">
+                    <dt class="text-sm font-regular text-gray-500 text-right truncate">
                       {{ card.name }}
                     </dt>
                     <dd>
-                      <div class="text-lg font-medium text-gray-900">
-                        {{ card.amount }}
+                      <div class="font-medium text-gray-900">
+                        <h2 class="text-2xl text-right">{{ card.amount }}</h2>
                       </div>
                     </dd>
                   </dl>
@@ -141,12 +125,16 @@
               </div>
             </div>
             <div class="bg-gray-50 px-5 py-3">
-              <div class="text-sm">
+              <div class="text-sm flex justify-end">
                 <a
                   :href="card.href"
-                  class="font-medium text-indigo-700 hover:text-indigo-900"
+                  class="inline-flex items-center font-medium pl-2 pr-1 bg-indigo-500 text-white rounded-xl hover:bg-indigo-400"
                 >
                   View all
+                  <ChevronRightIcon
+                      class="flex-shrink-0 h-3 w-3 text-white"
+                      aria-hidden="true"
+                    />
                 </a>
               </div>
             </div>
@@ -170,7 +158,7 @@
 
       <div class="hidden sm:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex flex-col mt-2">
+          <div class="flex flex-col mt-4">
             <div class="
                 bg-white 
                 align-middle
@@ -210,7 +198,7 @@
                           <div>
                             <p class="
                                 text-sm
-                                text-indigo-600
+                                text-gray-600
                                 truncate
                                 font-semibold
                               ">
@@ -299,7 +287,7 @@
 
       <div class="hidden sm:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="bg-white mt-2 shadow overflow-hidden sm:rounded-md ">
+          <div class="bg-white mt-4 shadow overflow-hidden sm:rounded-md ">
             <ul
               role="list"
               class="divide-y divide-gray-200"
@@ -316,7 +304,7 @@
                     <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                       <div class="truncate">
                         <div class="flex text-sm">
-                          <p class="font-semibold text-indigo-600 truncate">{{ position.title }}</p>
+                          <p class="font-semibold text-gray-600 truncate">{{ position.title }}</p>
                           <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ position.department }}</p>
                         </div>
                         <div class="mt-2 flex">
@@ -365,14 +353,14 @@
 </template>
 <script setup>
 import {} from "@headlessui/vue";
-import {} from "@heroicons/vue/outline";
 import {
   BriefcaseIcon,
   CheckCircleIcon,
   ChevronRightIcon,
   OfficeBuildingIcon,
   UserGroupIcon,
-  CalendarIcon,
+  CalendarIcon} from "@heroicons/vue/outline";
+import {
 } from "@heroicons/vue/solid";
 
 const cards = [
