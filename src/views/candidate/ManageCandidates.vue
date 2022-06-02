@@ -334,7 +334,7 @@
                     </div>
                     <div class="relative mt-6 flex-1 px-4 sm:px-6">
                       <div class="flex flex-col">
-                        <FormInput placeholder="Search by candidate name"></FormInput>
+                        <FormInput placeholder="Search by keyword"></FormInput>
                         
                         <div>
                           <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">

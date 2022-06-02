@@ -1,7 +1,10 @@
 <template>
   <main class="flex-1 pb-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-      <nav aria-label="Progress" class="bg-white">
+      <nav
+        aria-label="Progress"
+        class="bg-white"
+      >
         <ol
           role="list"
           class="border border-gray-300 rounded-md divide-y divide-gray-300 md:flex md:divide-y-0"
@@ -18,10 +21,11 @@
               class="group flex items-center w-full"
             >
               <span class="px-6 py-4 flex items-center text-sm font-medium">
-                <span
-                  class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800"
-                >
-                  <CheckIcon class="w-6 h-6 text-white" aria-hidden="true" />
+                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800">
+                  <CheckIcon
+                    class="w-6 h-6 text-white"
+                    aria-hidden="true"
+                  />
                 </span>
                 <span class="ml-4 text-sm font-medium text-gray-900">{{
                   step.name
@@ -34,28 +38,25 @@
               class="px-6 py-4 flex items-center text-sm font-medium"
               aria-current="step"
             >
-              <span
-                class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full"
-              >
+              <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full">
                 <span class="text-indigo-600">{{ step.id }}</span>
               </span>
               <span class="ml-4 text-sm font-medium text-indigo-600">{{
                 step.name
               }}</span>
             </a>
-            <a v-else :href="step.href" class="group flex items-center">
+            <a
+              v-else
+              :href="step.href"
+              class="group flex items-center"
+            >
               <span class="px-6 py-4 flex items-center text-sm font-medium">
-                <span
-                  class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full group-hover:border-gray-400"
-                >
+                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full group-hover:border-gray-400">
                   <span class="text-gray-500 group-hover:text-gray-900">{{
                     step.id
                   }}</span>
                 </span>
-                <span
-                  class="ml-4 text-sm font-medium text-gray-500 group-hover:text-gray-900"
-                  >{{ step.name }}</span
-                >
+                <span class="ml-4 text-sm font-medium text-gray-500 group-hover:text-gray-900">{{ step.name }}</span>
               </span>
             </a>
             <template v-if="stepIdx !== steps.length - 1">
@@ -85,254 +86,481 @@
 
       <div
         v-if="stepNo === 0"
-        class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
+        class="space-y-8 divide-y divide-gray-200 pt-6 pl-4 rounded-md border-0"
       >
-        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-          <!-- Job title and department -->
-          <div>
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Job title and Department details
-              </h3>
-              <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p> -->
-            </div>
-
-            <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-              >
-                <label
-                  for="jobtitle"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Job Title
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <div class="max-w-lg flex rounded-md shadow-sm">
-                    <FormInput
-                      type="text"
-                      id="jobtitle"
-                      name="jobtitle"
-                      class="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    ></FormInput>
-                  </div>
-                </div>
+        <div class="mt-10 sm:mt-0">
+          <div class="md:grid md:grid-cols-3 md:gap-6">
+            <div class="md:col-span-1">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">Vacancy Title</h3>
+                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+                <p class="mt-1 text-xs text-gray-500">This information will be displayed publicly so be careful what you share.</p>
+                <p class="mt-4 text-xs text-gray-500">Use common job titles for searchability</p>
+                <p class="mt-4 text-xs text-gray-500">Advertise for just one job eg: Project Manager, not Project Manangers</p>
+                <p class="mt-4 text-xs text-gray-500">No general opportunities or events</p>
               </div>
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
+            </div>
+            <div class="mt-5 md:mt-0 md:col-span-2">
+              <form
+                action="#"
+                method="POST"
               >
-                <label
-                  for="department"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >Department</label
-                >
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <div class="max-w-lg flex rounded-md shadow-sm">
-                    <SelectInput
-                      :items="[
-                        { name: 'Account', id: 'account' },
-                        { name: 'Human Resources', id: 'hr' },
+                <div class="shadow sm:rounded-md sm:overflow-hidden">
+                  <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                    <div class="grid grid-cols-6 gap-6">
+                      <div class="col-span-6 sm:col-span-6">
+                        <label
+                          for="job-title"
+                          class="block text-sm font-medium text-gray-700"
+                        >Title</label>
+                        <input
+                          type="text"
+                          name="job-title"
+                          id="first-name"
+                          autocomplete="job-title"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-3">
+                        <label
+                          for="first-name"
+                          class="block text-sm font-medium text-gray-700"
+                        >Select Department</label>
+                        <SelectInput
+                          :items="[
+                        { name: 'Account', id: 1 },
+                        { name: 'Human Resources', id: 2 },
+                        { name: 'Marketing', id: 3 },
+                        { name: 'Sales', id: 4 },
+                        { name: 'Support', id: 5 },
                       ]"
-                      id="department"
-                      name="department"
-                    ></SelectInput>
+                          id="department"
+                          name="department"
+                          class="mt-1"
+                        ></SelectInput>
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-3">
+                        <label
+                          for="last-name"
+                          class="block text-sm font-medium text-gray-700"
+                        >Internal Code</label>
+                        <input
+                          type="text"
+                          name="last-name"
+                          id="last-name"
+                          autocomplete="family-name"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+       
+        <div class="mt-10 sm:mt-0">
+          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+            <div class="md:col-span-1">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">Location Information</h3>
+                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+                <p class="mt-1 text-xs text-gray-500">Use a specific, full location to attract the most candidates</p>
+              </div>
+            </div>
+            <div class="mt-5 md:mt-0 md:col-span-2">
+              <form
+                action="#"
+                method="POST"
+              >
+                <div class="shadow overflow-hidden sm:rounded-md">
+                  <div class="px-4 py-5 bg-white sm:p-6">
+                    <div class="grid grid-cols-6 gap-6">
+                      
+                      <div class="col-span-6 sm:col-span-6">
+                        <label
+                          for="country"
+                          class="block text-sm font-medium text-gray-700"
+                        >Country</label>
+                        <select
+                          id="country"
+                          name="country"
+                          autocomplete="country-name"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Nigeria</option>
+                          <option>Ghana</option>
+                          <option>Togo</option>
+                        </select>
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label
+                          for="city"
+                          class="block text-sm font-medium text-gray-700"
+                        >State</label>
+                        <select
+                          id="country"
+                          name="country"
+                          autocomplete="country-name"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Lagos</option>
+                          <option>Abuja</option>
+                          <option>Ogun</option>
+                          <option>Delta</option>
+                        </select>
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                        <label
+                          for="region"
+                          class="block text-sm font-medium text-gray-700"
+                        >City </label>
+                        
+                        <select
+                          id="country"
+                          name="country"
+                          autocomplete="country-name"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Victoria Island</option>
+                          <option>Asaba</option>
+                          <option>Ogara</option>
+                          <option>Delta</option>
+                        </select>
+                      </div>
+
+                      <div class="col-span-6">
+                        <label
+                          for="street-address"
+                          class="block text-sm font-medium text-gray-700"
+                        >Street address</label>
+                        <input
+                          type="text"
+                          name="street-address"
+                          id="street-address"
+                          autocomplete="street-address"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                    <div class="flex items-start mt-6">
+                      <div class="flex items-center h-5">
+                        <input
+                          id="comments"
+                          name="comments"
+                          type="checkbox"
+                          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
+                      </div>
+                      <div class="ml-3 text-sm">
+                        <label
+                          for="comments"
+                          class="font-medium text-gray-700"
+                        >JOB IS FULLY REMOTE</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                    
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
+        </div>
 
-          <!-- Location -->
-          <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Location
-              </h3>
+        <div class="mt-10 sm:mt-0">
+          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+            <div class="md:col-span-1">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">Job Description</h3>
+                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+                <p class="mt-1 text-xs text-gray-500">Format into sections and lists to improve readability</p>
+                <p class="mt-4 text-xs text-gray-500">Avoid targeting specific demographics e.g. gender, nationality and age</p>
+                <p class="mt-4 text-xs text-gray-500">No need to add a link to apply (one is added automatically)</p>
+              </div>
             </div>
-            <div class="space-y-6 sm:space-y-5">
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+            <div class="mt-5 md:mt-0 md:col-span-2">
+              <form
+                action="#"
+                method="POST"
               >
-                <label
-                  for="country"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Country
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <SelectInput
-                    v-model="selectedCountry"
-                    :items="countries"
-                  ></SelectInput>
-                </div>
-              </div>
+                <div class="shadow overflow-hidden sm:rounded-md">
+                  <div class="px-4 py-0 bg-white sm:p-6">
+                    <div>
+                      <label for="about" class="block text-sm font-medium text-gray-700"> Description </label>
+                      <div class="mt-1">
+                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" />
+                      </div>
+                    </div>
 
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
-              >
-                <label
-                  for="city"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  City
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <input
-                    id="city"
-                    name="city"
-                    type="text"
-                    class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
-                  />
+                    <div class="mt-6">
+                      <label for="about" class="block text-sm font-medium text-gray-700"> Responsibilities </label>
+                      <div class="mt-1">
+                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" />
+                      </div>
+                    </div>
+
+                    <div class="mt-6">
+                      <label for="about" class="block text-sm font-medium text-gray-700"> Requirements </label>
+                      <div class="mt-1">
+                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" />
+                      </div>
+                    </div>
+
+                    <div class="mt-6">
+                      <label for="about" class="block text-sm font-medium text-gray-700"> Benefits </label>
+                      <div class="mt-1">
+                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                    
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
+        </div>
 
-          <!-- Job Description -->
-          <div
-            class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
-          >
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Job Description
-              </h3>
-              <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">We'll always let you know about important changes, but you pick what else you want to hear about.</p> -->
-            </div>
-            <div class="space-y-6 sm:space-y-5">
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-              >
-                <label
-                  for="description"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Description
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <TextArea cols="4"></TextArea>
-                  <!-- <ckeditor :config="editorConfig"></ckeditor> -->
-                </div>
+        <div class="mt-10 sm:mt-0">
+          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+            <div class="md:col-span-1">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">Employment Information</h3>
+                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+                <p class="mt-1 text-xs text-gray-500">Include as many details as possible to boost the job’s performance on some job boards</p>
+                <p class="mt-4 text-xs text-gray-500">Include as many keywords as possible to increase searchability</p>
               </div>
+            </div>
+            <div class="mt-5 md:mt-0 md:col-span-2">
+              <form
+                action="#"
+                method="POST"
+              >
+                <div class="shadow overflow-hidden sm:rounded-md">
+                  <div class="px-4 py-5 bg-white sm:p-6">
+                    <div class="grid grid-cols-6 gap-6">
+                      
+                      <div class="col-span-6 sm:col-span-3">
+                        <label
+                          for="country"
+                          class="block text-sm font-medium text-gray-700"
+                        >Job Function</label>
+                        <select
+                          id="job-function"
+                          name="job-function"
+                          autocomplete="job-function"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Product Management</option>
+                          <option>Project Management</option>
+                          <option>Facility Manager</option>
+                        </select>
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label
+                          for="city"
+                          class="block text-sm font-medium text-gray-700"
+                        >Employment Type</label>
+                        <select
+                          id="employment-type"
+                          name="employment-type"
+                          autocomplete="employment-type"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Full-time</option>
+                          <option>Part-time</option>
+                          <option>Contract</option>
+                          <option>Temporary</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                        <label
+                          for="region"
+                          class="block text-sm font-medium text-gray-700"
+                        >Experience </label>
+                        
+                        <select
+                          id="experience"
+                          name="experience"
+                          autocomplete="experience"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Not Applicable</option>
+                          <option>Internship</option>
+                          <option>Entry Level</option>
+                          <option>Associate</option>
+                          <option>Mid Level</option>
+                        </select>
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                        <label
+                          for="region"
+                          class="block text-sm font-medium text-gray-700"
+                        >Education </label>
+                        
+                        <select
+                          id="experience"
+                          name="experience"
+                          autocomplete="experience"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Not Applicable</option>
+                          <option>High School</option>
+                          <option>Certification</option>
+                          <option>Vocational</option>
+                          <option>Associate Degree</option>
+                        </select>
+                      </div>
+                      
+                      <div class="col-span-6">
+                        <label
+                          for="street-address"
+                          class="block text-sm font-medium text-gray-700"
+                        >Keywords</label>
+                        <input
+                          type="text"
+                          name="keywords"
+                          id="keywords"
+                          autocomplete="keywords"
+                          placeholder="Keywords are comma separated"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                    
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-          
-          <!-- Job Function -->
-          <div
-            class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
-          >
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Job Function
-              </h3>
-              <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">We'll always let you know about important changes, but you pick what else you want to hear about.</p> -->
-            </div>
-            <div class="space-y-6 sm:space-y-5">
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-              >
-                <label
-                  for="jobfunction"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Select Job Function
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <SelectInput id="jobfunction"></SelectInput>
-                </div>
+        </div>
+
+        <div class="mt-10 sm:mt-0">
+          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+            <div class="md:col-span-1">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">Salary Information</h3>
+                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+                <p class="mt-1 text-xs text-gray-500">Adding the salary here will improve performance on some job boards. You can also include the salary in the job description</p>
               </div>
+            </div>
+            <div class="mt-5 md:mt-0 md:col-span-2">
+              <form
+                action="#"
+                method="POST"
+              >
+                <div class="shadow overflow-hidden sm:rounded-md">
+                  <div class="px-4 py-5 bg-white sm:p-6">
+                    <div class="grid grid-cols-6 gap-6">
+                      
+                      <div class="col-span-6 sm:col-span-3">
+                        <label
+                          for="min-offer"
+                          class="block text-sm font-medium text-gray-700"
+                        >Minimum Offer</label>
+                         <input
+                          type="number"
+                          name="min-offer"
+                          id="min-offer"
+                          autocomplete="min-offer"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label
+                          for="max-offer"
+                          class="block text-sm font-medium text-gray-700"
+                        >Maximum Offer</label>
+                        <input
+                          type="number"
+                          name="max-offer"
+                          id="max-offer"
+                          autocomplete="max-offer"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+
+                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                        <label
+                          for="currency"
+                          class="block text-sm font-medium text-gray-700"
+                        >Currency </label>
+                        
+                        <select
+                          id="currency"
+                          name="currency"
+                          autocomplete="currency"
+                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                          <option>Naira</option>
+                          <option>US Dollars</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                    
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
+        </div>
 
-          <!-- Employment Details -->
-          <div
-            class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
-          >
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Employment Details
-              </h3>
-              <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">We'll always let you know about important changes, but you pick what else you want to hear about.</p> -->
-            </div>
-            <div class="space-y-6 sm:space-y-5">
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-              >
-                <label
-                  for="empType"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Employment Type
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <SelectInput id="empType"></SelectInput>
-                </div>
-              </div>
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
-              >
-                <label
-                  for="experience"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Experience
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <SelectInput id="experience"></SelectInput>
-                </div>
-              </div>
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
-              >
-                <label
-                  for="education"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Education
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <SelectInput id="education"></SelectInput>
-                </div>
+        <div class="mt-10 sm:mt-0">
+          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+            <div class="md:col-span-1">
+              <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">Application Deadline</h3>
+                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+                <p class="mt-1 text-xs text-gray-500">Adding a deadline will automatically close applications on the set date</p>
               </div>
             </div>
-          </div>
-
-          <!-- Annual Salary -->
-          <div
-            class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
-          >
-            <div>
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Annual Salary
-              </h3>
-              <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">We'll always let you know about important changes, but you pick what else you want to hear about.</p> -->
-            </div>
-            <div class="space-y-6 sm:space-y-5">
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+            <div class="mt-5 md:mt-0 md:col-span-2">
+              <form
+                action="#"
+                method="POST"
               >
-                <label
-                  for="startSalary"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  From
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <FormInput id="startSalary"></FormInput>
+                <div class="shadow overflow-hidden sm:rounded-md">
+                  <div class="px-4 py-5 bg-white sm:p-6">
+                    <div class="grid grid-cols-6 gap-6">
+                      
+                      <div class="col-span-6 sm:col-span-6">
+                        <label
+                          for="min-offer"
+                          class="block text-sm font-medium text-gray-700"
+                        >Deadline</label>
+                         <input
+                          type="date"
+                          name="min-offer"
+                          id="min-offer"
+                          autocomplete="min-offer"
+                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                    
+                  </div>
                 </div>
-              </div>
-              <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
-              >
-                <label
-                  for="toSalary"
-                  class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  To
-                </label>
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <FormInput id="toSalary"></FormInput>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -353,7 +581,11 @@
         </div>
       </div>
 
-      <ApplicationFormView @prevPage="gotoPage(0)" @nextPage="gotoPage(2)" v-if="stepNo === 1"></ApplicationFormView>
+      <ApplicationFormView
+        @prevPage="gotoPage(0)"
+        @nextPage="gotoPage(2)"
+        v-if="stepNo === 1"
+      ></ApplicationFormView>
       <div
         v-if="stepNo === 2"
         class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
@@ -371,8 +603,6 @@ import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
 import { CheckIcon } from "@heroicons/vue/solid";
 
-const selectedCountry = ref({});
-
 const steps = [
   { id: 0, name: "Job details", href: "#", status: "current" },
   { id: 1, name: "Application form", href: "#", status: "upcoming" },
@@ -381,46 +611,17 @@ const steps = [
 
 const stepNo = ref(0);
 
-const countries = [
-  { id: "01", name: "Nigeria" },
-  { id: "02", name: "Ghana" },
-  { id: "03", name: "South Africa" },
-];
-
-const people = [
-  { id: 1, name: "Wade Cooper" },
-  { id: 2, name: "Arlene Mccoy" },
-  { id: 3, name: "Devon Webb" },
-  { id: 4, name: "Tom Cook" },
-  { id: 5, name: "Tanya Fox" },
-  { id: 6, name: "Hellen Schmidt" },
-];
-
-const editorConfig = {
-  toolbar: [
-    [
-      "Format",
-      "Bold",
-      "Italic",
-      "BulletedList",
-      "NumberedList",
-      "Link",
-      "Maximize",
-    ],
-  ],
-};
-
 function gotoPage(value) {
   stepNo.value = value;
-  steps[value].status = 'current';
+  steps[value].status = "current";
   if (value > 0) {
-    steps[value - 1].status = 'complete';
-    steps[value + 1].status = 'upcoming';
+    steps[value - 1].status = "complete";
+    steps[value + 1].status = "upcoming";
   }
 
   if (value === 0) {
-    steps[1].status = 'upcoming';
-    steps[2].status = 'upcoming';
+    steps[1].status = "upcoming";
+    steps[2].status = "upcoming";
   }
 }
 </script>

@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="
+  <div class="
       space-y-8
       divide-y divide-gray-200
       bg-white
@@ -8,9 +7,11 @@
       mt-4
       rounded-md
       border border-gray-300
-    "
-  >
-    <div v-for="section in data" :key="section.sectionName">
+    ">
+    <div
+      v-for="section in data"
+      :key="section.sectionName"
+    >
       <div>
         <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2 mt-4">
           {{ section.sectionName }}
@@ -34,10 +35,12 @@
           <label
             for="names"
             class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-            >{{ item.name }}</label
-          >
+          >{{ item.name }}</label>
           <div class="mt-1 sm:mt-0 sm:col-span-2">
-            <RadioGroup v-model="selected" class="mt-2">
+            <RadioGroup
+              v-model="item.model"
+              class="mt-2"
+            >
               <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
                 <RadioGroupOption
                   as="template"
@@ -46,16 +49,14 @@
                   :value="option"
                   v-slot="{ active, checked }"
                 >
-                  <div
-                    :class="[
+                  <div :class="[
                       'cursor-pointer focus:outline-none',
                       active ? 'ring-2 ring-offset-2 ring-green-500' : '',
                       checked
                         ? 'bg-green-400 border-transparent text-white hover:bg-green-500'
                         : 'bg-[#E1E6EB] border-gray-200 text-gray-900 hover:bg-gray-50',
                       'border rounded-full py-1 px-1 flex items-center justify-center text-sm font-medium sm:flex-1',
-                    ]"
-                  >
+                    ]">
                     <RadioGroupLabel as="span">
                       {{ option.optionName }}
                     </RadioGroupLabel>
@@ -68,47 +69,118 @@
       </div>
     </div>
     <div>
-      <h3 class="text-lg leading-6 font-medium text-gray-900 mb-2 mt-4">
-        Other Question
-      </h3>
+      <div class="pb-6">
+        <h3 class="text-xl leading-6 font-bold text-gray-900 mb-2 mt-4">
+          Other Questions
+        </h3>
+        <div v-if="questions.length > 0">
+          <div
+            v-for="q in questions"
+            :key="q.question"
+            :value="q.questionType"
+            class="shadow rounded-lg p-4 mb-4 border border-gray-300"
+          >
+            <h3 class="font-bold">{{ q.questionType }}</h3>
+            <p>{{ q.question }}</p>
+          </div>
+
+        </div>
+        <hr class="mt-12">
+      </div>
+      <div
+        class="mt-10 sm:mt-0"
+        v-if="questionPanel == true"
+      >
+        <div class="md:grid md:grid-cols-3 md:gap-6 pt-8 mb-4">
+          <div class="mt-5 md:mt-0 md:col-span-2">
+            <form>
+              <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="px-4 py-5 bg-gray-100 sm:p-6 shadow">
+                  <div class="grid grid-cols-6 gap-6">
+
+                    <div class="col-span-6 sm:col-span-6">
+                      <label
+                        for="question-type"
+                        class="block text-sm font-medium text-gray-700"
+                      >Question Type</label>
+                      <select
+                        id="question-type"
+                        name="question-type"
+                        v-model="questionType"
+                        autocomplete="question-type"
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      >
+                        <option>Paragraph</option>
+                        <option>Short Answer</option>
+                        <option>Yes/No</option>
+                        <option>Dropdown</option>
+                        <option>Multiple Choice</option>
+                        <option>Date</option>
+                        <option>Number</option>
+                      </select>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6">
+                      <label
+                        for="question"
+                        class="block text-sm font-medium text-gray-700"
+                      >Question</label>
+                      <div class="mt-1">
+                        <textarea
+                          id="question"
+                          v-model="question"
+                          name="question"
+                          rows="5"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          placeholder="List job responsibilities"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-4 py-3 bg-gray-100 text-right sm:px-6">
+                  <span
+                    @click="addQuestion()"
+                    class="inline-flex cursor-pointer justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-500 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 sm:text-sm sm:leading-5"
+                  >
+                    Add Question
+                  </span>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="space-y-6 sm:space-y-5">
-        <div
+        <button
+          v-if="questionPanel == false"
+          type="button"
           class="
-            sm:grid
-            sm:grid-cols-3
-            sm:gap-4
-            sm:items-start
-            sm:border-t
-            sm:border-gray-200
-            sm:pt-5
-          "
-        >
-          <button
-            type="button"
-            class="
               inline-flex
-              border border-transparent
+              border-0 
               shadow-sm
               text-sm
               leading-4
               font-medium
-              rounded-md
-              text-indigo-700
+              rounded
+              text-indigo-700 px-4 py-3
+              bg-indigo-300
               focus:outline-none
             "
-            @click="addQuestion"
-          >
-            <PlusSmIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-            Add a question or Use requirements as questions
-          </button>
-        </div>
+          @click="questionPanel == true ? questionPanel = false : questionPanel = true"
+        >
+          <PlusSmIcon
+            class="-ml-0.5 mr-2 h-4 w-4"
+            aria-hidden="true"
+          />
+          ADD MORE QUESTIONS
+        </button>
       </div>
     </div>
     <div class="pt-5">
       <div class="flex justify-end">
         <CancelButton
           label="Previous"
-           @click="$emit('prevPage')"
+          @click="$emit('prevPage')"
           class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         ></CancelButton>
         <AppButton
@@ -127,11 +199,22 @@ import applicationData from "../../data/applicationForm";
 import { PlusSmIcon } from "@heroicons/vue/solid";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 
-const selected = ref();
 const data = ref(applicationData);
+const questionPanel = ref(false);
+
+var questions = ref([]);
+
+var question = ref("");
+var questionType = ref("");
 
 function addQuestion() {
-    
+  //alert("add question");
+  var currentQuestion = {
+    question: question.value,
+    questionType: questionType.value,
+  };
+  questions.value.push(currentQuestion);
+  questionPanel.value == true ? questionPanel.value = false : questionPanel.value = true 
 }
 </script>
 

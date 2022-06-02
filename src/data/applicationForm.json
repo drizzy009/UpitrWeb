@@ -4,6 +4,7 @@
         "fields": [
             {
                 "name": "Name",
+                "model": "name",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -12,6 +13,7 @@
             },
             {
                 "name": "Email",
+                "model": "email",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -20,6 +22,7 @@
             },
             {
                 "name": "Headline",
+                "model": "headline",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -34,6 +37,7 @@
             },
             {
                 "name": "Phone",
+                "model": "phone",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -47,7 +51,8 @@
                 ]
             },
             {
-                "name": "Address",
+                "name": "Address",                
+                "model": "address",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -61,7 +66,8 @@
                 ]
             },
             {
-                "name": "Photo",
+                "name": "Photo",             
+                "model": "photo",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -80,7 +86,8 @@
         "sectionName": "Profile",
         "fields": [
             {
-                "name": "Education",
+                "name": "Education",                             
+                "model": "education",
                 "options": [
                     {
                         "optionName": "Optional"
@@ -91,7 +98,8 @@
                 ]
             },
             {
-                "name": "Experience",
+                "name": "Experience",             
+                "model": "experience",
                 "options": [
                     {
                         "optionName": "Optional"
@@ -102,7 +110,8 @@
                 ]
             },
             {
-                "name": "Summary",
+                "name": "Summary",             
+                "model": "summary",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -121,7 +130,8 @@
         "sectionName": "Details",
         "fields": [
             {
-                "name": "Cover Letter",
+                "name": "Cover Letter",                             
+                "model": "coverLetter",
                 "options": [
                     {
                         "optionName": "Mandatory"
