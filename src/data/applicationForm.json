@@ -1,0 +1,139 @@
+[
+    {
+        "sectionName": "Personal Information",
+        "fields": [
+            {
+                "name": "Name",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    }
+                ]
+            },
+            {
+                "name": "Email",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    }
+                ]
+            },
+            {
+                "name": "Headline",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            },
+            {
+                "name": "Phone",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            },
+            {
+                "name": "Address",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            },
+            {
+                "name": "Photo",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "sectionName": "Profile",
+        "fields": [
+            {
+                "name": "Education",
+                "options": [
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            },
+            {
+                "name": "Experience",
+                "options": [
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            },
+            {
+                "name": "Summary",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "sectionName": "Details",
+        "fields": [
+            {
+                "name": "Cover Letter",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            }
+        ]
+    }
+]
