@@ -10,6 +10,7 @@
             v-for="(step, stepIdx) in steps"
             :key="step.name"
             class="relative md:flex-1 md:flex"
+            @click="navigate(step)"
           >
             <a
               v-if="step.status === 'complete'"
@@ -82,10 +83,12 @@
         </ol>
       </nav>
 
-      <form
+      <div
+        v-if="stepNo === 0"
         class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
       >
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <!-- Job title and department -->
           <div>
             <div>
               <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -116,7 +119,7 @@
                 </div>
               </div>
               <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
               >
                 <label
                   for="department"
@@ -139,6 +142,7 @@
             </div>
           </div>
 
+          <!-- Location -->
           <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
             <div>
               <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -164,7 +168,7 @@
               </div>
 
               <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
               >
                 <label
                   for="city"
@@ -184,6 +188,7 @@
             </div>
           </div>
 
+          <!-- Job Description -->
           <div
             class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
           >
@@ -211,6 +216,7 @@
             </div>
           </div>
           
+          <!-- Job Function -->
           <div
             class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
           >
@@ -237,6 +243,7 @@
             </div>
           </div>
 
+          <!-- Employment Details -->
           <div
             class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
           >
@@ -261,7 +268,7 @@
                 </div>
               </div>
               <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
               >
                 <label
                   for="experience"
@@ -274,7 +281,7 @@
                 </div>
               </div>
               <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
               >
                 <label
                   for="education"
@@ -289,6 +296,7 @@
             </div>
           </div>
 
+          <!-- Annual Salary -->
           <div
             class="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5"
           >
@@ -313,7 +321,7 @@
                 </div>
               </div>
               <div
-                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5"
               >
                 <label
                   for="toSalary"
@@ -337,26 +345,41 @@
             ></CancelButton>
             <AppButton
               type="submit"
-              label="Save"
+              label="Continue"
+              @click="gotoPage(1)"
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></AppButton>
           </div>
         </div>
-      </form>
+      </div>
+
+      <ApplicationFormView @prevPage="gotoPage(0)" @nextPage="gotoPage(2)" v-if="stepNo === 1"></ApplicationFormView>
+      <div
+        v-if="stepNo === 2"
+        class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
+      >
+        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <WorkFlowView @prevPage="gotoPage(1)"></WorkFlowView>
+        </div>
+      </div>
     </div>
   </main>
 </template>
 <script setup>
 import { ref } from "vue";
+import WorkFlowView from "./WorkFlowView.vue";
+import ApplicationFormView from "./ApplicationFormView.vue";
 import { CheckIcon } from "@heroicons/vue/solid";
 
 const selectedCountry = ref({});
 
 const steps = [
-  { id: "01", name: "Job details", href: "#", status: "complete" },
-  { id: "02", name: "Application form", href: "#", status: "current" },
-  { id: "03", name: "Preview", href: "#", status: "upcoming" },
+  { id: 0, name: "Job details", href: "#", status: "current" },
+  { id: 1, name: "Application form", href: "#", status: "upcoming" },
+  { id: 2, name: "Workflow", href: "#", status: "upcoming" },
 ];
+
+const stepNo = ref(0);
 
 const countries = [
   { id: "01", name: "Nigeria" },
@@ -386,4 +409,18 @@ const editorConfig = {
     ],
   ],
 };
+
+function gotoPage(value) {
+  stepNo.value = value;
+  steps[value].status = 'current';
+  if (value > 0) {
+    steps[value - 1].status = 'complete';
+    steps[value + 1].status = 'upcoming';
+  }
+
+  if (value === 0) {
+    steps[1].status = 'upcoming';
+    steps[2].status = 'upcoming';
+  }
+}
 </script>
