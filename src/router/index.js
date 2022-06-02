@@ -1,12 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+import JobListView from "../views/job/ListView.vue";
+import JobDetailView from "../views/job/DetailView.vue";
+
 import LoginView from "../views/authentication/LoginView.vue";
+import ForgotPasswordView from "../views/authentication/ForgotPasswordView.vue";
+
 import DashboardView from "../views/dashboard/DashboardView.vue";
+
 import ManageVacancyView from "../views/vacancy/ManageView.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
+
 import ManageCandidates from "../views/candidate/ManageCandidates.vue";
 import CreateCandidate from "../views/candidate/CreateCandidate.vue";
 import CandidateDetail from "../views/candidate/CandidateDetail.vue";
+
 import ManageDepartments from "../views/department/ManageDepartment.vue";
 
 const router = createRouter({
@@ -14,16 +23,31 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "dashboard",
-      component: () => import("../views/layouts/JupiterLayout.vue"),
+      redirect: "jobs/all",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
       children: [
         {
-          name: "Dashboard",
-          path: "dashboard",
+          name: "Jobs",
+          path: "jobs/all",
           meta: {
-            pageTitle: "Dashboard",
+            pageTitle: "Jobs",
           },
-          component: DashboardView,
+          component: JobListView,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "jobs/detail",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
+      children: [
+        {
+          name: "JobDetail",
+          path: "jobs/detail",
+          meta: {
+            pageTitle: "Job Detail",
+          },
+          component: JobDetailView,
         },
       ],
     },
@@ -39,6 +63,36 @@ const router = createRouter({
             pageTitle: "Login",
           },
           component: LoginView,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "forgot-password",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
+      children: [
+        {
+          name: "ForgotPassword",
+          path: "forgot-password",
+          meta: {
+            pageTitle: "ForgotPassword",
+          },
+          component: ForgotPasswordView,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "dashboard",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "Dashboard",
+          path: "dashboard",
+          meta: {
+            pageTitle: "Dashboard",
+          },
+          component: DashboardView,
         },
       ],
     },

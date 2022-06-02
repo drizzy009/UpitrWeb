@@ -115,13 +115,22 @@
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 bg-indigo-700">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div class="flex-1 flex-col flex-grow pt-5 pb-4 overflow-y-auto">
-        <div class="flex-1 items-center flex-shrink-0 px-4">
-          <img
-            class="h-8 w-auto"
-            src="@/assets/images/rainoil-logo.png"
-            alt="rain-oil logo"
-          />
+      <div class="flex-1 flex-col flex-grow pt-3 pb-4 overflow-y-auto">
+        <div class="flex flex-1 items-center flex-shrink-0 px-4">
+          <svg
+            class="shrink-0 h-8 w-8 text-indigo-300"
+            viewBox="0 0 24 24"
+          >
+            <path
+              class="fill-current text-indigo-200"
+              d="M18.974 8H22a2 2 0 012 2v6h-2v5a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5h-2v-6a2 2 0 012-2h.974zM20 7a2 2 0 11-.001-3.999A2 2 0 0120 7zM2.974 8H6a2 2 0 012 2v6H6v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5H0v-6a2 2 0 012-2h.974zM4 7a2 2 0 11-.001-3.999A2 2 0 014 7z"
+            ></path>
+            <path
+              class="fill-current text-indigo-400"
+              d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z"
+            ></path>
+          </svg>
+          <h2 class="text-white text-3xl font-medium ml-2">recruit<span class="text-indigo-200 font-medium text-3xl">r</span></h2>
         </div>
         <nav
           class="mt-5 flex-1 flex flex-col divide-y divide-indigo-800 overflow-y-auto"
@@ -132,7 +141,7 @@
               v-for="item in navigation"
               :key="item.name"
               :to="item.href"
-              :class="[item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:text-white hover:bg-indigo-600', 'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md']"
+              :class="[appStore.pageName == item.tag ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:text-white hover:bg-indigo-600', 'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md']"
               :aria-current="item.current ? 'page' : undefined"
             >
               <component
@@ -264,10 +273,12 @@
                   >Settings</a>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                  <a
-                    href="#"
+                  <router-link
+                    to="/login"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-                  >Logout</a>
+                  >
+                    Logout
+                  </router-link>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -307,20 +318,42 @@ import {
   OfficeBuildingIcon,
 } from "@heroicons/vue/outline";
 
-
-
 const navigation = [
-  { name: "Home", href: "/dashboard", icon: HomeIcon, current: true },
+  { 
+    name: "Home", 
+    tag: "Dashboard", 
+    href: "/dashboard", 
+    icon: HomeIcon 
+  },
   {
     name: "Vacancies",
+    tag: "ManageVacancies",
     href: "/vacancy/all",
     icon: BriefcaseIcon,
-    current: false,
   },
-  { name: "Candidates", href: "/candidate/all", icon: UserGroupIcon, current: false },
-  { name: "Activities", href: "#", icon: ClockIcon, current: false },
-  { name: "Departments", href: "/department/all", icon: OfficeBuildingIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
+  {
+    name: "Candidates",
+    tag: "ManageCandidates",
+    href: "/candidate/all",
+    icon: UserGroupIcon,
+  },
+  { 
+    name: "Activities", 
+    tag: "ManageActivities",
+    href: "#", 
+    icon: ClockIcon 
+  },
+  {
+    name: "Departments",
+    tag: "ManageDepartments",
+    href: "/department/all",
+    icon: OfficeBuildingIcon,
+  },
+  { 
+    name: "Reports", 
+    href: "#", 
+    icon: ChartPieIcon 
+  },
 ];
 const secondaryNavigation = [
   { name: "Settings", href: "#", icon: CogIcon },

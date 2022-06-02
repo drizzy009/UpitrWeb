@@ -112,7 +112,8 @@
                 <div class="flex-shrink-0">
                   <component
                     :is="card.icon"
-                    class="h-10 w-10 text-indigo-400"
+                    class="h-10 w-10 text-indigo-400
+                    "
                     aria-hidden="true"
                   />
                 </div>

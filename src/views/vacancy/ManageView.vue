@@ -78,78 +78,6 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-<<<<<<< HEAD
-      <div class="
-            align-middle
-            min-w-full
-            overflow-x-auto
-            shadow
-            overflow-hidden
-            sm:rounded-lg
-          ">
-          <table class="min-w-full divide-y divide-gray-300">
-            <thead class="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  class="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                >Vacancy</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Type</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Location</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Due Date</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Status</th>
-                <th
-                  scope="col"
-                  class="px-3 py-3 text-left text-sm font-semibold text-gray-900"
-                >Level</th>
-                <th
-                  scope="col"
-                  class="relative py-3 pl-3 pr-4 sm:pr-6"
-                >
-                  <span class="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
-              <tr
-                v-for="job in jobs"
-                :key="job.id"
-              >
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                  <div class="flex items-center">
-                    <div class="h-10 w-10 flex-shrink-0">
-                      <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200">
-                        <span class="text-xl font-medium leading-none text-indigo-700">{{ job.position[0] }}</span>
-                      </span>
-                    </div>
-                    <div class="ml-3">
-                      <div class="font-medium text-gray-900">{{ job.position }}</div>
-                      <div class="text-gray-500">{{ job.department }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="text-gray-900"><span class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800">{{ job.type }}</span></div>
-                </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                    <LocationMarkerIcon
-                      class="flex-shrink-0 mr-1 w-4 text-gray-400"
-                      aria-hidden="true"
-                    />{{ job.location }}
-=======
       <div
         class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
       >
@@ -221,7 +149,6 @@
                         >{{ job.position[0] }}</span
                       >
                     </span>
->>>>>>> f293f6f5d7674755bfd4f6a947f9dde83366302d
                   </div>
                   <div class="ml-4">
                     <div class="font-medium text-gray-900">
