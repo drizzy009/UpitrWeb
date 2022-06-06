@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import SideBar from './components/layout/SideBar.vue';
 import TextArea from './components/forms/TextArea.vue';
 import FormInput from './components/forms/FormInput.vue';
 import TextInput from './components/forms/TextInput.vue';
@@ -21,6 +22,7 @@ app.use(createPinia())
 app.use(router)
 app.use(CKEditor);
 
+app.component('SideBar', SideBar)
 app.component('TextArea', TextArea)
 app.component('FormInput', FormInput)
 app.component('TextInput', TextInput)

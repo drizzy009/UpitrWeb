@@ -1,47 +1,55 @@
 <template>
   <div class="space-y-8 divide-y divide-gray-200 bg-white">
     <div v-if="!showNewKit">
-      <h4
-        class="text-sm leading-6 font-medium text-gray-900 mb-2 mt-4 flex flex-row space-between"
-      >
-        <h5>Interview Kits</h5>
-        <button
-          type="button"
-          class="inline-flex border border-transparent shadow-sm text-sm font-medium text-indigo-700 focus:outline-none"
-          @click="toggleAddKits"
-        >
-          <PlusSmIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-          Add a question or Use requirements as questions
-        </button>
-      </h4>
-      <div
-        v-for="item in data"
-        :key="item.id"
-        class="border rounded mt-2 border-gray-200 p-4"
-      >
-        <h4 class="font-bold">{{ item.name }}</h4>
-        <div class="flex flex-col">
-          <span
-            v-for="option in item.items"
-            :key="option.id"
-            class="font-sm ml-2"
+      <div class="grid grid-cols-3 gap-4">
+        <div class="col-span-2">
+          <h4
+            class="text-md leading-6 font-medium text-gray-900 mb-2 mt-4 flex flex-row space-between"
           >
-            {{ option.name }}
-          </span>
+            <!-- <h5>Interview Kits</h5> -->
+            Add questions to your interview kit
+          </h4>
+          <div
+            v-for="item in data"
+            :key="item.id"
+            class="border rounded mt-2 border-gray-200 p-4 flex flex-row w-full"
+          >
+            <!-- <div class="flex flex-row"> -->
+              <div class="w-11/12">
+                <h4 class="font-bold">{{ item.name }}</h4>
+                <div class="flex flex-col">
+                  <span
+                    v-for="option in item.items"
+                    :key="option.id"
+                    class="font-sm ml-2"
+                  >
+                    {{ option.name }}
+                  </span>
+                </div>
+              </div>
+              <div class="w-1/12 flex flex-row">
+                <PencilIcon class="h-5 w-5 text-gray-400"></PencilIcon>
+                <TrashIcon class="h-5 w-5 text-gray-400"></TrashIcon>
+              </div>
+            <!-- </div> -->
+          </div>
+          <!-- <div class="pt-5">
+            <div class="flex justify-start">
+              <CancelButton
+                @click="$emit('toggleMain')"
+                label="Cancel"
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              ></CancelButton>
+            </div>
+          </div> -->
         </div>
-      </div>
-      <div class="pt-5">
-        <div class="flex justify-start">
-          <CancelButton
-            @click="$emit('toggleMain')"
-            label="Cancel"
-            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          ></CancelButton>
+        <div class="mt-12">
+          <button>Create a new section</button>
         </div>
       </div>
     </div>
 
-    <div v-if="showNewKit" id="newInterviewKit">
+    <div v-if="showNewKit" id="newInterviewKit" class="mt-4">
       <FormInput placeholder="Section title"></FormInput>
       <div class="mt-2 flex rounded-md shadow-sm">
         <div
@@ -126,12 +134,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import {
   MenuIcon,
   UserIcon,
   UsersIcon,
   TrashIcon,
+  PencilIcon,
   CreditCardIcon,
   SortAscendingIcon,
   OfficeBuildingIcon,
@@ -144,6 +153,12 @@ let showNewKit = ref(false);
 function toggleAddKits() {
   showNewKit.value = !showNewKit.value;
 }
+
+onMounted(() => {
+  if (questions.length === 0) {
+    showNewKit.value = true;
+  }
+});
 </script>
 
 <style></style>

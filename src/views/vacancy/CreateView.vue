@@ -85,21 +85,19 @@
       </nav>
 
       <div
-        v-if="stepNo === 0"
+        v-if="stepNo === 1"
         class="space-y-8 divide-y divide-gray-200 pt-6 pl-4 rounded-md border-0"
       >
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-bold leading-6 text-gray-900">Vacancy Title</h3>
-                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-                <p class="mt-1 text-xs text-gray-500">This information will be displayed publicly so be careful what you share.</p>
-                <p class="mt-4 text-xs text-gray-500">Use common job titles for searchability</p>
-                <p class="mt-4 text-xs text-gray-500">Advertise for just one job eg: Project Manager, not Project Manangers</p>
-                <p class="mt-4 text-xs text-gray-500">No general opportunities or events</p>
-              </div>
-            </div>
+            <SideBar>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">Vacancy Title</h3>
+              <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+              <p class="mt-1 text-xs text-gray-500">This information will be displayed publicly so be careful what you share.</p>
+              <p class="mt-4 text-xs text-gray-500">Use common job titles for searchability</p>
+              <p class="mt-4 text-xs text-gray-500">Advertise for just one job eg: Project Manager, not Project Manangers</p>
+              <p class="mt-4 text-xs text-gray-500">No general opportunities or events</p>
+            </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
                 action="#"
@@ -165,13 +163,11 @@
        
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
+            <SideBar>
                 <h3 class="text-lg font-bold leading-6 text-gray-900">Location Information</h3>
                 <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
                 <p class="mt-1 text-xs text-gray-500">Use a specific, full location to attract the most candidates</p>
-              </div>
-            </div>
+            </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
                 action="#"
@@ -277,15 +273,13 @@
 
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-bold leading-6 text-gray-900">Job Description</h3>
-                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-                <p class="mt-1 text-xs text-gray-500">Format into sections and lists to improve readability</p>
-                <p class="mt-4 text-xs text-gray-500">Avoid targeting specific demographics e.g. gender, nationality and age</p>
-                <p class="mt-4 text-xs text-gray-500">No need to add a link to apply (one is added automatically)</p>
-              </div>
-            </div>
+            <SideBar>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">Job Description</h3>
+              <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+              <p class="mt-1 text-xs text-gray-500">Format into sections and lists to improve readability</p>
+              <p class="mt-4 text-xs text-gray-500">Avoid targeting specific demographics e.g. gender, nationality and age</p>
+              <p class="mt-4 text-xs text-gray-500">No need to add a link to apply (one is added automatically)</p>
+            </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
                 action="#"
@@ -296,6 +290,7 @@
                     <div>
                       <label for="about" class="block text-sm font-medium text-gray-700"> Description </label>
                       <div class="mt-1">
+                        <!-- <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor> -->
                         <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" />
                       </div>
                     </div>
@@ -322,7 +317,6 @@
                     </div>
                   </div>
                   <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    
                   </div>
                 </div>
               </form>
@@ -332,14 +326,12 @@
 
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-bold leading-6 text-gray-900">Employment Information</h3>
-                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-                <p class="mt-1 text-xs text-gray-500">Include as many details as possible to boost the job’s performance on some job boards</p>
-                <p class="mt-4 text-xs text-gray-500">Include as many keywords as possible to increase searchability</p>
-              </div>
-            </div>
+            <SideBar>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">Employment Information</h3>
+              <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+              <p class="mt-1 text-xs text-gray-500">Include as many details as possible to boost the job’s performance on some job boards</p>
+              <p class="mt-4 text-xs text-gray-500">Include as many keywords as possible to increase searchability</p>
+            </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
                 action="#"
@@ -452,13 +444,11 @@
 
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-bold leading-6 text-gray-900">Salary Information</h3>
-                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-                <p class="mt-1 text-xs text-gray-500">Adding the salary here will improve performance on some job boards. You can also include the salary in the job description</p>
-              </div>
-            </div>
+            <SideBar>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">Salary Information</h3>
+              <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+              <p class="mt-1 text-xs text-gray-500">Adding the salary here will improve performance on some job boards. You can also include the salary in the job description</p>
+            </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
                 action="#"
@@ -525,13 +515,11 @@
 
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-bold leading-6 text-gray-900">Application Deadline</h3>
-                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-                <p class="mt-1 text-xs text-gray-500">Adding a deadline will automatically close applications on the set date</p>
-              </div>
-            </div>
+            <SideBar>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">Application Deadline</h3>
+              <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+              <p class="mt-1 text-xs text-gray-500">Adding a deadline will automatically close applications on the set date</p>
+            </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
                 action="#"
@@ -574,7 +562,7 @@
             <AppButton
               type="submit"
               label="Continue"
-              @click="gotoPage(1)"
+              @click="gotoPage(2)"
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></AppButton>
           </div>
@@ -582,16 +570,17 @@
       </div>
 
       <ApplicationFormView
-        @prevPage="gotoPage(0)"
-        @nextPage="gotoPage(2)"
-        v-if="stepNo === 1"
-      ></ApplicationFormView>
-      <div
+        @prevPage="gotoPage(1)"
+        @nextPage="gotoPage(3)"
         v-if="stepNo === 2"
+      ></ApplicationFormView>
+      
+      <div
+        v-if="stepNo === 3"
         class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
       >
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-          <WorkFlowView @prevPage="gotoPage(1)"></WorkFlowView>
+          <WorkFlowView @prevPage="gotoPage(2)"></WorkFlowView>
         </div>
       </div>
     </div>
@@ -599,29 +588,39 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { CheckIcon } from "@heroicons/vue/solid";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
-import { CheckIcon } from "@heroicons/vue/solid";
 
 const steps = [
-  { id: 0, name: "Job details", href: "#", status: "current" },
-  { id: 1, name: "Application form", href: "#", status: "upcoming" },
-  { id: 2, name: "Workflow", href: "#", status: "upcoming" },
+  { id: 1, name: "Job details", href: "#", status: "current" },
+  { id: 2, name: "Application form", href: "#", status: "upcoming" },
+  { id: 3, name: "Workflow", href: "#", status: "upcoming" },
 ];
 
-const stepNo = ref(0);
+const stepNo = ref(1);
+const editor = ClassicEditor;
+const description = ref("");
+const editorConfig = {
+  toolbar: {
+    items: [
+      'heading',
+      'bold',
+      'italic',
+      '|',
+      'undo',
+      'redo',
+      'list'
+    ]
+  }
+}
 
 function gotoPage(value) {
   stepNo.value = value;
   steps[value].status = "current";
-  if (value > 0) {
-    steps[value - 1].status = "complete";
-    steps[value + 1].status = "upcoming";
-  }
 
-  if (value === 0) {
-    steps[1].status = "upcoming";
-    steps[2].status = "upcoming";
-  }
+  steps[value - 1].status = "complete";
+  steps[value + 1].status = "upcoming";
 }
 </script>

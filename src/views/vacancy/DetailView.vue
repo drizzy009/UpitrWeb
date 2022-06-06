@@ -53,11 +53,11 @@
             type="button"
             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
           >
-            <LinkIcon
+            <UserGroupIcon
               class="-ml-1 mr-2 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-            View
+            Candidates
           </button>
         </span>
 
@@ -184,46 +184,28 @@
           ">
           <div class="px-4 sm:px-0">
             <h2 class="text-lg font-medium text-gray-900">Candidates</h2>
-            <!-- Tabs -->
-            <div class="sm:hidden">
-              <label
-                for="tabs"
-                class="sr-only"
-              >Select a tab</label>
-              <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-              <select
-                id="tabs"
-                name="tabs"
-                class="mt-4 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              >
-                <option
-                  v-for="tab in tabs"
-                  :key="tab.name"
-                  :selected="tab.current"
-                >{{ tab.name }}</option>
-              </select>
-            </div>
-            <div class="hidden sm:block">
-              <div class="border-b border-gray-200">
-                <nav
-                  class="mt-2 -mb-px flex space-x-8"
-                  aria-label="Tabs"
+            <TabGroup>
+              <TabList class="flex rounded- mt-4">
+                <Tab
+                  as="template"
+                  v-for="item in tabList"
+                  :key="item.id"
+                  v-slot="{ selected }"
+                  :aria-current="selected ? 'page' : undefined"
                 >
-                  <a
-                    v-for="tab in tabs"
-                    :key="tab.name"
-                    :href="tab.href"
-                    :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200', 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm']"
+                  <button
+                    :class="[
+                      'workflow-tab workflow-enabled-tab',
+                      selected
+                        ? 'border-b border-b-indigo-500 text-indigo-600'
+                        : `text-${item.color}-500`,
+                    ]"
                   >
-                    {{ tab.name }}
-                    <span
-                      v-if="tab.count"
-                      :class="[tab.current ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900', 'hidden ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block']"
-                    >{{ tab.count }}</span>
-                  </a>
-                </nav>
-              </div>
-            </div>
+                    {{ item.title }}
+                  </button>
+                </Tab>
+              </TabList>
+            </TabGroup>
           </div>
 
           <!-- Stacked list -->
@@ -360,31 +342,32 @@
 <script setup>
 import { ref } from "vue";
 import {
-  Listbox,
-  ListboxButton,
-  ListboxLabel,
-  ListboxOption,
-  ListboxOptions,
   Menu,
-  MenuButton,
+  Listbox,
   MenuItem,
   MenuItems,
+  MenuButton,
+  ListboxLabel,
+  ListboxOption,
+  ListboxButton,
+  ListboxOptions,
 } from "@headlessui/vue";
 import {
-  ArrowNarrowLeftIcon,
-  ArrowNarrowRightIcon,
-  BriefcaseIcon,
-  CalendarIcon,
-  CheckCircleIcon,
+  MailIcon,
   CheckIcon,
+  PencilIcon,
+  CalendarIcon,
+  UserGroupIcon,
+  BriefcaseIcon,
+  CheckCircleIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   CurrencyDollarIcon,
-  LinkIcon,
   LocationMarkerIcon,
-  MailIcon,
-  PencilIcon,
+  ArrowNarrowLeftIcon,
+  ArrowNarrowRightIcon,
 } from "@heroicons/vue/solid";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 
 const tabs = [
   { name: "Applied", href: "#", count: "2", current: false },
@@ -393,6 +376,46 @@ const tabs = [
   { name: "Offer", href: "#", current: false },
   { name: "Disqualified", href: "#", current: false },
 ];
+
+const tabList = [
+  {
+    id: 1,
+    name: "sourced",
+    title: "Sourced",
+    color: 'gray',
+  },
+  {
+    id: 2,
+    name: "applied",
+    title: "Applied",
+    color: 'gray',
+  },
+  {
+    id: 3,
+    name: "assessment",
+    title: "Assessment",
+    color: 'gray',
+  },
+  {
+    id: 4,
+    name: "offered",
+    title: "Offered",
+    color: 'gray',
+  },
+  {
+    id: 5,
+    name: "hired",
+    title: "Hired",
+    color: 'gray',
+  },
+  {
+    id: 6,
+    name: "disqualified",
+    title: "Disqualified",
+    color: 'red'
+  },
+];
+
 const candidates = [
   {
     name: "Emily Selman",
