@@ -2,3 +2,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    .workflow-disabled-tab {
+        @apply bg-gray-200 cursor-not-allowed
+    }
+
+    .workflow-enabled-tab {
+        @apply hover:text-gray-700 hover:border-b-indigo-500
+    }
+
+    .workflow-tab {
+        @apply w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm
+    }
+}

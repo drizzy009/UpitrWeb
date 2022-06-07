@@ -1,6 +1,7 @@
 [
     {
         "sectionName": "Personal Information",
+        "description": "",
         "fields": [
             {
                 "name": "Name",
@@ -84,6 +85,7 @@
     },
     {
         "sectionName": "Profile",
+        "description": "",
         "fields": [
             {
                 "name": "Education",                             
@@ -128,6 +130,7 @@
     },
     {
         "sectionName": "Details",
+        "description": "",
         "fields": [
             {
                 "name": "Cover Letter",                             

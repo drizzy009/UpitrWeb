@@ -3,100 +3,34 @@
     <TabGroup>
       <TabList class="flex rounded-xl p-1">
         <Tab
-          disabled
+          as="template"
+          v-for="item in tabList"
+          :disabled="!item.enabled"
+          :key="item.id"
           v-slot="{ selected }"
-          :class="[
-            selected
-              ? 'border-b border-b-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm',
-          ]"
           :aria-current="selected ? 'page' : undefined"
         >
-          <!-- <component
-              :is="UserIcon"
-              :class="[
-                selected
-                  ? 'text-indigo-500'
-                  : 'text-gray-400 group-hover:text-gray-500',
-                'h-10 w-10',
-              ]"
-              aria-hidden="true"
-            /> -->
-          <span>Sourced</span>
+          <button
+            :class="[
+              'workflow-tab',
+              !item.enabled ? 'workflow-disabled-tab' : 'workflow-enabled-tab',
+              selected
+                ? 'border-b border-b-indigo-500 text-indigo-600'
+                : 'text-gray-500',
+            ]"
+          >
+            {{ item.title }}
+          </button>
         </Tab>
-        <Tab
-          disabled
-          v-slot="{ selected }"
-          :class="[
-            selected
-              ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm',
-          ]"
-          :aria-current="selected ? 'page' : undefined"
-        >
-          <span>Applied</span>
-        </Tab>
-        <Tab
-          v-slot="{ selected }"
-          :class="[
-            selected
-              ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm',
-          ]"
-          :aria-current="selected ? 'page' : undefined"
-        >
-          <span>Assessment</span>
-        </Tab>
-        <Tab
-          v-slot="{ selected }"
-          :class="[
-            selected
-              ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm',
-          ]"
-          :aria-current="selected ? 'page' : undefined"
-        >
-          <span>Interview</span>
-        </Tab>
-        <Tab
-          disabled
-          v-slot="{ selected }"
-          :class="[
-            selected
-              ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm',
-          ]"
-          :aria-current="selected ? 'page' : undefined"
-        >
-          <span>Offer</span>
-        </Tab>
-        <Tab
-          disabled
-          v-slot="{ selected }"
-          :class="[
-            selected
-              ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            'w-1/6 py-4 px-1 text-center border-b-2 font-medium text-sm',
-          ]"
-          :aria-current="selected ? 'page' : undefined"
-        >
-          <span>Hired</span>
-        </Tab>
-        <!-- <Tab>Tab 2</Tab>
-        <Tab>Tab 3</Tab> -->
       </TabList>
       <TabPanels>
         <TabPanel>Sourced</TabPanel>
         <TabPanel>Applied</TabPanel>
         <TabPanel>
           <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-            <div class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div
+              class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+            >
               <div class="space-y-1 text-center">
                 <svg
                   class="mx-auto h-12 w-12 text-gray-400"
@@ -134,35 +68,39 @@
         </TabPanel>
         <TabPanel>
           <div v-if="showMainPanel">
-             <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-            <div class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div class="space-y-1 text-center">                
-                <span>Setup an interview kit</span>
-                <p class="text-xs text-gray-500">How would you like to evaluate candidate during an interview</p>
-                <AppButton
-                  @click="toggleInterview"
-                  label="Edit interview kit"
-                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                ></AppButton>
+            <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+              <div
+                class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+              >
+                <div class="space-y-1 text-center">
+                  <span>Setup an interview kit</span>
+                  <p class="text-xs text-gray-500">
+                    How would you like to evaluate candidate during an interview
+                  </p>
+                  <AppButton
+                    @click="toggleInterview"
+                    label="Add interview kit"
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  ></AppButton>
+                </div>
               </div>
             </div>
           </div>
+          <div v-if="showInterview" id="interviewKits">
+            <InterviewKitsView
+              @toggleMain="toggleMainPanel"
+            ></InterviewKitsView>
           </div>
-          <div
-            v-if="showInterview"
-            id="interviewKits"
-          >
-            <InterviewKitsView @toggleMain="toggleMainPanel"></InterviewKitsView>
-          </div>
-          <div
-            v-if="showAssessment"
-            id="interviewAssessments"
-          >
+          <div v-if="showAssessment" id="interviewAssessments">
             <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <div
+                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+              >
                 <!-- <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Cover photo </label> -->
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                  <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                  <div
+                    class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                  >
                     <div class="space-y-1 text-center">
                       <svg
                         class="mx-auto h-12 w-12 text-gray-400"
@@ -232,11 +170,51 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import {
 } from "@heroicons/vue/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import InterviewKitsView from "./InterviewKitsView.vue";
+import questions from "../../data/interviewKits";
+
+const tabList = [
+  {
+    id: 1,
+    name: "sourced",
+    title: "Sourced",
+    enabled: false,
+  },
+  {
+    id: 2,
+    name: "applied",
+    title: "Applied",
+    enabled: false,
+  },
+  {
+    id: 3,
+    name: "assessment",
+    title: "Assessment",
+    enabled: true,
+  },
+  {
+    id: 4,
+    name: "interview",
+    title: "Interview",
+    enabled: true,
+  },
+  {
+    id: 5,
+    name: "offered",
+    title: "Offered",
+    enabled: false,
+  },
+  {
+    id: 6,
+    name: "hired",
+    title: "Hired",
+    enabled: false,
+  },
+];
 
 const showInterview = ref(false);
 const showAssessment = ref(false);
@@ -252,6 +230,13 @@ function toggleMainPanel() {
   showInterview.value = false;
   showAssessment.value = false;
 }
+
+onMounted(() => {
+  if (questions.length > 0) {
+    showInterview.value = !showInterview.value;
+    showMainPanel.value = false;
+  }
+});
 </script>
 
 <style></style>
