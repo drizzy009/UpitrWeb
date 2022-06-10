@@ -397,8 +397,6 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import {
-  CalendarIcon,
-  LocationMarkerIcon,
   PlusCircleIcon,
   RefreshIcon,
   FilterIcon,

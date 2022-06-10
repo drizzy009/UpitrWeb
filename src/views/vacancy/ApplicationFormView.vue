@@ -80,24 +80,21 @@
         </SideBar>
         <div class="mt-5 md:mt-0 md:col-span-2">
           <div class="shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-5 bg-white sm:p-6">
-              <div class="grid grid-cols-6 gap-6">
-                <div v-if="questions.length > 0">
-                  <div
-                    v-for="q in questions"
-                    :key="q.question"
-                    :value="q.questionType"
-                    class="shadow rounded-lg p-4 mb-4 border border-gray-300"
-                  >
-                    <h3 class="font-bold">{{ q.questionType }}</h3>
-                    <p>{{ q.question }}</p>
-                  </div>
+            <div class="px-4 py-3 bg-white sm:p-6">
+              <div class="grid grid-cols-12 gap-6">
+                <div
+                  v-for="q in questions"
+                  :key="q.question"
+                  :value="q.questionType"
+                  class="shadow rounded-lg p-4 col-span-12 border border-gray-300"
+                >
+                  <h3 class="font-bold">{{ q.questionType }}</h3>
+                  <p>{{ q.question }}</p>
                 </div>
-                <!-- <hr class="mt-12" /> -->
               </div>
               <div class="mt-10 sm:mt-0" v-if="questionPanel == true">
                 <div class="md:grid md:grid-cols-3 md:gap-6 pt-8 mb-4">
-                  <div class="mt-5 md:mt-0 md:col-span-2">
+                  <div class="mt-5 md:mt-0 md:col-span-3">
                     <form>
                       <div class="shadow overflow-hidden sm:rounded-md">
                         <div class="px-4 py-5 bg-gray-100 sm:p-6 shadow">
@@ -156,11 +153,12 @@
                   </div>
                 </div>
               </div>
-              <div class="space-y-6 sm:space-y-5">
-                <button
+            </div>
+            <div class="px-4 py-3 bg-gray-50  sm:px-6">
+              <button
                   v-if="questionPanel == false"
                   type="button"
-                  class="inline-flex border-0 shadow-sm text-sm leading-4 font-medium rounded text-indigo-700 px-4 py-3 bg-indigo-300 focus:outline-none"
+                  class="inline-flex text-sm leading-4 font-medium rounded text-indigo-700 px-4 py-3 focus:outline-none"
                   @click="
                     questionPanel == true
                       ? (questionPanel = false)
@@ -168,11 +166,9 @@
                   "
                 >
                   <PlusSmIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-                  ADD MORE QUESTIONS
+                  Add Questions
                 </button>
-              </div>
             </div>
-            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
           </div>
         </div>
       </div>

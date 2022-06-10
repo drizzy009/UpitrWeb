@@ -589,7 +589,7 @@
 <script setup>
 import { ref } from "vue";
 import { CheckIcon } from "@heroicons/vue/solid";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+//import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
 
@@ -600,21 +600,21 @@ const steps = [
 ];
 
 const stepNo = ref(1);
-const editor = ClassicEditor;
-const description = ref("");
-const editorConfig = {
-  toolbar: {
-    items: [
-      'heading',
-      'bold',
-      'italic',
-      '|',
-      'undo',
-      'redo',
-      'list'
-    ]
-  }
-}
+// const editor = ClassicEditor;
+// const description = ref("");
+// const editorConfig = {
+//   toolbar: {
+//     items: [
+//       'heading',
+//       'bold',
+//       'italic',
+//       '|',
+//       'undo',
+//       'redo',
+//       'list'
+//     ]
+//   }
+// }
 
 function gotoPage(value) {
   // stepNo.value = value;

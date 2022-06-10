@@ -172,13 +172,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import {
-  MenuIcon,
-  UserIcon,
-  UsersIcon,
-  TrashIcon,
-  CreditCardIcon,
-  SortAscendingIcon,
-  OfficeBuildingIcon,
 } from "@heroicons/vue/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import InterviewKitsView from "./InterviewKitsView.vue";
