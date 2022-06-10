@@ -37,7 +37,7 @@
           <span
             aria-hidden="true"
             :class="[tabIdx == tabIndex ? 'bg-indigo-500' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
-          />
+          ></span>
         </a>
       </nav>
     </div>

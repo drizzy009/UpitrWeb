@@ -288,16 +288,17 @@
         </div>
       </div>
     </div>
+    <CreateDepartment></CreateDepartment>
   </main>
 </template>
 <script setup>
 import departmentList from "../../data/department";
 import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
+  // Dialog,
+  // DialogPanel,
+  // DialogTitle,
+  // TransitionChild,
+  // TransitionRoot,
   Menu,
   MenuButton,
   MenuItem,
@@ -314,15 +315,17 @@ import {
   PencilAltIcon,
   TrashIcon,
   SearchIcon,
+  ExclamationIcon,
   DotsVerticalIcon,
   ClipboardListIcon
 } from "@heroicons/vue/solid";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { XIcon } from "@heroicons/vue/outline";
+import CreateDepartment from './CreateDepartmentModal.vue';
 const departments = departmentList;
 
-const open = ref(false);
+// const open = ref(true);
 const router = useRouter();
 
 function goto(name) {

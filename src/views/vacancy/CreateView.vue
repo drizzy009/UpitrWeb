@@ -617,10 +617,10 @@ const editorConfig = {
 }
 
 function gotoPage(value) {
-  stepNo.value = value;
-  steps[value].status = "current";
+  // stepNo.value = value;
+  // steps[value].status = "current";
 
-  steps[value - 1].status = "complete";
-  steps[value + 1].status = "upcoming";
+  // steps[value - 1].status = "complete";
+  // steps[value + 1].status = "upcoming";
 }
 </script>
