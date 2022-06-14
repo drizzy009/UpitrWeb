@@ -1,0 +1,44 @@
+import axios from "axios";
+import TokenService from "./token.service";
+
+const CoreService = {
+  init() {
+    axios.defaults.baseURL = "";
+    axios.defaults.headers.common.Accept = "application/json";
+
+    axios.interceptors.request.use(
+      (config) => {
+        let token = TokenService.getToken()
+          ? TokenService.getToken().accessToken
+          : null;
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
+    axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.$router.push({ name: "login" });
+        }
+        return Promise.reject(error);
+      }
+    );
+  },
+
+  setHeader() {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${
+      TokenService.getToken().accessToken
+    }`;
+  },
+};
+
+export default CoreService;

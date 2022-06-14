@@ -18,12 +18,14 @@
     "@tailwindcss/forms": "^0.5.2",
     "@vuelidate/core": "^2.0.0-alpha.41",
     "@vuelidate/validators": "^2.0.0-alpha.29",
+    "axios": "^0.27.2",
     "moment": "^2.29.3",
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",
+    "read-excel-file": "^5.3.4",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
-    "vue-select": "^3.18.3"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",

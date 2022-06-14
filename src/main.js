@@ -4,13 +4,15 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import SideBar from './components/layout/SideBar.vue';
 import TextArea from './components/forms/TextArea.vue';
 import FormInput from './components/forms/FormInput.vue';
-import TextInput from './components/forms/TextInput.vue';
+import TextInputGroup from './components/forms/TextInputGroup.vue';
 import PasswordInput from './components/forms/PasswordInput.vue';
 import AppButton from './components/forms/AppButton.vue';
 import IconButton from './components/forms/IconButton.vue';
 import AutoComplete from './components/forms/AutoComplete.vue';
 import SelectInput from './components/forms/SelectInput.vue';
 import CancelButton from './components/forms/CancelButton.vue';
+import AppModal from './components/commons/modal/AppModal.vue';
+
 import { useAppStore } from './stores/app';
 
 import App from './App.vue'
@@ -25,13 +27,15 @@ app.use(CKEditor);
 app.component('SideBar', SideBar)
 app.component('TextArea', TextArea)
 app.component('FormInput', FormInput)
-app.component('TextInput', TextInput)
+app.component('TextInputGroup', TextInputGroup)
 app.component('PasswordInput', PasswordInput)
 app.component('AppButton', AppButton)
 app.component('IconButton', IconButton)
 app.component('SelectInput', SelectInput)
 app.component('AutoComplete', AutoComplete)
 app.component('CancelButton', CancelButton)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('AppModal', AppModal)
 
 const appStore = useAppStore();
 

@@ -33,7 +33,7 @@
           <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
             <button
               type="button"
-              @click="goto('CreateCandidate')"
+              @click="toggleAddDepartment"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
@@ -288,7 +288,7 @@
         </div>
       </div>
     </div>
-    <CreateDepartment></CreateDepartment>
+    <CreateDepartment :toggle="openAddDepartment" @toggleDepartment="toggleAddDepartment"></CreateDepartment>
   </main>
 </template>
 <script setup>
@@ -322,14 +322,19 @@ import {
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { XIcon } from "@heroicons/vue/outline";
-import CreateDepartment from './CreateDepartmentModal.vue';
+import CreateDepartment from './CreateDepartment.vue';
 const departments = departmentList;
+const openAddDepartment = ref(false);
 
 // const open = ref(true);
 const router = useRouter();
 
 function goto(name) {
   // router.push({ name: name });
+}
+
+function toggleAddDepartment() {
+  openAddDepartment.value = !openAddDepartment.value;
 }
 
 </script>

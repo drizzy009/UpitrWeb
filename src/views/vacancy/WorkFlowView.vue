@@ -57,6 +57,7 @@
                       name="file-upload"
                       type="file"
                       class="sr-only"
+                      @change="uploadAssessment"
                     />
                   </label>
                   <p class="pl-1">or drag and drop</p>
@@ -170,6 +171,7 @@
 </template>
 
 <script setup>
+import readXlsxFile from 'read-excel-file'
 import { ref, onMounted } from "vue";
 import {
 } from "@heroicons/vue/solid";
@@ -229,6 +231,31 @@ function toggleMainPanel() {
   showMainPanel.value = true;
   showInterview.value = false;
   showAssessment.value = false;
+}
+
+function uploadAssessment(data) {
+  console.log(data.target.files);
+
+  readXlsxFile(data.target.files[0]).then((rows) => {
+    console.log(rows);
+  })
+  // let reader = new FileReader()
+  // reader.readAsBinaryString(files)
+  // try {
+  //   reader.onload = function (e) {
+  //     let data = e.target.result
+  //     let workbook = XLXS.read(data, { type: 'binary' })
+  //     workbook.SheetNames.forEach(sheet => {
+  //       let rowData = XLXS.utils.sheet_to_row_object_array(workbook.Sheets[sheet])
+
+  //       rowData.forEach((item) => {
+  //         console.log(item);
+  //       })
+  //     })
+  //   }
+  // } catch (error) {
+  //   // console.error(error)
+  // }
 }
 
 onMounted(() => {

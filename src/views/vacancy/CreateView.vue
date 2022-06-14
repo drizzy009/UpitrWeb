@@ -108,16 +108,17 @@
                     <div class="grid grid-cols-6 gap-6">
                       <div class="col-span-6 sm:col-span-6">
                         <label
-                          for="job-title"
+                          for="title"
                           class="block text-sm font-medium text-gray-700"
                         >Title</label>
-                        <input
+                        <FormInput :error="v$.title.$error" id="title"></FormInput>
+                        <!-- <input
                           type="text"
                           name="job-title"
                           id="first-name"
                           autocomplete="job-title"
                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
+                        /> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-3">
@@ -127,12 +128,12 @@
                         >Select Department</label>
                         <SelectInput
                           :items="[
-                        { name: 'Account', id: 1 },
-                        { name: 'Human Resources', id: 2 },
-                        { name: 'Marketing', id: 3 },
-                        { name: 'Sales', id: 4 },
-                        { name: 'Support', id: 5 },
-                      ]"
+                            { name: 'Account', id: 1 },
+                            { name: 'Human Resources', id: 2 },
+                            { name: 'Marketing', id: 3 },
+                            { name: 'Sales', id: 4 },
+                            { name: 'Support', id: 5 },
+                          ]"
                           id="department"
                           name="department"
                           class="mt-1"
@@ -588,10 +589,45 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { CheckIcon } from "@heroicons/vue/solid";
 //import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
+
+const jobDetail = ref({
+  title: '',
+  departmentId: '',
+  internalCode: '',
+  countryId: '',
+  countryStateId: '',
+  cityId: '',
+  streetAddress: '',
+  isRemote: false,
+  description: '',
+  responsibilities: '',
+  requirements: '',
+  benefits: '',
+  jobFunctionId: '',
+  employmentTypeId: '',
+  experienceId: '',
+  educationId: '',
+  minimumOffer: '',
+  maximumOffer: '',
+  currencyId: '',
+  deadline: '',
+});
+
+const rules = {
+  title: { required },
+  departmentId: { required },
+  internalCode: { required },
+  countryId: { required },
+  countryStateId: { required },
+}
+
+const v$ = useVuelidate(rules, jobDetail);
 
 const steps = [
   { id: 1, name: "Job details", href: "#", status: "current" },
@@ -616,11 +652,14 @@ const stepNo = ref(1);
 //   }
 // }
 
-function gotoPage(value) {
-  // stepNo.value = value;
-  // steps[value].status = "current";
+async function gotoPage(value) {
+  const valid = await v$.value.$validate();
+  // if (valid) {
+  stepNo.value = value;
+  steps[value].status = "current";
 
-  // steps[value - 1].status = "complete";
-  // steps[value + 1].status = "upcoming";
+  steps[value - 1].status = "complete";
+  steps[value + 1].status = "upcoming";
+  // }
 }
 </script>

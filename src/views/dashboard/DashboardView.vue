@@ -370,6 +370,7 @@ import {
 import {
 } from "@heroicons/vue/solid";
 
+
 const cards = [
   { name: "Active Vacancies", href: "#", icon: BriefcaseIcon, amount: "50" },
   {
@@ -515,4 +516,5 @@ const positions = [
     ],
   },
 ];
+
 </script>
