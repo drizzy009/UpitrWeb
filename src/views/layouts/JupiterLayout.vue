@@ -260,15 +260,15 @@
                 leave-to-class="transform opacity-0 scale-95"
               >
                 <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <MenuItem v-slot="{ active }">
+                  <!-- <MenuItem v-slot="{ active }">
                   <a
                     href="#"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                   >Your Profile</a>
-                  </MenuItem>
+                  </MenuItem> -->
                   <MenuItem v-slot="{ active }">
                   <a
-                    href="#"
+                    href="/settings"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                   >Settings</a>
                   </MenuItem>
@@ -340,7 +340,7 @@ const navigation = [
   { 
     name: "Activities", 
     tag: "ManageActivities",
-    href: "#", 
+    href: "/activity/all", 
     icon: ClockIcon 
   },
   {
@@ -356,7 +356,7 @@ const navigation = [
   },
 ];
 const secondaryNavigation = [
-  { name: "Settings", href: "#", icon: CogIcon },
+  { name: "Settings", href: "/settings", icon: CogIcon },
   { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
 ];
 

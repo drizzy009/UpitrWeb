@@ -13,8 +13,10 @@ import CreateVacancyView from "../views/vacancy/CreateView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
 
 import ManageCandidates from "../views/candidate/ManageCandidates.vue";
+import ManageActivities from "../views/activities/ManageActivities.vue";
 import CreateCandidate from "../views/candidate/CreateCandidate.vue";
 import CandidateDetail from "../views/candidate/CandidateDetail.vue";
+import SettingsView from "../views/settings/SettingsView.vue";
 
 import ManageDepartments from "../views/department/ManageDepartment.vue";
 
@@ -171,24 +173,38 @@ const router = createRouter({
           },
           component: ManageDepartments,
         },
-        // {
-        //   name: "CreateCandidate",
-        //   path: "candidate/create",
-        //   meta: {
-        //     pageTitle: "Create Candidate",
-        //   },
-        //   component: CreateCandidate,
-        // },
-        // {
-        //   name: "CandidateDetail",
-        //   path: "candidate/detail",
-        //   meta: {
-        //     pageTitle: "Candidate Details",
-        //   },
-        //   component: CandidateDetail,
-        // },
       ],
-    }
+    },
+    {
+      path: "/",
+      redirect: "activity",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "ManageActivities",
+          path: "activity/all",
+          meta: {
+            pageTitle: "Manage Activities",
+          },
+          component: ManageActivities,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "settings",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "Settings",
+          path: "settings",
+          meta: {
+            pageTitle: "Settings",
+          },
+          component: SettingsView,
+        },
+      ],
+    },
   ],
 });
 

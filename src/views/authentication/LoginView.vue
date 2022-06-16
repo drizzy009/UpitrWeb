@@ -24,11 +24,12 @@
         <div class="mt-8">
           <div class="mt-6">
             <form action="#" method="POST" class="space-y-6">
-              <div>
-                  <text-input id="email" type="email" placeholder="Email address" leading-icon="fa-solid fa-envelope">
-                  </text-input>
+              <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <MailIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                </div>
+                <input type="email" name="email" id="email" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Email" />
               </div>
-
               <div class="space-y-1">
                 <div class="mt-1">
                   <password-input id="password" placeholder="Password">
@@ -75,4 +76,5 @@
   </div>
 </template>
 <script setup>
+import { MailIcon } from '@heroicons/vue/solid';
 </script>

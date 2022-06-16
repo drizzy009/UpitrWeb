@@ -29,6 +29,15 @@
         <TabPanel>
           <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
             <div
+              v-if="assessments.length > 0"
+              class="flex px-2 pt-0 pb-6 border-2 border-gray-300 rounded-md"
+            >
+              <div class="space-y-1">
+                <AssessmentView :questions="assessments"></AssessmentView>
+              </div>
+            </div>
+            <div
+              v-if="assessments.length === 0"
               class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
             >
               <div class="space-y-1 text-center">
@@ -177,6 +186,7 @@ import {
 } from "@heroicons/vue/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import InterviewKitsView from "./InterviewKitsView.vue";
+import AssessmentView from "./AssessmentView.vue";
 import questions from "../../data/interviewKits";
 
 const tabList = [
@@ -222,6 +232,8 @@ const showInterview = ref(false);
 const showAssessment = ref(false);
 const showMainPanel = ref(true);
 
+const assessments = ref([]);
+
 function toggleInterview() {
   showInterview.value = !showInterview.value;
   showMainPanel.value = false;
@@ -234,28 +246,35 @@ function toggleMainPanel() {
 }
 
 function uploadAssessment(data) {
-  console.log(data.target.files);
-
+  console.clear();
   readXlsxFile(data.target.files[0]).then((rows) => {
-    console.log(rows);
-  })
-  // let reader = new FileReader()
-  // reader.readAsBinaryString(files)
-  // try {
-  //   reader.onload = function (e) {
-  //     let data = e.target.result
-  //     let workbook = XLXS.read(data, { type: 'binary' })
-  //     workbook.SheetNames.forEach(sheet => {
-  //       let rowData = XLXS.utils.sheet_to_row_object_array(workbook.Sheets[sheet])
+    if (rows.length > 1) {
+      const newRows = rows.slice(1, rows.length);
+      const cbtQuestions = [];
+      let sno = 0;
+      newRows.forEach(item => {
+        const optionList = item.slice(1, item.length);
+        const list = optionList.map((o) => {
+          return {
+            id: ++sno,
+            name: o
+          }
+        });
 
-  //       rowData.forEach((item) => {
-  //         console.log(item);
-  //       })
-  //     })
-  //   }
-  // } catch (error) {
-  //   // console.error(error)
-  // }
+        sno += sno;
+        const question = {
+          id: sno,
+          name: item[0],
+          model: `question-${sno}`,
+          options: list
+        }
+
+        cbtQuestions.push(question);
+      });
+      console.log(cbtQuestions);
+      assessments.value = cbtQuestions;
+    }
+  })
 }
 
 onMounted(() => {
