@@ -130,7 +130,6 @@ function saveSection(title, skills) {
 }
 
 function deleteSection(index) {
-  console.log(index);
   sections.value.pop(index);
   if (sections.value.length == 0) {
     showEmptyKit.value = true;    
