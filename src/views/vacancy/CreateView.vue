@@ -183,53 +183,39 @@
                           for="country"
                           class="block text-sm font-medium text-gray-700"
                         >Country</label>
-                        <select
+                        <SelectInput
+                          placeholder="Select a country"
+                          v-model="jobDetail.countryId"
+                          :items="countries"
                           id="country"
-                          name="country"
-                          autocomplete="country-name"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Nigeria</option>
-                          <option>Ghana</option>
-                          <option>Togo</option>
-                        </select>
+                          @change="onCountryChanged"
+                        ></SelectInput>
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                         <label
-                          for="city"
+                          for="state"
                           class="block text-sm font-medium text-gray-700"
                         >State</label>
-                        <select
-                          id="country"
-                          name="country"
-                          autocomplete="country-name"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Lagos</option>
-                          <option>Abuja</option>
-                          <option>Ogun</option>
-                          <option>Delta</option>
-                        </select>
+                        <SelectInput
+                          placeholder="Select a state"
+                          v-model="jobDetail.countryStateId"
+                          :items="countryStates"
+                          id="state"
+                        ></SelectInput>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                         <label
-                          for="region"
+                          for="city"
                           class="block text-sm font-medium text-gray-700"
                         >City </label>
-                        
-                        <select
-                          id="country"
-                          name="country"
-                          autocomplete="country-name"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Victoria Island</option>
-                          <option>Asaba</option>
-                          <option>Ogara</option>
-                          <option>Delta</option>
-                        </select>
+                        <SelectInput
+                          placeholder="Select a city"
+                          v-model="jobDetail.cityId"
+                          :items="cities"
+                          id="city"
+                        ></SelectInput>
                       </div>
 
                       <div class="col-span-6">
@@ -344,78 +330,55 @@
                       
                       <div class="col-span-6 sm:col-span-3">
                         <label
-                          for="country"
+                          for="jobFunction"
                           class="block text-sm font-medium text-gray-700"
                         >Job Function</label>
-                        <select
-                          id="job-function"
-                          name="job-function"
-                          autocomplete="job-function"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Product Management</option>
-                          <option>Project Management</option>
-                          <option>Facility Manager</option>
-                        </select>
+                        <SelectInput
+                          placeholder="Select Job Function"
+                          v-model="jobDetail.jobFunctionId"
+                          :items="jobFunctions"
+                          id="jobFunction"
+                        ></SelectInput>
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                         <label
-                          for="city"
+                          for="employmentType"
                           class="block text-sm font-medium text-gray-700"
                         >Employment Type</label>
-                        <select
-                          id="employment-type"
-                          name="employment-type"
-                          autocomplete="employment-type"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Full-time</option>
-                          <option>Part-time</option>
-                          <option>Contract</option>
-                          <option>Temporary</option>
-                          <option>Other</option>
-                        </select>
+                        <SelectInput
+                          placeholder="Select Employment Type"
+                          v-model="jobDetail.employmentTypeId"
+                          :items="employmentTypes"
+                          id="employmentType"
+                        ></SelectInput>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                         <label
-                          for="region"
+                          for="experience"
                           class="block text-sm font-medium text-gray-700"
                         >Experience </label>
-                        
-                        <select
+                        <SelectInput
+                          placeholder="Select Experience"
+                          v-model="jobDetail.experienceId"
+                          :items="experienceLevels"
                           id="experience"
-                          name="experience"
-                          autocomplete="experience"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Not Applicable</option>
-                          <option>Internship</option>
-                          <option>Entry Level</option>
-                          <option>Associate</option>
-                          <option>Mid Level</option>
-                        </select>
+                        ></SelectInput>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                         <label
-                          for="region"
+                          for="educationLevel"
                           class="block text-sm font-medium text-gray-700"
                         >Education </label>
                         
-                        <select
-                          id="experience"
-                          name="experience"
-                          autocomplete="experience"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Not Applicable</option>
-                          <option>High School</option>
-                          <option>Certification</option>
-                          <option>Vocational</option>
-                          <option>Associate Degree</option>
-                        </select>
+                        <SelectInput
+                          placeholder="Select Education Level"
+                          v-model="jobDetail.educationId"
+                          :items="educationLevels"
+                          id="educationLevel"
+                        ></SelectInput>
                       </div>
                       
                       <div class="col-span-6">
@@ -492,16 +455,12 @@
                           for="currency"
                           class="block text-sm font-medium text-gray-700"
                         >Currency </label>
-                        
-                        <select
+                        <SelectInput
+                          placeholder="Select a currency"
+                          v-model="jobDetail.currencyId"
+                          :items="currencies"
                           id="currency"
-                          name="currency"
-                          autocomplete="currency"
-                          class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>Naira</option>
-                          <option>US Dollars</option>
-                        </select>
+                        ></SelectInput>
                       </div>
                     </div>
                   </div>
@@ -588,14 +547,17 @@
   </main>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { CheckIcon } from "@heroicons/vue/solid";
 //import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
-
+import { useMiscellaneous } from "../../stores/miscellaneous";
+import MiscService from '../../service/miscellaneous.service';
 const jobDetail = ref({
   title: '',
   departmentId: '',
@@ -635,7 +597,18 @@ const steps = [
   { id: 3, name: "Workflow", href: "#", status: "upcoming" },
 ];
 
+const {
+  countries,
+  currencies,
+  jobFunctions,
+  educationLevels,
+  employmentTypes,
+  experienceLevels,
+} = storeToRefs(useMiscellaneous());
 const stepNo = ref(1);
+const countryStates = ref([]);
+const cities = ref([]);
+const toast = useToast();
 // const editor = ClassicEditor;
 // const description = ref("");
 // const editorConfig = {
@@ -654,12 +627,33 @@ const stepNo = ref(1);
 
 async function gotoPage(value) {
   const valid = await v$.value.$validate();
-  // if (valid) {
   stepNo.value = value;
   steps[value].status = "current";
 
   steps[value - 1].status = "complete";
   steps[value + 1].status = "upcoming";
-  // }
 }
+
+onMounted(() => {
+  jobDetail.value.countryId = countries.value[0].id;
+  MiscService.getRegions(countries.value[0].id).then(result => {
+    countryStates.value = result.data.data;
+  })
+})
+
+watch(() => jobDetail.value.countryStateId, (newValue) => {
+  cities.value = [];
+  const id = Number(newValue);
+  MiscService.getCities(id).then(result => {
+    cities.value = result.data.data;
+  })
+});
+
+watch(() => jobDetail.value.countryId, (newValue) => {
+  countryStates.value = [];
+  const id = Number(newValue);
+  MiscService.getRegions(id).then(result => {
+    countryStates.value = result.data.data;
+  })
+});
 </script>

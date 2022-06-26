@@ -1,14 +1,4 @@
 <template>
-  <!-- <select
-    v-bind="$attr"
-    :v-model="modelValue"
-    @change="$emit('update:modelValue', $event.target.value)"
-    class="select-input"
-  >
-    <option v-for="item in items" :key="item.id" :value="item.id">
-        {{ item.name }}
-    </option>
-  </select> -->
    <div class="mt-1 relative rounded-md shadow-sm">
     <select
       v-bind="$attr"
