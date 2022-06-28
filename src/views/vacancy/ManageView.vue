@@ -449,7 +449,7 @@ import {
   TrashIcon,
   SearchIcon,
 } from "@heroicons/vue/solid";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { DotsVerticalIcon, ClipboardListIcon } from "@heroicons/vue/solid";
 import {
@@ -464,6 +464,7 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/outline";
+import VacancyService from '../../service/vacancies.service';
 
 const open = ref(false);
 
@@ -507,4 +508,10 @@ const router = useRouter();
 function goto(name) {
   router.push({ name: name });
 }
+
+onMounted(() => {
+  VacancyService.all().then(result => {
+    console.log(result);
+  })
+})
 </script>

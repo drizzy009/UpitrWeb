@@ -6,15 +6,40 @@
             {
                 "name": "Name",
                 "model": "name",
+                "key": "name",
                 "options": [
                     {
-                        "optionName": "Mandatory"
+                        "optionName": "Mandatory",
+                        "checked": true
+                    }
+                ]
+            },
+            {
+                "name": "Gender",
+                "model": "gender",
+                "key": "gender",
+                "options": [
+                    {
+                        "optionName": "Mandatory",
+                        "checked": true
                     }
                 ]
             },
             {
                 "name": "Email",
                 "model": "email",
+                "key": "email",
+                "options": [
+                    {
+                        "optionName": "Mandatory",
+                        "checked": true
+                    }
+                ]
+            },
+            {
+                "name": "Date of Birth",
+                "model": "dob",
+                "key": "dob",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -23,7 +48,8 @@
             },
             {
                 "name": "Headline",
-                "model": "headline",
+                "model": "heading",
+                "key": "heading",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -39,6 +65,7 @@
             {
                 "name": "Phone",
                 "model": "phone",
+                "key": "phone",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -54,6 +81,7 @@
             {
                 "name": "Address",                
                 "model": "address",
+                "key": "address",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -69,6 +97,7 @@
             {
                 "name": "Photo",             
                 "model": "photo",
+                "key": "photo",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -90,6 +119,7 @@
             {
                 "name": "Education",                             
                 "model": "education",
+                "key": "education",
                 "options": [
                     {
                         "optionName": "Optional"
@@ -102,6 +132,7 @@
             {
                 "name": "Experience",             
                 "model": "experience",
+                "key": "experience",
                 "options": [
                     {
                         "optionName": "Optional"
@@ -114,6 +145,7 @@
             {
                 "name": "Summary",             
                 "model": "summary",
+                "key": "summary",
                 "options": [
                     {
                         "optionName": "Mandatory"
@@ -134,7 +166,24 @@
         "fields": [
             {
                 "name": "Cover Letter",                             
-                "model": "coverLetter",
+                "model": "cover_letter",
+                "key": "cover_letter",
+                "options": [
+                    {
+                        "optionName": "Mandatory"
+                    },
+                    {
+                        "optionName": "Optional"
+                    },
+                    {
+                        "optionName": "Off"
+                    }
+                ]
+            },
+            {
+                "name": "Resume",                             
+                "model": "resume",
+                "key": "resume",
                 "options": [
                     {
                         "optionName": "Mandatory"

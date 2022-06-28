@@ -10,6 +10,7 @@ export const useAuthentication = defineStore({
         tokenInfo: null,
         successful: false,
         authenticating: false,
+        isAuthenticated: false,
         errorMessage: "",
     }),
     getters: {},
@@ -22,6 +23,7 @@ export const useAuthentication = defineStore({
                 const { data } = result.data;
                 this.loginInfo = data.user;
                 this.tokenInfo = data.access;
+                this.isAuthenticated = true;
                 TokenService.saveToken(data.access.token)
                 this.successful = true;
             }).catch((error) => {
@@ -30,6 +32,12 @@ export const useAuthentication = defineStore({
             }).finally(() => {
                 this.authenticating = false;
             })
+        },
+        setLoginInfo(payload) {
+            this.loginInfo = payload.user;
+            this.tokenInfo = payload.access;
+            this.isAuthenticated = true;
+            TokenService.saveToken(payload.access.token)
         }
     },
     persist: true

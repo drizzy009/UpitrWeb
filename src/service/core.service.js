@@ -9,7 +9,7 @@ const CoreService = {
     axios.interceptors.request.use(
       (config) => {
         let token = TokenService.getToken()
-          ? TokenService.getToken().accessToken
+          ? TokenService.getToken()
           : null;
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;

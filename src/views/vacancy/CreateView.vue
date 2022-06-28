@@ -99,10 +99,7 @@
               <p class="mt-4 text-xs text-gray-500">No general opportunities or events</p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <form
-                action="#"
-                method="POST"
-              >
+              <form>
                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                   <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
@@ -111,7 +108,7 @@
                           for="title"
                           class="block text-sm font-medium text-gray-700"
                         >Title</label>
-                        <FormInput :error="v$.title.$error" id="title"></FormInput>
+                        <FormInput v-model="jobDetail.title" :error="v$.title.$error" id="title"></FormInput>
                         <!-- <input
                           type="text"
                           name="job-title"
@@ -127,31 +124,18 @@
                           class="block text-sm font-medium text-gray-700"
                         >Select Department</label>
                         <SelectInput
-                          :items="[
-                            { name: 'Account', id: 1 },
-                            { name: 'Human Resources', id: 2 },
-                            { name: 'Marketing', id: 3 },
-                            { name: 'Sales', id: 4 },
-                            { name: 'Support', id: 5 },
-                          ]"
-                          id="department"
-                          name="department"
+                          :items="departmentList"
                           class="mt-1"
+                          v-model="jobDetail.department_id"
                         ></SelectInput>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3">
                         <label
-                          for="last-name"
+                          for="code"
                           class="block text-sm font-medium text-gray-700"
                         >Internal Code</label>
-                        <input
-                          type="text"
-                          name="last-name"
-                          id="last-name"
-                          autocomplete="family-name"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
+                        <FormInput v-model="jobDetail.code" :error="v$.code.$error" id="code"></FormInput>
                       </div>
                     </div>
                   </div>
@@ -170,10 +154,7 @@
                 <p class="mt-1 text-xs text-gray-500">Use a specific, full location to attract the most candidates</p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <form
-                action="#"
-                method="POST"
-              >
+              <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
@@ -185,7 +166,7 @@
                         >Country</label>
                         <SelectInput
                           placeholder="Select a country"
-                          v-model="jobDetail.countryId"
+                          v-model="jobDetail.country_id"
                           :items="countries"
                           id="country"
                           @change="onCountryChanged"
@@ -199,7 +180,7 @@
                         >State</label>
                         <SelectInput
                           placeholder="Select a state"
-                          v-model="jobDetail.countryStateId"
+                          v-model="jobDetail.region_id"
                           :items="countryStates"
                           id="state"
                         ></SelectInput>
@@ -212,7 +193,7 @@
                         >City </label>
                         <SelectInput
                           placeholder="Select a city"
-                          v-model="jobDetail.cityId"
+                          v-model="jobDetail.city_id"
                           :items="cities"
                           id="city"
                         ></SelectInput>
@@ -223,18 +204,13 @@
                           for="street-address"
                           class="block text-sm font-medium text-gray-700"
                         >Street address</label>
-                        <input
-                          type="text"
-                          name="street-address"
-                          id="street-address"
-                          autocomplete="street-address"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
+                        <FormInput v-model="jobDetail.location" name="location" id="location"></FormInput>
                       </div>
                     </div>
                     <div class="flex items-start mt-6">
                       <div class="flex items-center h-5">
                         <input
+                          @change="onRemoteChange"
                           id="comments"
                           name="comments"
                           type="checkbox"
@@ -269,37 +245,38 @@
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form
-                action="#"
-                method="POST"
               >
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-0 bg-white sm:p-6">
                     <div>
                       <label for="about" class="block text-sm font-medium text-gray-700"> Description </label>
                       <div class="mt-1">
-                        <!-- <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor> -->
-                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" />
+                        <!-- <ckeditor class="h-48 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" :editor="editor" v-model="jobDetail.description" :config="editorConfig"></ckeditor> -->
+                        <TextArea v-model="jobDetail.description" id="description" name="description" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" />
                       </div>
                     </div>
 
                     <div class="mt-6">
                       <label for="about" class="block text-sm font-medium text-gray-700"> Responsibilities </label>
                       <div class="mt-1">
-                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" />
+                        <TextArea v-model="jobDetail.responsibilities" id="responsibilities" name="responsibilities" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" />
+                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" /> -->
                       </div>
                     </div>
 
                     <div class="mt-6">
                       <label for="about" class="block text-sm font-medium text-gray-700"> Requirements </label>
                       <div class="mt-1">
-                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" />
+                        <TextArea v-model="jobDetail.requirements" id="requirements" name="requirements" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" />
+                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" /> -->
                       </div>
                     </div>
 
                     <div class="mt-6">
                       <label for="about" class="block text-sm font-medium text-gray-700"> Benefits </label>
                       <div class="mt-1">
-                        <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" />
+                        <TextArea v-model="jobDetail.benefits" id="benefits" name="benefits" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" />
+                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" /> -->
                       </div>
                     </div>
                   </div>
@@ -320,10 +297,7 @@
               <p class="mt-4 text-xs text-gray-500">Include as many keywords as possible to increase searchability</p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <form
-                action="#"
-                method="POST"
-              >
+              <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
@@ -335,7 +309,7 @@
                         >Job Function</label>
                         <SelectInput
                           placeholder="Select Job Function"
-                          v-model="jobDetail.jobFunctionId"
+                          v-model="jobDetail.job_function_id"
                           :items="jobFunctions"
                           id="jobFunction"
                         ></SelectInput>
@@ -348,7 +322,7 @@
                         >Employment Type</label>
                         <SelectInput
                           placeholder="Select Employment Type"
-                          v-model="jobDetail.employmentTypeId"
+                          v-model="jobDetail.employment_type_id"
                           :items="employmentTypes"
                           id="employmentType"
                         ></SelectInput>
@@ -361,7 +335,7 @@
                         >Experience </label>
                         <SelectInput
                           placeholder="Select Experience"
-                          v-model="jobDetail.experienceId"
+                          v-model="jobDetail.experience_level_id"
                           :items="experienceLevels"
                           id="experience"
                         ></SelectInput>
@@ -375,24 +349,48 @@
                         
                         <SelectInput
                           placeholder="Select Education Level"
-                          v-model="jobDetail.educationId"
+                          v-model="jobDetail.education_level_id"
                           :items="educationLevels"
                           id="educationLevel"
                         ></SelectInput>
                       </div>
+
+                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                        <label
+                          for="industry"
+                          class="block text-sm font-medium text-gray-700"
+                        >Industries </label>
+                        <SelectInput
+                          placeholder="Select Industries"
+                          v-model="jobDetail.industry_id"
+                          :items="industries"
+                          id="industry"
+                        ></SelectInput>
+                      </div>
                       
-                      <div class="col-span-6">
+                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                         <label
                           for="street-address"
                           class="block text-sm font-medium text-gray-700"
                         >Keywords</label>
-                        <input
-                          type="text"
+                        <FormInput
                           name="keywords"
                           id="keywords"
-                          autocomplete="keywords"
+                          v-model="jobDetail.keywords"
                           placeholder="Keywords are comma separated"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        ></FormInput>
+                      </div>
+                      <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label
+                          for="headcount"
+                          class="block text-sm font-medium text-gray-700"
+                        >Head Count</label>
+                        <NumberInput
+                          type="number"
+                          name="headcount"
+                          id="headcount"
+                          v-model="jobDetail.head_count"
+                          class="mt-1"
                         />
                       </div>
                     </div>
@@ -414,10 +412,7 @@
               <p class="mt-1 text-xs text-gray-500">Adding the salary here will improve performance on some job boards. You can also include the salary in the job description</p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <form
-                action="#"
-                method="POST"
-              >
+              <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
@@ -427,13 +422,13 @@
                           for="min-offer"
                           class="block text-sm font-medium text-gray-700"
                         >Minimum Offer</label>
-                         <input
-                          type="number"
-                          name="min-offer"
-                          id="min-offer"
-                          autocomplete="min-offer"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
+                         <NumberInput
+                            type="number"
+                            name="min-offer"
+                            id="min-offer"
+                            v-model="jobDetail.salary_min"
+                            class="mt-1"
+                          />
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
@@ -441,12 +436,12 @@
                           for="max-offer"
                           class="block text-sm font-medium text-gray-700"
                         >Maximum Offer</label>
-                        <input
+                        <NumberInput
                           type="number"
                           name="max-offer"
                           id="max-offer"
-                          autocomplete="max-offer"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          v-model="jobDetail.salary_max"
+                          class="mt-1"
                         />
                       </div>
 
@@ -457,7 +452,7 @@
                         >Currency </label>
                         <SelectInput
                           placeholder="Select a currency"
-                          v-model="jobDetail.currencyId"
+                          v-model="jobDetail.salary_currency_id"
                           :items="currencies"
                           id="currency"
                         ></SelectInput>
@@ -481,10 +476,7 @@
               <p class="mt-1 text-xs text-gray-500">Adding a deadline will automatically close applications on the set date</p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <form
-                action="#"
-                method="POST"
-              >
+              <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
@@ -494,11 +486,11 @@
                           for="min-offer"
                           class="block text-sm font-medium text-gray-700"
                         >Deadline</label>
-                         <input
+                         <DateInput
                           type="date"
-                          name="min-offer"
-                          id="min-offer"
-                          autocomplete="min-offer"
+                          name="deadline"
+                          id="deadline"
+                          v-model="jobDetail.deadline"
                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
                       </div>
@@ -522,7 +514,9 @@
             <AppButton
               type="submit"
               label="Continue"
-              @click="gotoPage(2)"
+              @click="submitVacancyDetail"
+              :disabled="processing"
+              :class="processing ? 'cursor-not-allowed' : 'cursor-pointer'"
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></AppButton>
           </div>
@@ -530,6 +524,7 @@
       </div>
 
       <ApplicationFormView
+        :jobId="vacancyId"
         @prevPage="gotoPage(1)"
         @nextPage="gotoPage(3)"
         v-if="stepNo === 2"
@@ -551,64 +546,103 @@ import { ref, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { required, helpers } from '@vuelidate/validators';
 import { CheckIcon } from "@heroicons/vue/solid";
-//import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
+import { useDepartments } from "../../stores/department";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import MiscService from '../../service/miscellaneous.service';
+import VacancyService from '../../service/vacancies.service';
+
 const jobDetail = ref({
   title: '',
-  departmentId: '',
-  internalCode: '',
-  countryId: '',
-  countryStateId: '',
-  cityId: '',
-  streetAddress: '',
+  department_id: 0,
+  code: '',
+  country_id: '',
+  region_id: '',
+  city_id: '',
   isRemote: false,
   description: '',
   responsibilities: '',
   requirements: '',
   benefits: '',
-  jobFunctionId: '',
-  employmentTypeId: '',
-  experienceId: '',
-  educationId: '',
-  minimumOffer: '',
-  maximumOffer: '',
-  currencyId: '',
+  job_function_id: '',
+  employment_type_id: '',
+  experience_level_id: '',
+  education_level_id: '',
+  salary_currency_id: '',
   deadline: '',
+  zip_code: '',
+  location: '',
+  industry_id: '',
+  keywords: '',
+  salary_min: '',
+  salary_max: '',
+  head_count: '',
 });
 
 const rules = {
-  title: { required },
-  departmentId: { required },
-  internalCode: { required },
-  countryId: { required },
-  countryStateId: { required },
+  title: { required: helpers.withMessage('Vacancy title is required', required) },
+  department_id: { required },
+  code: { required },
+  country_id: { required },
+  region_id: { required },
 }
 
 const v$ = useVuelidate(rules, jobDetail);
 
-const steps = [
+const steps = ref([
   { id: 1, name: "Job details", href: "#", status: "current" },
   { id: 2, name: "Application form", href: "#", status: "upcoming" },
   { id: 3, name: "Workflow", href: "#", status: "upcoming" },
-];
+]);
 
 const {
   countries,
   currencies,
+  industries,
   jobFunctions,
   educationLevels,
   employmentTypes,
   experienceLevels,
 } = storeToRefs(useMiscellaneous());
-const stepNo = ref(1);
+
+const vacancyId = ref(0);
+const { departments } = storeToRefs(useDepartments());
+const stepNo = ref(2);
 const countryStates = ref([]);
 const cities = ref([]);
 const toast = useToast();
+const processing = ref(false);
+const departmentList = ref(departments.value.data);
+// const samplePayload = {
+//   benefits: "Competitive Salary",
+//   city_id: "76932",
+//   code: "SAL-556632",
+//   country_id: 161,
+//   deadline: "2022-07-04",
+//   department_id: "11",
+//   description: "Sales Representative",
+//   education_level_id: "2",
+//   employment_type_id: "2",
+//   experience_level_id: "4",
+//   head_count: "2",
+//   industry_id: "29",
+//   isRemote: false,
+//   job_function_id: "37",
+//   keywords: "sales, buy, sell",
+//   location: "Alausa Ikeja",
+//   region_id: "306",
+//   requirements: "Sales Representative",
+//   responsibilities: "Sales Representative",
+//   salary_currency_id: "102",
+//   salary_max: "125000",
+//   salary_min: "75000",
+//   title: "Sale Rep",
+//   zip_code: "",
+// }
 // const editor = ClassicEditor;
 // const description = ref("");
 // const editorConfig = {
@@ -625,23 +659,49 @@ const toast = useToast();
 //   }
 // }
 
-async function gotoPage(value) {
-  const valid = await v$.value.$validate();
-  stepNo.value = value;
-  steps[value].status = "current";
-
-  steps[value - 1].status = "complete";
-  steps[value + 1].status = "upcoming";
+function onRemoteChange(evt) {
+  jobDetail.value.isRemote = evt.target.checked;
 }
 
+function gotoPage(step) {
+  stepNo.value = step;
+  steps.value[step - 1].status = "current";
+
+  steps.value[step - 2].status = "complete";
+  steps.value[step].status = "upcoming";
+}
+
+async function submitVacancyDetail() {
+  const valid = await v$.value.$validate();
+  if (valid) {
+    processing.value = true;
+    VacancyService.create(jobDetail.value).then(result => {
+      const { data } = result.data;
+      vacancyId.value = data.id;
+      gotoPage(2);
+    }).catch((error) => {
+      console.log(error);
+      toast.error('Something went wrong, please try again later');
+    }).finally(() => {
+      processing.value = false;
+    })
+  }
+
+  if (!valid) {
+    toast.error('Please provide all required data');
+    return;
+  }
+}
+
+
 onMounted(() => {
-  jobDetail.value.countryId = countries.value[0].id;
+  jobDetail.value.country_id = countries.value[0].id;
   MiscService.getRegions(countries.value[0].id).then(result => {
     countryStates.value = result.data.data;
   })
 })
 
-watch(() => jobDetail.value.countryStateId, (newValue) => {
+watch(() => jobDetail.value.region_id, (newValue) => {
   cities.value = [];
   const id = Number(newValue);
   MiscService.getCities(id).then(result => {
@@ -649,7 +709,7 @@ watch(() => jobDetail.value.countryStateId, (newValue) => {
   })
 });
 
-watch(() => jobDetail.value.countryId, (newValue) => {
+watch(() => jobDetail.value.country_id, (newValue) => {
   countryStates.value = [];
   const id = Number(newValue);
   MiscService.getRegions(id).then(result => {

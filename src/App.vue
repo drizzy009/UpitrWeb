@@ -1,9 +1,15 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
+import { storeToRefs } from "pinia";
 import { RouterView } from "vue-router";
+import { useDepartments } from "./stores/department";
 import { useMiscellaneous } from "./stores/miscellaneous";
+import { useAuthentication } from "./stores/authentication";
 
 const miscStore = useMiscellaneous();
+const useDepartmentStore = useDepartments();
+
+const { isAuthenticated } = storeToRefs(useAuthentication());
 
 onMounted(() => {
   try {
@@ -15,10 +21,22 @@ onMounted(() => {
     miscStore.fetchEmploymentTypes();
     miscStore.fetchEducationLevels();
     miscStore.fetchExperienceLevels();
+
+    if (isAuthenticated) {
+      useDepartmentStore.reset();
+      useDepartmentStore.fetchAllDepartments();
+    }
   } catch (error) {
     // console.log(error);
   }
 })
+
+watch(() => isAuthenticated.value, (value) => {
+  if (value) {
+    useDepartmentStore.reset();
+    useDepartmentStore.fetchAllDepartments();
+  }
+});
 </script>
 
 <template>

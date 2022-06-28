@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-for="section in data"
+      v-for="section in applicantInfo"
       :key="section.sectionName"
       class="mt-10 sm:mt-0 space-y-8 divide-y divide-gray-200 pb-8 border-b-2 border-b-gray-200"
     >
@@ -45,7 +45,7 @@
                               active
                                 ? 'ring-2 ring-offset-2 ring-green-500'
                                 : '',
-                              checked
+                              (checked || setDefault(item))
                                 ? 'bg-green-400 border-transparent text-white hover:bg-green-500'
                                 : 'bg-[#E1E6EB] border-gray-200 text-gray-900 hover:bg-gray-50',
                               'border rounded-full py-1 px-1 flex items-center justify-center text-sm font-medium sm:flex-1',
@@ -114,11 +114,11 @@
                               >
                                 <option>Paragraph</option>
                                 <option>Short Answer</option>
-                                <option>Yes/No</option>
+                                <!-- <option>Yes/No</option>
                                 <option>Dropdown</option>
                                 <option>Multiple Choice</option>
                                 <option>Date</option>
-                                <option>Number</option>
+                                <option>Number</option> -->
                               </select>
                             </div>
                             <div class="col-span-6 sm:col-span-6">
@@ -182,7 +182,9 @@
           ></CancelButton>
           <AppButton
             label="Continue"
-            @click="$emit('nextPage')"
+            @click="saveApplicantInfo"
+            :disabled="processing"
+            :class="processing ? 'cursor-not-allowed' : 'cursor-pointer'"
             class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></AppButton>
         </div>
@@ -195,12 +197,17 @@ import { ref } from "vue";
 import applicationData from "../../data/applicationForm";
 import { PlusSmIcon } from "@heroicons/vue/solid";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import VacancySettingService from "../../service/vacancy-settings.service";
 
-const data = ref(applicationData);
+const applicantInfo = ref(applicationData);
 const questionPanel = ref(false);
+const emits = defineEmits(['nextPage']);
+const props = defineProps({
+  jobId: Number,
+});
 
 var questions = ref([]);
-
+const processing = ref(false);
 var question = ref("");
 var questionType = ref("");
 
@@ -215,6 +222,59 @@ function addQuestion() {
   // questionPanel.value == true
   //   ? (questionPanel.value = false)
   //   : (questionPanel.value = true);
+}
+
+function saveApplicantInfo() {
+  processing.value = true;
+  const payload = {
+    phone: "",
+    heading: "",
+    address: "",
+    photo: "",
+    education: "",
+    experience: "",
+    summary: "",
+    resume: "",
+    cover_letter: "",
+  }
+
+  const appFields = [];
+  applicantInfo.value.forEach(element => {
+    element.fields.forEach(field => {
+      appFields.push(field)
+    })
+  });
+
+  Object.entries(payload).forEach((key) => {
+    const fieldValue = appFields.find(item => item.key === key[0]);
+    if (fieldValue !== undefined && fieldValue.model === key[0]) payload[key[0]] = "Off";
+    if (fieldValue !== undefined && fieldValue.model !== key[0]) payload[key[0]] = fieldValue.model.optionName;
+  })
+
+  Object.assign(
+    payload,
+    {
+      job_id: props.jobId,
+      firstname: "Mandatory",
+      lastname: "Mandatory",
+      email: "Mandatory",
+      gender: "Mandatory",
+      cv: "Off",
+      dob: "Mandatory",
+    }
+  )
+
+  VacancySettingService.create(payload).then(() => {
+    emits('nextPage');
+  }).catch((error) => {
+    console.log(error);
+  }).finally(() => {
+    processing.value = false;
+  })
+}
+
+function setDefault(item) {
+  return item.options.length === 1
 }
 
 </script>

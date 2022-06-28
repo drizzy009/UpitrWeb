@@ -78,12 +78,13 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
+// import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { MailIcon } from "@heroicons/vue/solid";
 import { useAuthentication } from "../../stores/authentication";
+import AuthService from "../../service/authentication.service";
 
 const loginDetail = ref({
   email: '',
@@ -98,10 +99,14 @@ const rules = {
 
 const toast = useToast();
 const router = useRouter();
-const { error, successful, authenticating, errorMessage } = storeToRefs(useAuthentication());
-const { loginUser } = useAuthentication();
+// const { error, successful, authenticating, errorMessage } = storeToRefs(useAuthentication());
+const { setLoginInfo } = useAuthentication();
 const v$ = useVuelidate(rules, loginDetail);
 
+const error = ref(false);
+const errorMessage = ref('');
+const successful = ref(false);
+const authenticating = ref(false);
 watch(() => successful.value, (value) => {
   if (value) {
     toast.success("Login successful");
@@ -118,7 +123,16 @@ watch(() => error.value, (value) => {
 async function onLogin() {
   const valid = await v$.value.$validate();
   if (valid) {
-    loginUser(loginDetail.value);
+    AuthService.signIn(loginDetail.value).then(result => {
+        const { data } = result.data;
+        setLoginInfo(data);
+        successful.value = true;
+    }).catch((errorData) => {
+        errorMessage.value = errorData.data.message
+        error.value = true;
+    }).finally(() => {
+        authenticating.value = false;
+    })
   }
 
   if (!valid) {
