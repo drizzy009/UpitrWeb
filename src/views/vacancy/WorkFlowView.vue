@@ -30,7 +30,7 @@
           <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
             <div
               v-if="assessments.length > 0"
-              class="flex px-2 pt-0 pb-6 border-2 border-gray-300 rounded-md"
+              class="flex rounded-md"
             >
               <div class="space-y-1">
                 <AssessmentView :questions="assessments"></AssessmentView>

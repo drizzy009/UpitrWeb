@@ -317,6 +317,7 @@ import {
   ChartPieIcon,
   OfficeBuildingIcon,
 } from "@heroicons/vue/outline";
+import { UserCircleIcon } from "@heroicons/vue/solid";
 
 const navigation = [
   { 
@@ -342,6 +343,12 @@ const navigation = [
     tag: "ManageActivities",
     href: "/activity/all", 
     icon: ClockIcon 
+  },
+  { 
+    name: "Users", 
+    tag: "ManageUsers",
+    href: "/users/all", 
+    icon: UserCircleIcon 
   },
   {
     name: "Departments",

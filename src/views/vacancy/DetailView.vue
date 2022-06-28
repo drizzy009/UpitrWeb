@@ -925,7 +925,6 @@
 
 <script setup>
 import { ref } from "vue";
-import TabbedPanel from "../../components/commons/tabs/TabbedPanel.vue";
 import {
   Menu,
   Listbox,
@@ -938,15 +937,12 @@ import {
   ListboxOptions,
 } from "@headlessui/vue";
 import {
-  MailIcon,
   CheckIcon,
   PencilIcon,
   CalendarIcon,
   UserGroupIcon,
   BriefcaseIcon,
-  CheckCircleIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
   CurrencyDollarIcon,
   LocationMarkerIcon,
   ArrowNarrowLeftIcon,

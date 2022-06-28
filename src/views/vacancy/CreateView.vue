@@ -653,7 +653,7 @@ const stepNo = ref(1);
 // }
 
 async function gotoPage(value) {
-  const valid = await v$.value.$validate();
+  // const valid = await v$.value.$validate();
   // if (valid) {
   stepNo.value = value;
   steps[value].status = "current";
