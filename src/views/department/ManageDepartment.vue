@@ -305,33 +305,20 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import {
-  CalendarIcon,
-  LocationMarkerIcon,
   PlusCircleIcon,
   RefreshIcon,
-  FilterIcon,
   DownloadIcon,
   DuplicateIcon,
   PencilAltIcon,
   TrashIcon,
   SearchIcon,
-  ExclamationIcon,
   DotsVerticalIcon,
   ClipboardListIcon
 } from "@heroicons/vue/solid";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { XIcon } from "@heroicons/vue/outline";
 import CreateDepartment from './CreateDepartment.vue';
 const departments = departmentList;
 const openAddDepartment = ref(false);
-
-// const open = ref(true);
-const router = useRouter();
-
-function goto(name) {
-  // router.push({ name: name });
-}
 
 function toggleAddDepartment() {
   openAddDepartment.value = !openAddDepartment.value;

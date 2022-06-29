@@ -56,7 +56,22 @@
           for="relatedTo"
           class="block text-sm font-medium text-gray-700 mb-2"
         >Related To</label>
-        <FormInput id="relatedTo" v-model="formData.relatedTo"></FormInput>
+        <SelectInput
+          :items="[
+            { name: 'Vacancy', id: 1 },
+            { name: 'Candidate', id: 2 },
+            { name: 'Assessment', id: 3 },
+            { name: 'Interview', id: 4 },
+          ]"
+          id="relatedTo"
+        ></SelectInput>
+      </div>
+      <div class="col-span-6 mt-2 md:mt-4">
+        <label
+          for="relatedTo"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >Date & Time</label>
+        <Datepicker v-model="date"></Datepicker>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
@@ -100,8 +115,11 @@
 import { ref, watch } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
-import { CheckIcon, SelectorIcon, PhoneIcon, UserGroupIcon, CalendarIcon, MailIcon, UserCircleIcon } from '@heroicons/vue/solid'
+import { CheckIcon, SelectorIcon, PhoneIcon, UserGroupIcon, CalendarIcon, MailIcon, UserCircleIcon} from '@heroicons/vue/solid'
 import { required } from '@vuelidate/validators';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 const emits = defineEmits(['toggleActivity']);
 const props = defineProps({
   toggle: Boolean,
@@ -151,6 +169,7 @@ const taskTypes = [
 ]
 
 const selected = ref(taskTypes[0]);
+const date = ref();
 
 const v$ = useVuelidate(rules, formData);
 
@@ -164,7 +183,7 @@ function closeCreateActivity() {
 }
 
 async function saveActivity() {
-  const valid = await v$.value.$validate();
+ // const valid = await v$.value.$validate();
 }
 
 </script>

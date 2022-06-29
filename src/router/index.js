@@ -8,6 +8,9 @@ import ForgotPasswordView from "../views/authentication/ForgotPasswordView.vue";
 
 import DashboardView from "../views/dashboard/DashboardView.vue";
 
+import UserListView from "../views/user/ListView.vue";
+import UserDetailView from "../views/user/DetailView.vue";
+
 import ManageVacancyView from "../views/vacancy/ManageView.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
@@ -188,6 +191,36 @@ const router = createRouter({
             pageTitle: "Manage Activities",
           },
           component: ManageActivities,
+        },
+      ],
+    },     
+    {
+      path: "/",
+      redirect: "users/all",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "Users",
+          path: "users/all",
+          meta: {
+            pageTitle: "Users",
+          },
+          component: UserListView,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "users/detail",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "UserDetail",
+          path: "users/detail",
+          meta: {
+            pageTitle: "User Detail",
+          },
+          component: UserDetailView,
         },
       ],
     },

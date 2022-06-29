@@ -2,55 +2,56 @@
     {
       "title": "General Meeting",
       "type": "Call",
-      "relatedTo": "Management Meeting",
+      "relatedTo": "Meeting",
       "date": "24/10/2022",
       "time": "12:19 PM",
-      "attendees": "Ade, Seyi, Ola",
-      "assignees": "John Doe"
+      "attendees": ["Adele John", "John Newton", "Lily Sandalwool"],
+      "assignees": ["Adam Smith", "John Doe", "Lily Jane"]
     },
     {
       "title": "Job Interview",
       "type": "Interview",
-      "relatedTo": "Accountant Candidate",
+      "relatedTo": "Candidate",
       "date": "02/10/2021",
       "time": "6:01 PM",
-      "attendees": "Don Jon",
-      "assignees": "Dayo Dayo"
+      "attendees": ["Adele John", "John Newton"],
+      "assignees": ["Adam Smith", "John Doe", "Lily Jane"]
     },
     {
-      "title": "Prepare Account Record",
+      "title": "Candidate Assessment",
       "type": "Task",
       "relatedTo": "Task",
       "date": "28/01/2022",
       "time": "4:48 AM",
-      "attendees": "",
-      "assignees": "Manager"
+      "attendees": ["Lily Sandalwool"],
+      "assignees": ["Adam Smith", "John Doe", "Lily Jane"]
     },
     {
       "title": "Job Interview",
       "type": "Interview",
-      "relatedTo": "Accountant Candidate",
+      "relatedTo": "Inteview",
       "date": "02/10/2021",
       "time": "6:01 PM",
-      "attendees": "Don Jon",
-      "assignees": "Dayo Dayo"
+      "attendees": ["Adele John",  "Lily Sandalwool"],
+      "assignees": ["Adam Smith", "John Doe", "Lily Jane"]
     },
     {
       "title": "General Meeting",
       "type": "Call",
-      "relatedTo": "Management Meeting",
+      "relatedTo": "Meeting",
       "date": "24/10/2022",
       "time": "12:19 PM",
-      "attendees": "Ade, Seyi, Ola",
-      "assignees": "John Doe"
+      "attendees": ["John Newton", "Lily Sandalwool"],
+      "assignees": ["Adam Smith", "John Doe", "Lily Jane"]
     },
     {
       "title": "Reminder Email",
       "type": "Task",
-      "relatedTo": "Reminder Email",
+      "relatedTo": "Email",
       "date": "05/01/2022",
       "time": "4:16 PM",
-      "assignees": "CEO"
+      "attendees": ["Adele John"],
+      "assignees": ["Adam Smith", "John Doe"]
     }
   ]
   
