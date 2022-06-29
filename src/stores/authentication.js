@@ -1,0 +1,36 @@
+import { defineStore } from "pinia";
+import AuthService from "../service/authentication.service";
+import TokenService from "../service/token.service";
+
+export const useAuthentication = defineStore({
+    id: "authentication",
+    state: () => ({
+        error: false,
+        loginInfo: null,
+        tokenInfo: null,
+        successful: false,
+        authenticating: false,
+        errorMessage: "",
+    }),
+    getters: {},
+    actions: {
+        loginUser(payload) {
+            this.error = false;
+            this.errorMessage = "";
+            this.authenticating = true;
+            AuthService.signIn(payload).then(result => {
+                const { data } = result.data;
+                this.loginInfo = data.user;
+                this.tokenInfo = data.access;
+                TokenService.saveToken(data.access.token)
+                this.successful = true;
+            }).catch((error) => {
+                this.errorMessage = error.data.message
+                this.error = true;
+            }).finally(() => {
+                this.authenticating = false;
+            })
+        }
+    },
+    persist: true
+})

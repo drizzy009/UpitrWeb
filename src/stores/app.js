@@ -7,8 +7,8 @@ export const useAppStore = defineStore({
     pageTitle: "",
   }),
   getters: {
-    getPageTitle: (state) => state.pageTitle,
     getPageName: (state) => state.pageName,
+    getPageTitle: (state) => state.pageTitle,
   },
   actions: {
     setPageTitle(value) {

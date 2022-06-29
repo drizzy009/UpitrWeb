@@ -1,11 +1,11 @@
 import axios from "axios";
-const basePath = "user";
+const basePath = "authentication";
 
 const UserService = {
   signIn(data) {
     return new Promise((resolve, reject) => {
       axios
-        .post(`/${basePath}/login`, data)
+        .post(`/${basePath}/signin`, data)
         .then((result) => {
           resolve(result);
         })

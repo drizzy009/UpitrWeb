@@ -3,7 +3,7 @@ import TokenService from "./token.service";
 
 const CoreService = {
   init() {
-    axios.defaults.baseURL = "";
+    axios.defaults.baseURL = "https://upitr.herokuapp.com/api/v1";
     axios.defaults.headers.common.Accept = "application/json";
 
     axios.interceptors.request.use(

@@ -292,7 +292,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useAppStore } from "@/stores/app.js";
 import {
   Dialog,
@@ -369,4 +369,6 @@ const secondaryNavigation = [
 
 const appStore = useAppStore();
 const sidebarOpen = ref(false);
+
+
 </script>

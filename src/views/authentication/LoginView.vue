@@ -23,16 +23,16 @@
 
         <div class="mt-8">
           <div class="mt-6">
-            <form action="#" method="POST" class="space-y-6">
+            <div class="space-y-6">
               <div class="mt-1 relative rounded-md shadow-sm">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <MailIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
-                <input type="email" name="email" id="email" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Email" />
+                <input type="email" v-model="loginDetail.email" name="email" id="email" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Email" />
               </div>
               <div class="space-y-1">
                 <div class="mt-1">
-                  <password-input id="password" placeholder="Password">
+                  <password-input v-model="loginDetail.password" id="password" placeholder="Password">
                   </password-input>
                 </div>
               </div>
@@ -61,14 +61,14 @@
               </div>
 
               <div>
-                <a
-                href="/dashboard"
+                <button
+                  @click="onLogin"
                   class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Sign in
-                </a>
+                  {{ authenticating ? "Authenticating..." : "Sign in"}}
+                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -76,5 +76,53 @@
   </div>
 </template>
 <script setup>
-import { MailIcon } from '@heroicons/vue/solid';
+import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { MailIcon } from "@heroicons/vue/solid";
+import { useAuthentication } from "../../stores/authentication";
+
+const loginDetail = ref({
+  email: '',
+  password: '',
+  remember_me: false
+})
+
+const rules = {
+  email: { required },
+  password: { required },
+}
+
+const toast = useToast();
+const router = useRouter();
+const { error, successful, authenticating, errorMessage } = storeToRefs(useAuthentication());
+const { loginUser } = useAuthentication();
+const v$ = useVuelidate(rules, loginDetail);
+
+watch(() => successful.value, (value) => {
+  if (value) {
+    toast.success("Login successful");
+    router.push({ name: 'Dashboard' });
+  }
+});
+
+watch(() => error.value, (value) => {
+  if (value) {
+    toast.error(errorMessage.value);
+  }
+});
+
+async function onLogin() {
+  const valid = await v$.value.$validate();
+  if (valid) {
+    loginUser(loginDetail.value);
+  }
+
+  if (!valid) {
+    toast.error('Enter username and password');
+  }
+}
 </script>
