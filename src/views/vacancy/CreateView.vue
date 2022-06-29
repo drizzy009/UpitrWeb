@@ -544,6 +544,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
+// import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import useVuelidate from '@vuelidate/core';
 import { required, helpers } from '@vuelidate/validators';
@@ -596,7 +597,7 @@ const v$ = useVuelidate(rules, jobDetail);
 const steps = ref([
   { id: 1, name: "Job details", href: "#", status: "current" },
   { id: 2, name: "Application form", href: "#", status: "upcoming" },
-  { id: 3, name: "Workflow", href: "#", status: "upcoming" },
+  // { id: 3, name: "Workflow", href: "#", status: "upcoming" },
 ]);
 
 const {
@@ -609,12 +610,14 @@ const {
   experienceLevels,
 } = storeToRefs(useMiscellaneous());
 
-const vacancyId = ref(0);
 const { departments } = storeToRefs(useDepartments());
-const stepNo = ref(2);
+const toast = useToast();
+// const router = useRouter();
+
+const stepNo = ref(1);
+const vacancyId = ref(0);
 const countryStates = ref([]);
 const cities = ref([]);
-const toast = useToast();
 const processing = ref(false);
 const departmentList = ref(departments.value.data);
 // const samplePayload = {
@@ -668,7 +671,7 @@ function gotoPage(step) {
   steps.value[step - 1].status = "current";
 
   steps.value[step - 2].status = "complete";
-  steps.value[step].status = "upcoming";
+  // steps.value[step].status = "upcoming";
 }
 
 async function submitVacancyDetail() {
@@ -679,8 +682,7 @@ async function submitVacancyDetail() {
       const { data } = result.data;
       vacancyId.value = data.id;
       gotoPage(2);
-    }).catch((error) => {
-      console.log(error);
+    }).catch(() => {
       toast.error('Something went wrong, please try again later');
     }).finally(() => {
       processing.value = false;

@@ -510,8 +510,9 @@ function goto(name) {
 }
 
 onMounted(() => {
+  console.clear();
   VacancyService.all().then(result => {
-    console.log(result);
+    console.log(result.data);
   })
 })
 </script>

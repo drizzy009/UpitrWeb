@@ -114,6 +114,38 @@ const VacancyService = {
         });
     });
   },
+  createQuestion(payload) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post("/vacancy-questions", payload)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
+  deleteQuestion(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`/vacancy-questions/${id}`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
 };
 
 export default VacancyService;

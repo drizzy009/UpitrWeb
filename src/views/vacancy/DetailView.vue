@@ -924,7 +924,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import {
   Menu,
   Listbox,
@@ -951,6 +952,7 @@ import {
 import CandidateView from "./CandidateView.vue";
 // import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 var tabIndex = ref(0);
+const router = useRouter();
 
 const tabs = [
   { name: "Sourced", href: "#", count: "2", current: true },
@@ -1014,4 +1016,10 @@ const publishingOptions = [
 ];
 
 const selected = ref(publishingOptions[0]);
+
+onMounted(() => {
+  console.clear();
+  const { id } = router.currentRoute.value.params;
+  console.log(id);
+})
 </script>

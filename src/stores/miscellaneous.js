@@ -9,6 +9,7 @@ export const useMiscellaneous = defineStore({
         currencies: [],
         designations: [],
         jobFunctions: [],
+        questionTypes: [],
         employmentTypes: [],
         educationLevels: [],
         experienceLevels: [],
@@ -54,6 +55,11 @@ export const useMiscellaneous = defineStore({
         fetchExperienceLevels() {
             MiscService.getExperienceLevels().then(result => {
                 this.experienceLevels = result.data.data;
+            })
+        },
+        fetchQuestionTypes() {
+            MiscService.getQuestionTypes().then(result => {
+                this.questionTypes = result.data.data;
             })
         }
     },

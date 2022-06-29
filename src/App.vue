@@ -18,6 +18,7 @@ onMounted(() => {
     miscStore.fetchIndustries();
     miscStore.fetchDesignations();
     miscStore.fetchJobFunctions();
+    miscStore.fetchQuestionTypes();
     miscStore.fetchEmploymentTypes();
     miscStore.fetchEducationLevels();
     miscStore.fetchExperienceLevels();

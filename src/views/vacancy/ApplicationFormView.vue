@@ -81,15 +81,26 @@
         <div class="mt-5 md:mt-0 md:col-span-2">
           <div class="shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-3 bg-white sm:p-6">
-              <div class="grid grid-cols-12 gap-6">
+              <div class="">
                 <div
                   v-for="q in questions"
                   :key="q.question"
-                  :value="q.questionType"
-                  class="shadow rounded-lg p-4 col-span-12 border border-gray-300"
+                  :value="q.question"
+                  class="grid grid-cols-2 shadow rounded-lg mb-2 py-3 px-4 border border-gray-300"
                 >
-                  <h3 class="font-bold">{{ q.questionType }}</h3>
-                  <p>{{ q.question }}</p>
+                  <div class="col-start">
+                    <h3 class="font-bold">{{ q.question }}</h3>
+                    <p>{{ getQuestionType(q) }}</p>
+                  </div>
+                  <div class="col-end">
+                    <div class="flex flex-row-reverse">
+                      <TrashIcon
+                        @click="deleteQuestion(q.id)"
+                        :disabled="deletingQuestion"
+                        :class="deletingQuestion ? 'cursor-not-allowed' : 'cursor-pointer'"
+                        class="h-6 w-6 text-red-500 cursor-pointer"></TrashIcon>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="mt-10 sm:mt-0" v-if="questionPanel == true">
@@ -105,21 +116,13 @@
                                 class="block text-sm font-medium text-gray-700"
                                 >Question Type</label
                               >
-                              <select
+                              <SelectInput
                                 id="question-type"
                                 name="question-type"
+                                :items="questionTypes"
                                 v-model="questionType"
-                                autocomplete="question-type"
-                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               >
-                                <option>Paragraph</option>
-                                <option>Short Answer</option>
-                                <!-- <option>Yes/No</option>
-                                <option>Dropdown</option>
-                                <option>Multiple Choice</option>
-                                <option>Date</option>
-                                <option>Number</option> -->
-                              </select>
+                              </SelectInput>
                             </div>
                             <div class="col-span-6 sm:col-span-6">
                               <label
@@ -132,21 +135,23 @@
                                   id="question"
                                   v-model="question"
                                   name="question"
-                                  rows="5"
+                                  rows="4"
                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                                  placeholder="List job responsibilities"
+                                  placeholder="enter question here...."
                                 />
                               </div>
                             </div>
                           </div>
                         </div>
                         <div class="px-4 py-3 bg-gray-100 text-right sm:px-6">
-                          <span
-                            @click="addQuestion()"
+                          <button
+                            @click="addQuestion"
+                            :disabled="savingQuestion"
+                            :class="savingQuestion ? 'cursor-not-allowed' : 'cursor-pointer'"
                             class="inline-flex cursor-pointer justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-500 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 sm:text-sm sm:leading-5"
                           >
                             Add Question
-                          </span>
+                          </button>
                         </div>
                       </div>
                     </form>
@@ -181,9 +186,9 @@
             class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></CancelButton>
           <AppButton
-            label="Continue"
-            @click="saveApplicantInfo"
+            label="Save Vacancy"
             :disabled="processing"
+            @click="saveApplicantInfo"
             :class="processing ? 'cursor-not-allowed' : 'cursor-pointer'"
             class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></AppButton>
@@ -194,30 +199,57 @@
 
 <script setup>
 import { ref } from "vue";
-import applicationData from "../../data/applicationForm";
-import { PlusSmIcon } from "@heroicons/vue/solid";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import { PlusSmIcon, TrashIcon } from "@heroicons/vue/solid";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import applicationData from "../../data/applicationForm";
+import { useMiscellaneous } from "../../stores/miscellaneous";
+import VacancyService from '../../service/vacancies.service';
 import VacancySettingService from "../../service/vacancy-settings.service";
 
-const applicantInfo = ref(applicationData);
-const questionPanel = ref(false);
-const emits = defineEmits(['nextPage']);
 const props = defineProps({
   jobId: Number,
 });
 
-var questions = ref([]);
+const {
+  questionTypes
+} = storeToRefs(useMiscellaneous());
+
+const toast = useToast();
+const router = useRouter();
+const savingQuestion = ref(false);
+const deletingQuestion = ref(false);
+const applicantInfo = ref(applicationData);
+const questionPanel = ref(false);
+const emits = defineEmits(['nextPage']);
+
+const questions = ref([]);
 const processing = ref(false);
-var question = ref("");
-var questionType = ref("");
+const question = ref("");
+const questionType = ref(0);
 
 function addQuestion() {
-  var currentQuestion = {
+  const currentQuestion = {
+    job_id: props.jobId,
     question: question.value,
-    questionType: questionType.value,
+    job_question_type_id: Number(questionType.value)
   };
 
-  questions.value.push(currentQuestion);
+  savingQuestion.value = true;
+  VacancyService.createQuestion(currentQuestion).then(result => {
+    const id = result.data.data.id;
+    Object.assign(currentQuestion, {id});
+    questions.value.push(currentQuestion);
+    toast.info('Question successfully added');
+  }).catch(() => {
+    toast.error('Unable to add question, please try again later');
+  })
+  .finally(() => {
+    savingQuestion.value = false;
+  })
+
   questionPanel.value = !questionPanel.value;
   // questionPanel.value == true
   //   ? (questionPanel.value = false)
@@ -225,6 +257,7 @@ function addQuestion() {
 }
 
 function saveApplicantInfo() {
+  router.push(`detail/${props.jobId}`);
   processing.value = true;
   const payload = {
     phone: "",
@@ -265,9 +298,12 @@ function saveApplicantInfo() {
   )
 
   VacancySettingService.create(payload).then(() => {
-    emits('nextPage');
+    toast.success('Application form successfully saved');
+    router.push({ name: 'VacancyDetail', params: { ...props.jobId } });
+    // emits('nextPage');
   }).catch((error) => {
     console.log(error);
+    toast.error('Unable to save application form, please try again later');
   }).finally(() => {
     processing.value = false;
   })
@@ -275,6 +311,29 @@ function saveApplicantInfo() {
 
 function setDefault(item) {
   return item.options.length === 1
+}
+
+function getQuestionType(question) {
+  const id = Number(question.job_question_type_id);
+  const getType = questionTypes.value.find(q => q.id === id);
+  if (getType !== undefined) {
+    return getType.name;
+  }
+
+  return "";
+}
+
+function deleteQuestion(id) {
+  deletingQuestion.value = true;
+  VacancyService.deleteQuestion(id).then(() => {
+    questions.value = questions.value.filter(item => item.id !== id);
+    toast.info('Question successfully deleted');
+  }).catch(() => {
+    toast.error('Unable to delete question, please try again later');
+  })
+  .finally(() => {
+    deletingQuestion.value = false;
+  })
 }
 
 </script>
