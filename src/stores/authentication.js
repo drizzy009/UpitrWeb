@@ -38,6 +38,12 @@ export const useAuthentication = defineStore({
             this.tokenInfo = payload.access;
             this.isAuthenticated = true;
             TokenService.saveToken(payload.access.token)
+        },
+        logOut() {
+            this.loginInfo = null;
+            this.tokenInfo = null;
+            this.isAuthenticated = false;
+            TokenService.destroyToken();
         }
     },
     persist: true

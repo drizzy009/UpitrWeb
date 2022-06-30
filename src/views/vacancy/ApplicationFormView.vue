@@ -117,6 +117,7 @@
                                 >Question Type</label
                               >
                               <SelectInput
+                                placeholder="Select Question Type"
                                 id="question-type"
                                 name="question-type"
                                 :items="questionTypes"

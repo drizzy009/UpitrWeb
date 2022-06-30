@@ -23,6 +23,7 @@
         <SelectInput
           v-model="formData.locationId"
           :error="v$.locationId.$error"
+          placeholder="Select Location"
           :items="[
             { name: 'Lagos', id: 1 },
             { name: 'Ogun', id: 2 },

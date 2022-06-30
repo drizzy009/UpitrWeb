@@ -57,6 +57,7 @@
           class="block text-sm font-medium text-gray-700 mb-2"
         >Related To</label>
         <SelectInput
+          placeholder=""
           :items="[
             { name: 'Vacancy', id: 1 },
             { name: 'Candidate', id: 2 },
@@ -87,6 +88,7 @@
         >Location</label>
         <SelectInput
           v-model="formData.locationId"
+          placeholder=""
           :error="v$.locationId.$error"
           :items="[
             { name: 'Lagos', id: 1 },

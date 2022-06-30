@@ -95,6 +95,7 @@
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                           <div class="max-w-lg flex rounded-md shadow-sm">
                             <SelectInput
+                              placeholder=""
                               :items="[
                                 { name: 'Male', id: 'male' },
                                 { name: 'Female', id: 'female' },

@@ -27,7 +27,8 @@ const CoreService = {
       },
       (error) => {
         if (error.status == 401) {
-          this.$router.push({ name: "login" });
+          console.log('unauthorised');
+          this.$router.push({ name: "Login" });
         }
         return Promise.reject(error);
       }

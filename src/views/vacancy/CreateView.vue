@@ -122,10 +122,11 @@
                         <label
                           for="first-name"
                           class="block text-sm font-medium text-gray-700"
-                        >Select Department</label>
+                        >Department</label>
                         <SelectInput
                           class="mt-1"
                           :items="departmentList"
+                          placeholder="Select Department"
                           v-model="jobDetail.department_id"
                         ></SelectInput>
                       </div>
@@ -165,7 +166,7 @@
                           class="block text-sm font-medium text-gray-700"
                         >Country</label>
                         <SelectInput
-                          placeholder="Select a country"
+                          placeholder="Select Country"
                           v-model="jobDetail.country_id"
                           :items="countries"
                           id="country"
@@ -179,7 +180,7 @@
                           class="block text-sm font-medium text-gray-700"
                         >State</label>
                         <SelectInput
-                          placeholder="Select a state"
+                          placeholder="Select State"
                           v-model="jobDetail.region_id"
                           :items="countryStates"
                           id="state"
@@ -192,7 +193,7 @@
                           class="block text-sm font-medium text-gray-700"
                         >City </label>
                         <SelectInput
-                          placeholder="Select a city"
+                          placeholder="Select City"
                           v-model="jobDetail.city_id"
                           :items="cities"
                           id="city"
@@ -451,7 +452,7 @@
                           class="block text-sm font-medium text-gray-700"
                         >Currency </label>
                         <SelectInput
-                          placeholder="Select a currency"
+                          placeholder="Select Currency"
                           v-model="jobDetail.salary_currency_id"
                           :items="currencies"
                           id="currency"
@@ -618,7 +619,7 @@ const vacancyId = ref(0);
 const countryStates = ref([]);
 const cities = ref([]);
 const processing = ref(false);
-const departmentList = ref(departments.value.data);
+const departmentList = ref([]);
 // const samplePayload = {
 //   benefits: "Competitive Salary",
 //   city_id: "76932",
@@ -696,6 +697,8 @@ async function submitVacancyDetail() {
 
 
 onMounted(() => {
+  // console.log(departments.value.data);
+  departmentList.value = departments.value.data
   jobDetail.value.country_id = countries.value[0].id;
   MiscService.getRegions(countries.value[0].id).then(result => {
     countryStates.value = result.data.data;

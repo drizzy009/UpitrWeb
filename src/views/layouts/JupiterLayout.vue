@@ -179,14 +179,15 @@
         >
           <div class="flex items-center">
             <div>
-              <img
+              <!-- <img
                 class="inline-block h-9 w-9 rounded-full"
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                 alt=""
-              />
+              /> -->
+              <UserCircleIcon class="h-8 w-8 rounded-full"></UserCircleIcon>
             </div>
             <div class="ml-3">
-              <p class="text-sm font-medium text-white group-hover:text-gray-300">Emilia Birch</p>
+              <p class="text-sm font-medium text-white group-hover:text-gray-300">{{loginInfo.firstname}} {{loginInfo.lastname}}</p>
               <p class="text-xs font-medium text-white group-hover:text-gray-300">View profile</p>
             </div>
           </div>
@@ -239,12 +240,13 @@
             >
               <div>
                 <MenuButton class="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">
-                  <img
+                  <!-- <img
                     class="h-8 w-8 rounded-full"
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
-                  />
-                  <span class="hidden ml-3 text-gray-700 text-sm font-medium lg:block"><span class="sr-only">Open user menu for </span>Emilia Birch</span>
+                  /> -->
+                  <UserCircleIcon class="h-8 w-8 rounded-full"></UserCircleIcon>
+                  <span class="hidden ml-3 text-gray-700 text-sm font-medium lg:block"><span class="sr-only">Open user menu for </span>{{loginInfo.firstname}} {{loginInfo.lastname}}</span>
                   <ChevronDownIcon
                     class="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block"
                     aria-hidden="true"
@@ -293,6 +295,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthentication } from "./../../stores/authentication";
 import { useAppStore } from "@/stores/app.js";
 import {
   Dialog,
@@ -318,6 +322,8 @@ import {
   OfficeBuildingIcon,
 } from "@heroicons/vue/outline";
 import { UserCircleIcon } from "@heroicons/vue/solid";
+const { loginInfo } = storeToRefs(useAuthentication());
+// const authStore = useAuthentication();
 
 const navigation = [
   { 
@@ -370,5 +376,12 @@ const secondaryNavigation = [
 const appStore = useAppStore();
 const sidebarOpen = ref(false);
 
+// function onLogout() {
+//   authStore.logOut();
+// }
 
+onMounted(() => {
+  // console.clear();
+  // console.log(loginInfo.value);
+})
 </script>

@@ -26,7 +26,21 @@ import ManageDepartments from "../views/department/ManageDepartment.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    
+    {
+      path: "/",
+      redirect: "dashboard",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "Dashboard",
+          path: "dashboard",
+          meta: {
+            pageTitle: "Dashboard",
+          },
+          component: DashboardView,
+        },
+      ],
+    },
     {
       path: "/",
       redirect: "jobs/all",
@@ -84,21 +98,6 @@ const router = createRouter({
             pageTitle: "ForgotPassword",
           },
           component: ForgotPasswordView,
-        },
-      ],
-    },
-    {
-      path: "/",
-      redirect: "dashboard",
-      component: () => import("../views/layouts/JupiterLayout.vue"),
-      children: [
-        {
-          name: "Dashboard",
-          path: "dashboard",
-          meta: {
-            pageTitle: "Dashboard",
-          },
-          component: DashboardView,
         },
       ],
     },

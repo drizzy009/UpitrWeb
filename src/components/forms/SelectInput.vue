@@ -7,7 +7,7 @@
       class="select-input"
       :class="[!error ? 'select-input' : 'select-input-error']"
     >
-      <option value="0">{{""}}</option> 
+      <option value="0">{{ placeholder }}</option> 
       <option v-for="item in items" :key="item.id" :value="item.id">
           {{ item.name }}
       </option>
@@ -25,8 +25,8 @@
 defineProps({
   items: Array,
   modelValue: [String, Number],
-  error: Boolean
-
+  error: Boolean,
+  placeholder: String
 })
 </script>
 

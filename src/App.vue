@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { RouterView } from "vue-router";
+import { useRouter } from "vue-router";
 import { useDepartments } from "./stores/department";
 import { useMiscellaneous } from "./stores/miscellaneous";
 import { useAuthentication } from "./stores/authentication";
 
+const router = useRouter();
 const miscStore = useMiscellaneous();
 const useDepartmentStore = useDepartments();
 
@@ -23,9 +24,13 @@ onMounted(() => {
     miscStore.fetchEducationLevels();
     miscStore.fetchExperienceLevels();
 
-    if (isAuthenticated) {
+    if (isAuthenticated.value) {
       useDepartmentStore.reset();
       useDepartmentStore.fetchAllDepartments();
+    }
+
+    if (!isAuthenticated.value) {
+      router.push({ name: 'Login'})
     }
   } catch (error) {
     // console.log(error);
