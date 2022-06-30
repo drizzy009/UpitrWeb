@@ -208,8 +208,8 @@
             aria-hidden="true"
           />
         </button>
-        <!-- Search bar -->
-        <div class="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-8">
+        
+        <div class="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-9xl lg:mx-auto ">
           <div class="flex-1 flex items-center">
             <h1 class="
                       text-2xl
