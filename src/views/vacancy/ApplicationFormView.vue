@@ -144,14 +144,13 @@
                           </div>
                         </div>
                         <div class="px-4 py-3 bg-gray-100 text-right sm:px-6">
-                          <button
+                          <AppButton
                             @click="addQuestion"
-                            :disabled="savingQuestion"
-                            :class="savingQuestion ? 'cursor-not-allowed' : 'cursor-pointer'"
+                            label="Add Question"
+                            :processing="savingQuestion"
                             class="inline-flex cursor-pointer justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-500 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 sm:text-sm sm:leading-5"
                           >
-                            Add Question
-                          </button>
+                          </AppButton>
                         </div>
                       </div>
                     </form>
@@ -187,9 +186,8 @@
           ></CancelButton>
           <AppButton
             label="Save Vacancy"
-            :disabled="processing"
             @click="saveApplicantInfo"
-            :class="processing ? 'cursor-not-allowed' : 'cursor-pointer'"
+            :processing="processing"
             class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></AppButton>
         </div>
@@ -243,21 +241,19 @@ function addQuestion() {
     Object.assign(currentQuestion, {id});
     questions.value.push(currentQuestion);
     toast.info('Question successfully added');
+    questionPanel.value = !questionPanel.value;
   }).catch(() => {
     toast.error('Unable to add question, please try again later');
   })
   .finally(() => {
     savingQuestion.value = false;
   })
-
-  questionPanel.value = !questionPanel.value;
   // questionPanel.value == true
   //   ? (questionPanel.value = false)
   //   : (questionPanel.value = true);
 }
 
 function saveApplicantInfo() {
-  router.push(`detail/${props.jobId}`);
   processing.value = true;
   const payload = {
     phone: "",
@@ -299,10 +295,10 @@ function saveApplicantInfo() {
 
   VacancySettingService.create(payload).then(() => {
     toast.success('Application form successfully saved');
-    router.push({ name: 'VacancyDetail', params: { ...props.jobId } });
+    router.push(`detail/${props.jobId}`);
+    // router.push({ name: 'VacancyDetail', params: { ...props.jobId } });
     // emits('nextPage');
-  }).catch((error) => {
-    console.log(error);
+  }).catch(() => {
     toast.error('Unable to save application form, please try again later');
   }).finally(() => {
     processing.value = false;

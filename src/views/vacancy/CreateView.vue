@@ -124,8 +124,8 @@
                           class="block text-sm font-medium text-gray-700"
                         >Select Department</label>
                         <SelectInput
-                          :items="departmentList"
                           class="mt-1"
+                          :items="departmentList"
                           v-model="jobDetail.department_id"
                         ></SelectInput>
                       </div>
@@ -514,9 +514,8 @@
             <AppButton
               type="submit"
               label="Continue"
-              @click="submitVacancyDetail"
-              :disabled="processing"
-              :class="processing ? 'cursor-not-allowed' : 'cursor-pointer'"
+              @click="submitVacancyDetail"              
+              :processing="processing"
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></AppButton>
           </div>

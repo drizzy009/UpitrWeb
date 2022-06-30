@@ -10,14 +10,14 @@
             <div class="flex-shrink-0">
               <img
                 class="h-12 w-12 rounded-full group-hover:opacity-75"
-                :src="candidate.imageUrl"
+                :src="candidate.photo"
                 alt=""
               />
             </div>
             <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
               <div>
                 <p class="text-sm font-medium text-indigo-600 truncate">
-                  {{ candidate.name }}
+                  {{ candidate.firstname }} {{ candidate.lastname }}
                 </p>
                 <p class="mt-2 flex items-center text-sm text-gray-500">
                   <MailIcon
@@ -32,8 +32,8 @@
                   <p class="text-sm text-gray-900">
                     Applied on
                     {{ " " }}
-                    <time :datetime="candidate.appliedDatetime">{{
-                      candidate.applied
+                    <time :datetime="candidate.created_at">{{
+                      candidate.created_at
                     }}</time>
                   </p>
                   <p class="mt-2 flex items-center text-sm text-gray-500">

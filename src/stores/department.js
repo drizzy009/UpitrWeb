@@ -18,7 +18,7 @@ export const useDepartments = defineStore({
             this.isSuccess = false;
             this.processing = false;
             this.errorMessage = "";
-
+            this.departments = [];
         },
         fetchAllDepartments() {
             this.processing = true;

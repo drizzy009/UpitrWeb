@@ -31,8 +31,60 @@
     .select-input-error {
         @apply max-w-lg block pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 w-full shadow-sm sm:text-sm rounded-md
     }
+
+    .vue3-easy-data-table .data-table__body table tbody {
+      @apply divide-y divide-gray-200 bg-white
+    }
+
+    .vue3-easy-data-table .data-table__body table tbody tr[data-v-0e8b8763] {
+      @apply whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:pl-6
+    }
+
+    .vue3-easy-data-table .data-table__body table thead[data-v-0e8b8763] {
+      @apply bg-gray-50
+    }
+    
+    .vue3-easy-data-table .data-table__body.fixed-header thead tr th[data-v-0e8b8763] {
+      @apply py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6
+    }
 }
 
 .number-input {
     border: none;
 }
+
+.loading {
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+  }
+  .loading div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    margin: 2px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+  }
+  .loading div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .loading div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .loading div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes loading {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

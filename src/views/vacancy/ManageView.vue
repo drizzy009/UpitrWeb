@@ -340,166 +340,167 @@
             </a>
           </div>
         </nav> -->
+        <template v-if="loading">
+          <SkeletonLoading></SkeletonLoading>
+          <SkeletonLoading></SkeletonLoading>
+        </template>
         <DataTable
-            :headers="headers"
-            :items="vacancies"
-            show-index
-            class="min-w-full divide-y divide-gray-300"
-          >
-            <template #item-title="item">
-              <div class="flex items-center">
-                <div class="h-10 w-10 flex-shrink-0">
-                  <span
-                    class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200"
-                  >
-                    <span
-                      class="text-xl font-medium leading-none text-indigo-700"
-                      >{{ item.title[0] }}</span
-                    >
-                  </span>
-                </div>
-                <div class="ml-4">
-                  <div class="font-medium text-gray-900">
-                    {{ item.title }}
-                  </div>
-                  <div class="text-gray-500">{{ item.department.name }}</div>
-                </div>
-              </div>
-            </template>
-            <template #item-employment_type="item">
-              <div class="text-gray-900">
+          v-if="!loading"
+          :headers="headers"
+          :items="vacancies"
+          show-index
+          class="min-w-full divide-y divide-gray-300"
+        >
+          <template #item-title="item">
+            <div class="flex items-center">
+              <div class="h-10 w-10 flex-shrink-0">
                 <span
-                  class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800"
-                  >{{ item.employment_type.name }}</span
+                  class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200"
                 >
-              </div>
-            </template>
-            <template #item-is_remote="item">
-              <div
-                  class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
-                >
-                  <LocationMarkerIcon
-                    class="flex-shrink-0 mr-1 w-4 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <span v-if="item.is_remote !== null">{{ item.is_remote ? 'Remote' : 'On-site' }}</span>
-                  <span v-if="item.is_remote === null">On-site</span>
-                </div>
-            </template>
-            <template #item-deadline="item">
-              <div
-                  class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
-                >
-                  <CalendarIcon
-                    class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <p>
-                    Closing
-                    {{ " " }}
-                    {{ getClosingDays(item.deadline )}}
-                  </p>
-                </div>
-            </template>
-            <template #item-actions="item">
-              <Menu as="div" class="relative inline-block text-left">
-                  <div>
-                    <MenuButton
-                      class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
-                    >
-                      <span class="sr-only">Open options</span>
-                      <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
-                    </MenuButton>
-                  </div>
-
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
+                  <span
+                    class="text-xl font-medium leading-none text-indigo-700"
+                    >{{ item.title[0] }}</span
                   >
-                    <MenuItems
-                      class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                    >
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <PencilAltIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Edit
-                          </a>
-                        </MenuItem>
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            :href="`detail/${item.id}`"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <ClipboardListIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Details
-                          </a>
-                        </MenuItem>
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <DuplicateIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Duplicate
-                          </a>
-                        </MenuItem>
-                      </div>
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-red-100 text-red-900'
-                                : 'text-red-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <TrashIcon
-                              class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
-                              aria-hidden="true"
-                            />
-                            Delete
-                          </a>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </transition>
-                </Menu>
-            </template>
-          </DataTable>
+                </span>
+              </div>
+              <div class="ml-4">
+                <div class="font-medium text-gray-900">
+                  {{ item.title }}
+                </div>
+                <div class="text-gray-500">{{ item.department.name }}</div>
+              </div>
+            </div>
+          </template>
+          <template #item-employment_type="item">
+            <div class="text-gray-900">
+              <span
+                class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800"
+                >{{ item.employment_type.name }}</span
+              >
+            </div>
+          </template>
+          <template #item-is_remote="item">
+            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+              <LocationMarkerIcon
+                class="flex-shrink-0 mr-1 w-4 text-gray-400"
+                aria-hidden="true"
+              />
+              <span v-if="item.is_remote !== null">{{
+                item.is_remote ? "Remote" : "On-site"
+              }}</span>
+              <span v-if="item.is_remote === null">On-site</span>
+            </div>
+          </template>
+          <template #item-deadline="item">
+            <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+              <CalendarIcon
+                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+              <p>
+                Closing
+                {{ " " }}
+                {{ getClosingDays(item.deadline) }}
+              </p>
+            </div>
+          </template>
+          <template #item-actions="item">
+            <Menu as="div" class="relative inline-block text-left">
+              <div>
+                <MenuButton
+                  class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                >
+                  <span class="sr-only">Open options</span>
+                  <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                </MenuButton>
+              </div>
+
+              <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <MenuItems
+                  class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                >
+                  <div class="py-1">
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        href="#"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'group flex items-center px-4 py-2 text-sm',
+                        ]"
+                      >
+                        <PencilAltIcon
+                          class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        Edit
+                      </a>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        :href="`detail/${item.id}`"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'group flex items-center px-4 py-2 text-sm',
+                        ]"
+                      >
+                        <ClipboardListIcon
+                          class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        Details
+                      </a>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        href="#"
+                        :class="[
+                          active
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700',
+                          'group flex items-center px-4 py-2 text-sm',
+                        ]"
+                      >
+                        <DuplicateIcon
+                          class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        Duplicate
+                      </a>
+                    </MenuItem>
+                  </div>
+                  <div class="py-1">
+                    <MenuItem v-slot="{ active }">
+                      <a
+                        href="#"
+                        :class="[
+                          active ? 'bg-red-100 text-red-900' : 'text-red-700',
+                          'group flex items-center px-4 py-2 text-sm',
+                        ]"
+                      >
+                        <TrashIcon
+                          class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                          aria-hidden="true"
+                        />
+                        Delete
+                      </a>
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </transition>
+            </Menu>
+          </template>
+        </DataTable>
       </div>
     </div>
   </main>
@@ -547,24 +548,32 @@
                     </div>
                     <div class="relative mt-6 flex-1 px-4 sm:px-6">
                       <div class="flex flex-col">
-                        <FormInput placeholder="Search by vacancy name"></FormInput>
-                        
+                        <FormInput
+                          placeholder="Search by vacancy name"
+                        ></FormInput>
+
                         <div>
-                          <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
                             Filter by role
                           </h3>
                           <SelectInput class="mt-1"></SelectInput>
                         </div>
 
                         <div>
-                          <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
                             Filter by department
                           </h3>
                           <SelectInput class="mt-1"></SelectInput>
                         </div>
 
                         <div>
-                          <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
                             Filter by location
                           </h3>
                           <SelectInput class="mt-1"></SelectInput>
@@ -624,18 +633,19 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/outline";
-import { ConvertDateToDays } from '../../util/Formatter';
-import VacancyService from '../../service/vacancies.service';
+import { ConvertDateToDays } from "../../util/Formatter";
+import VacancyService from "../../service/vacancies.service";
 
 const open = ref(false);
+const loading = ref(false);
 const vacancies = ref([]);
 const pagination = ref({
-    pageSize: 10,
-    totalRecords: 0,
-    totalPages: 1,
-    hasNextPage: false,
-    hasPrevPage: false,
-    currentPageNumber: 1,
+  pageSize: 10,
+  totalRecords: 0,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPrevPage: false,
+  currentPageNumber: 1,
 });
 
 const jobs = [
@@ -682,7 +692,7 @@ const headers = [
   { text: "Due Date", value: "deadline" },
   { text: "Level", value: "experience_level.name" },
   { text: "", value: "actions" },
-]
+];
 function goto(name) {
   router.push({ name: name });
 }
@@ -692,15 +702,17 @@ function getClosingDays(dateValue) {
 }
 
 onMounted(() => {
-  console.clear();
-  VacancyService.all().then(result => {
-    console.log(result.data);
+  loading.value = true;
+  VacancyService.all().then((result) => {
     const resData = result.data;
     vacancies.value = resData.data.data;
     pagination.value.totalRecords = resData.data.total;
     pagination.value.pageSize = resData.data.per_page;
     pagination.value.currentPageNumber = resData.data.current_page;
     pagination.value.totalPages = resData.data.last_page;
+  }).catch(() => {})
+  .finally(() => {
+    loading.value = false;
   });
-})
+});
 </script>

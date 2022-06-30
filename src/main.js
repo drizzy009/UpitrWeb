@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Toast from 'vue-toastification';
+import Editor from '@tinymce/tinymce-vue';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
@@ -57,6 +58,8 @@ app.component('PasswordInput', PasswordInput);
 app.component('DataTable', Vue3EasyDataTable);
 app.component('TextInputGroup', TextInputGroup);
 app.component('SkeletonLoading', SkeletonLoading);
+
+app.component('HtmlEditor', Editor);
 app.use(Toast, options);
 
 const appStore = useAppStore();

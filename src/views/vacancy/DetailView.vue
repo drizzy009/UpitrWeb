@@ -77,6 +77,8 @@
           <div class="sm:ml-3 relative z-0">
             <IconButton
               type="submit"
+              @click="publishVacancy"
+              :processing="processing"
               :label="published ? 'Published' : 'Publish'"
               :class="published ? 'bg-green-600' : 'bg-indigo-600'"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -281,7 +283,8 @@
 
               <div v-if="tabIndex == 0">
                 <!-- Stacked list -->
-                <CandidateView :candidates="candidates"></CandidateView>
+                <!-- <CandidateView :candidates="candidates"></CandidateView> -->
+                <CandidateView :candidates="sourcedCandidates"></CandidateView>
                 <!-- Pagination -->
                 <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
@@ -355,7 +358,7 @@
               </div>
               <div v-if="tabIndex == 1">
                 <!-- Stacked list -->
-                <CandidateView :candidates="appliedCandidates"></CandidateView>
+                <!-- <CandidateView :candidates="appliedCandidates"></CandidateView> -->
                 <!-- <ul
                 role="list"
                 class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
@@ -498,7 +501,7 @@
               </div>
               <div v-if="tabIndex == 2">
                 <!-- Stacked list -->
-                <CandidateView :candidates="candidates"></CandidateView>
+                <!-- <CandidateView :candidates="candidates"></CandidateView> -->
                 <!-- Pagination -->
                 <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
@@ -715,7 +718,7 @@
               </div>
               <div v-if="tabIndex == 4">
                 <!-- Stacked list -->
-                <CandidateView :candidates="candidates"></CandidateView>
+                <!-- <CandidateView :candidates="candidates"></CandidateView> -->
                 <!-- Pagination -->
                 <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
@@ -789,7 +792,7 @@
               </div>
               <div v-if="tabIndex == 5">
                 <!-- Stacked list -->
-                <CandidateView :candidates="appliedCandidates"></CandidateView>
+                <!-- <CandidateView :candidates="appliedCandidates"></CandidateView> -->
                 <!-- <ul
                 role="list"
                 class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
@@ -974,8 +977,10 @@ import { FormatShortDate } from "../../util/Formatter";
 var tabIndex = ref(0);
 const router = useRouter();
 const published = ref(false);
-const remoteOffice = ref("On-site");
+const processing = ref(false);
 const vacancyDetail = ref(null);
+const sourcedCandidates = ref([]);
+const remoteOffice = ref("On-site");
 
 const tabs = [
   { name: "Sourced", href: "#", count: "2", current: true },
@@ -1043,19 +1048,55 @@ const selected = ref(publishingOptions[0]);
 function formatClosingData(dateValue) {
   return FormatShortDate(dateValue);
 }
-onMounted(() => {
+
+function publishVacancy() {
+  processing.value = true;
+  const id = vacancyDetail.value.id;
+
+  if (!published.value) {
+    VacancyService.publish(id).then(() => {
+      getVacancyDetail(id);
+      published.value = true;
+    }).catch(() => {})
+    .finally(() => {
+      processing.value = false;
+    })
+  }
+
+  if (published.value) {
+    VacancyService.unPublish(id).then(() => {
+      getVacancyDetail(id);
+      published.value = false;
+    }).catch(() => {})
+    .finally(() => {
+      processing.value = false;
+    })
+  }
+}
+
+function getVacancyDetail(id) {
   console.clear();
+  VacancyService.single(id).then((response) => {
+    const { data } = response.data;
+    vacancyDetail.value = data;
+    published.value = data.is_published;
+    if (vacancyDetail.value.is_remote !== null) {
+      remoteOffice.value = vacancyDetail.value.is_remote ? 'Remote' : 'On-site';
+    }
+    // console.log(vacancyDetail.value);
+  });
+
+  VacancyService.candidates(id).then(response => {
+    const responseData = response.data.data
+    sourcedCandidates.value = responseData.data;
+  })
+}
+
+onMounted(() => {
+  // console.clear();
   const { id } = router.currentRoute.value.params;
   if (id !== undefined) {
-    VacancyService.single(Number(id)).then((response) => {
-      const { data } = response.data;
-      vacancyDetail.value = data;
-      published.value = data.is_published;
-      if (vacancyDetail.value.is_remote !== null) {
-        remoteOffice.value = vacancyDetail.value.is_remote ? 'Remote' : 'On-site';
-      }
-      console.log(vacancyDetail.value);
-    });
+    getVacancyDetail(Number(id));
   }
 });
 </script>

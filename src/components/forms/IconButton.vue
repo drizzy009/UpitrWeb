@@ -15,16 +15,24 @@
       bg-indigo-600
       hover:bg-indigo-700
       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    :disabled="processing"
+    :class="processing ? 'cursor-not-allowed' : 'cursor-pointer'"
   >
-    <slot></slot>
-    {{$attrs.label}}
+    <template v-if="processing">
+      <div class="loading"><div></div><div></div><div></div><div></div></div>
+      Processing...
+    </template>
+    <template v-if="!processing">
+      <slot></slot>
+      {{$attrs.label}}
+    </template>
   </button>
 </template>
 
-<script>
-export default {
-    name: "IconButton",
-};
+<script setup>
+defineProps({
+  processing: Boolean,
+});
 </script>
 
 <style>
