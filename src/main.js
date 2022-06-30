@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Toast from 'vue-toastification';
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import Vue3EasyDataTable from 'vue3-easy-data-table';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import SideBar from './components/layout/SideBar.vue';
 import TextArea from './components/forms/TextArea.vue';
@@ -16,10 +17,12 @@ import AutoComplete from './components/forms/AutoComplete.vue';
 import SelectInput from './components/forms/SelectInput.vue';
 import CancelButton from './components/forms/CancelButton.vue';
 import AppModal from './components/commons/modal/AppModal.vue';
+import SkeletonLoading from './components/layout/SkeletonLoading.vue';
 import CoreService from  './service/core.service';
 // import TokenService from './service/token.service';
 import { useAppStore } from './stores/app';
 import "vue-toastification/dist/index.css";
+import 'vue3-easy-data-table/dist/style.css';
 
 const options = {
     transition: "Vue-Toastification__bounce",
@@ -41,6 +44,7 @@ app.use(CKEditor);
 
 app.component('SideBar', SideBar);
 app.component('TextArea', TextArea);
+app.component('AppModal', AppModal);
 app.component('FormInput', FormInput);
 app.component('DateInput', DateInput);
 app.component('AppButton', AppButton);
@@ -50,9 +54,9 @@ app.component('NumberInput', NumberInput);
 app.component('AutoComplete', AutoComplete);
 app.component('CancelButton', CancelButton);
 app.component('PasswordInput', PasswordInput);
+app.component('DataTable', Vue3EasyDataTable);
 app.component('TextInputGroup', TextInputGroup);
-// eslint-disable-next-line vue/multi-word-component-names
-app.component('AppModal', AppModal);
+app.component('SkeletonLoading', SkeletonLoading);
 app.use(Toast, options);
 
 const appStore = useAppStore();
