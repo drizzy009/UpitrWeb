@@ -2,10 +2,10 @@ import axios from "axios";
 const basePath = "vacancies";
 
 const VacancyService = {
-  all() {
+  all(slug = "") {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/${basePath}`)
+        .get(`/${basePath}?${slug}`)
         .then((result) => {
           resolve(result);
         })

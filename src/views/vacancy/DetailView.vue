@@ -285,6 +285,7 @@
                 <!-- Stacked list -->
                 <!-- <CandidateView :candidates="candidates"></CandidateView> -->
                 <CandidateView :candidates="sourcedCandidates"></CandidateView>
+                <h4 v-if="sourcedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- Pagination -->
                 <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
@@ -358,7 +359,8 @@
               </div>
               <div v-if="tabIndex == 1">
                 <!-- Stacked list -->
-                <!-- <CandidateView :candidates="appliedCandidates"></CandidateView> -->
+                <CandidateView :candidates="appliedCandidates"></CandidateView>
+                 <h4 v-if="appliedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- <ul
                 role="list"
                 class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
@@ -501,7 +503,8 @@
               </div>
               <div v-if="tabIndex == 2">
                 <!-- Stacked list -->
-                <!-- <CandidateView :candidates="candidates"></CandidateView> -->
+                <CandidateView :candidates="assessedCandidates"></CandidateView>
+                <h4 v-if="assessedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- Pagination -->
                 <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
@@ -575,7 +578,8 @@
               </div>
               <div v-if="tabIndex == 3">
                 <!-- Stacked list -->
-                <CandidateView :candidates="appliedCandidates"></CandidateView>
+                <CandidateView :candidates="offeredCandidates"></CandidateView>
+                <h4 v-if="offeredCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- <ul
                 role="list"
                 class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
@@ -718,7 +722,8 @@
               </div>
               <div v-if="tabIndex == 4">
                 <!-- Stacked list -->
-                <!-- <CandidateView :candidates="candidates"></CandidateView> -->
+                <CandidateView :candidates="hiredCandidates"></CandidateView>
+                <h4 v-if="hiredCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- Pagination -->
                 <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
@@ -792,7 +797,8 @@
               </div>
               <div v-if="tabIndex == 5">
                 <!-- Stacked list -->
-                <!-- <CandidateView :candidates="appliedCandidates"></CandidateView> -->
+                <CandidateView :candidates="disqualifiedCandidates"></CandidateView>
+                <h4 v-if="disqualifiedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- <ul
                 role="list"
                 class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
@@ -949,14 +955,9 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
   Menu,
-  Listbox,
   MenuItem,
   MenuItems,
   MenuButton,
-  ListboxLabel,
-  ListboxOption,
-  ListboxButton,
-  ListboxOptions,
 } from "@headlessui/vue";
 import {
   CheckIcon,
@@ -979,7 +980,12 @@ const router = useRouter();
 const published = ref(false);
 const processing = ref(false);
 const vacancyDetail = ref(null);
+const hiredCandidates = ref([]);
+const appliedCandidates = ref([]);
+const offeredCandidates = ref([]);
 const sourcedCandidates = ref([]);
+const assessedCandidates = ref([]);
+const disqualifiedCandidates = ref([]);
 const remoteOffice = ref("On-site");
 
 const tabs = [
@@ -994,41 +1000,6 @@ const tabs = [
 function changeTab(tabIdx) {
   tabIndex.value = tabIdx;
 }
-
-const candidates = [
-  {
-    name: "Emily Selman",
-    email: "emily.selman@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    applied: "January 7, 2020",
-    appliedDatetime: "2020-07-01T15:34:56",
-    status: "Completed phone screening",
-  },
-  // More candidates...
-];
-
-const appliedCandidates = [
-  {
-    name: "Emily Selman",
-    email: "emily.selman@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    applied: "January 7, 2020",
-    appliedDatetime: "2020-07-01T15:34:56",
-    status: "Completed phone screening",
-  },
-  {
-    name: "Emily Selman",
-    email: "emily.selman@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    applied: "January 7, 2020",
-    appliedDatetime: "2020-07-01T15:34:56",
-    status: "Completed phone screening",
-  },
-  // More candidates...
-];
 
 const publishingOptions = [
   {
@@ -1075,7 +1046,6 @@ function publishVacancy() {
 }
 
 function getVacancyDetail(id) {
-  console.clear();
   VacancyService.single(id).then((response) => {
     const { data } = response.data;
     vacancyDetail.value = data;
@@ -1083,17 +1053,20 @@ function getVacancyDetail(id) {
     if (vacancyDetail.value.is_remote !== null) {
       remoteOffice.value = vacancyDetail.value.is_remote ? 'Remote' : 'On-site';
     }
-    // console.log(vacancyDetail.value);
   });
 
   VacancyService.candidates(id).then(response => {
-    const responseData = response.data.data
-    sourcedCandidates.value = responseData.data;
+    const responseData = response.data.data;
+    sourcedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 1);
+    appliedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 2);
+    assessedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 3);
+    offeredCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 4);
+    hiredCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 5);
+    disqualifiedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 6);
   })
 }
 
 onMounted(() => {
-  // console.clear();
   const { id } = router.currentRoute.value.params;
   if (id !== undefined) {
     getVacancyDetail(Number(id));

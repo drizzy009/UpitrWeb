@@ -1,5 +1,5 @@
 <template>
-  <AppModal :showModal="showAddDepartment" :processing="savingDepartment" @closeModal="closeCreateDepartment" @submit="saveDepartment" title="Create Department">
+  <AppModal :showModal="showEditDepartment" :processing="savingDepartment" @closeModal="closeCreateDepartment" @submit="saveDepartment" title="Edit Department">
     <div class="grid grid-cols-6">
       <div class="col-span-6">
         <label
@@ -50,12 +50,14 @@ import DepartmentService from "../../service/department.service";
 const emits = defineEmits(['toggleDepartment']);
 const props = defineProps({
   toggle: Boolean,
+  departmentDetail: Object
 });
+
 
 const toast = useToast();
 const departmentStore = useDepartments();
 const savingDepartment = ref(false);
-const showAddDepartment = ref(false);
+const showEditDepartment = ref(false);
 const formData = ref({
   name: '',
   description: '',
@@ -70,11 +72,18 @@ const rules = {
 const v$ = useVuelidate(rules, formData);
 
 watch(() => props.toggle, (newValue) => {
-  showAddDepartment.value = newValue;
+  showEditDepartment.value = newValue;
+});
+
+watch(() => props.departmentDetail, (newValue) => {
+  if (newValue !== null) {
+    formData.value.name = newValue.name;
+    formData.value.description = newValue.description;
+  }
 });
 
 function closeCreateDepartment() {
-  showAddDepartment.value = false
+  showEditDepartment.value = false
   emits('toggleDepartment');
 }
 
@@ -82,12 +91,13 @@ async function saveDepartment() {
   const valid = await v$.value.$validate();
   if (valid) {
     savingDepartment.value = true;
-    DepartmentService.create(formData.value).then(async() => {
-      toast.success("Department successfully created");
+    DepartmentService.update(props.departmentDetail.id,formData.value).then(async() => {
+      toast.success("Department successfully updated");
       departmentStore.fetchAllDepartments();
       formData.value.name = "";
       formData.value.description = "";
       await v$.value.$reset();
+      closeCreateDepartment();
     }).catch(() => {})
     .finally(() => {
       savingDepartment.value = false;

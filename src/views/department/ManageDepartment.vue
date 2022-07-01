@@ -93,59 +93,74 @@
                 </th>
                 <th
                   scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
+                  Description
+                </th>
+                <!-- <th
+                  scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Job Count
-                </th>
-                <th
+                </th> -->
+                <!-- <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Location
-                </th>
-                <th
+                </th> -->
+                <!-- <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Status
-                </th>
-                <th
+                </th> -->
+                <!-- <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
                   Date Created
-                </th>
+                </th> -->
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="department in departments" :key="department.id">
+            <tbody v-if="departmentList.length > 0" class="divide-y divide-gray-200 bg-white">
+              <tr v-for="department in departmentList" :key="department.id">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="">
                       <div class="font-medium text-gray-900">
-                        {{ department.departmentName }}
+                        {{ department.name }}
                       </div>
                     </div>
                   </div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="">
+                      <div class="font-medium text-gray-900">
+                        {{ department.description }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <div class="text-gray-500">{{ department.jobCount }}</div>
-                </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                </td> -->
+                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <div class="text-gray-500">{{ department.location }}</div>
-                </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                </td> -->
+                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <span
                     class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
                     >Active</span
                   >
-                </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                </td> -->
+                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <div class="text-gray-500">{{ department.dateCreated }}</div>
-                </td>
+                </td> -->
                 <td
                 class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
               >
@@ -173,12 +188,12 @@
                       <div class="py-1">
                         <MenuItem v-slot="{ active }">
                           <a
-                            href="#"
+                            @click="editDepartment(department)"
                             :class="[
                               active
                                 ? 'bg-gray-100 text-gray-900'
                                 : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
+                              'group flex items-center px-4 py-2 text-sm cursor-pointer',
                             ]"
                           >
                             <PencilAltIcon
@@ -188,49 +203,16 @@
                             Edit
                           </a>
                         </MenuItem>
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <ClipboardListIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Details
-                          </a>
-                        </MenuItem>
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <DuplicateIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Duplicate
-                          </a>
-                        </MenuItem>
                       </div>
                       <div class="py-1">
                         <MenuItem v-slot="{ active }">
                           <a
-                            href="#"
+                            @click="deleteDepartment(department.id)"
                             :class="[
                               active
                                 ? 'bg-red-100 text-red-900'
                                 : 'text-red-700',
-                              'group flex items-center px-4 py-2 text-sm',
+                              'group flex items-center px-4 py-2 text-sm cursor-pointer',
                             ]"
                           >
                             <TrashIcon
@@ -289,16 +271,13 @@
       </div>
     </div>
     <CreateDepartment :toggle="openAddDepartment" @toggleDepartment="toggleAddDepartment"></CreateDepartment>
+    <EditDepartment :departmentDetail="selectedDepartment" :toggle="openEditDepartment" @toggleDepartment="toggleEditDepartment"></EditDepartment>
   </main>
 </template>
 <script setup>
-import departmentList from "../../data/department";
+import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
 import {
-  // Dialog,
-  // DialogPanel,
-  // DialogTitle,
-  // TransitionChild,
-  // TransitionRoot,
   Menu,
   MenuButton,
   MenuItem,
@@ -308,20 +287,64 @@ import {
   PlusCircleIcon,
   RefreshIcon,
   DownloadIcon,
-  DuplicateIcon,
   PencilAltIcon,
   TrashIcon,
   SearchIcon,
   DotsVerticalIcon,
-  ClipboardListIcon
 } from "@heroicons/vue/solid";
-import { ref } from "vue";
+import { ref, inject, onMounted, watch } from "vue";
 import CreateDepartment from './CreateDepartment.vue';
-const departments = departmentList;
+import EditDepartment from './EditDepartment.vue';
+import { useDepartments } from "../../stores/department";
+import DepartmentService from "../../service/department.service";
+
+const swal = inject('$swal');
+const toast = useToast();
+const departmentStore = useDepartments();
 const openAddDepartment = ref(false);
+const openEditDepartment = ref(false);
+const selectedDepartment = ref(false);
+const departmentList = ref([]);
+const { departments } = storeToRefs(useDepartments());
 
 function toggleAddDepartment() {
   openAddDepartment.value = !openAddDepartment.value;
 }
 
+function toggleEditDepartment() {
+  openEditDepartment.value = !openEditDepartment.value;
+}
+
+function editDepartment(item) {
+  selectedDepartment.value = item;
+  openEditDepartment.value = true;
+}
+
+
+function deleteDepartment(id) {
+  swal({
+    title: "Confirm Delete",
+    text: "Are you sure you want to delete this department",
+    icon: "question",
+    showCancelButton: true,
+    cancelButtonText: "No",
+    confirmButtonText: "Yes",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      DepartmentService.delete(id).then(() => {
+        toast("Department successfully deleted");
+        departmentStore.fetchAllDepartments();
+      }).catch(() => {})
+    }
+  });
+}
+
+watch(() => departments.value, (newValue) => {
+  departmentList.value = [];
+  departmentList.value = newValue.data;
+});
+
+onMounted(() => {
+  departmentList.value = departments.value.data;
+})
 </script>

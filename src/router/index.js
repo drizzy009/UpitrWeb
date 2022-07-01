@@ -155,7 +155,7 @@ const router = createRouter({
         },
         {
           name: "CandidateDetail",
-          path: "candidate/detail",
+          path: "candidate/detail/:id",
           meta: {
             pageTitle: "Candidate Details",
           },

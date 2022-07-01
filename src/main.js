@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
+import VueSweetalert2 from 'vue-sweetalert2';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
@@ -22,6 +23,8 @@ import SkeletonLoading from './components/layout/SkeletonLoading.vue';
 import CoreService from  './service/core.service';
 // import TokenService from './service/token.service';
 import { useAppStore } from './stores/app';
+
+import 'sweetalert2/dist/sweetalert2.min.css';
 import "vue-toastification/dist/index.css";
 import 'vue3-easy-data-table/dist/style.css';
 
@@ -42,6 +45,7 @@ pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
 app.use(CKEditor);
+app.use(VueSweetalert2);
 
 app.component('SideBar', SideBar);
 app.component('TextArea', TextArea);

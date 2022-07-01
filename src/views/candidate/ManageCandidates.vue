@@ -65,6 +65,7 @@
 
             <button
               type="button"
+              @click="refreshData"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon
@@ -76,8 +77,11 @@
         </div>
       </div>
     </div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <template v-if="processing">
+      <SkeletonLoading></SkeletonLoading>
+      <SkeletonLoading></SkeletonLoading>
+    </template>
+    <div v-if="!processing" class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
           class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
@@ -101,13 +105,13 @@
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Status
+                  Applied on
                 </th>
                 <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Role
+                  
                 </th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
@@ -115,36 +119,35 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="person in people" :key="person.email">
+              <tr v-for="candidate in candidateList" :key="candidate.email">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
                       <img
                         class="h-10 w-10 rounded-full"
-                        :src="person.image"
+                        :src="candidate.photo"
                         alt=""
                       />
                     </div>
                     <div class="ml-4">
                       <div class="font-medium text-gray-900">
-                        {{ person.name }}
+                        {{ candidate.firstname }} {{ candidate.lastname }}
                       </div>
-                      <div class="text-gray-500">{{ person.email }}</div>
+                      <div class="text-gray-500">{{ candidate.email }}</div>
                     </div>
                   </div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="text-gray-900">{{ person.title }}</div>
-                  <div class="text-gray-500">{{ person.department }}</div>
+                  <div class="text-gray-900">{{ candidate.job.title }}</div>
+                  <!-- <div class="text-gray-500">{{ candidate.department }}</div> -->
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <span
-                    class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
-                    >Active</span
-                  >
+                  <p class="text-sm text-gray-900">
+                    {{formatAppDate(candidate.created_at)}}
+                  </p>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  {{ person.role }}
+                  {{ candidate.role }}
                 </td>
                 <td
                 class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
@@ -190,7 +193,7 @@
                         </MenuItem>
                         <MenuItem v-slot="{ active }">
                           <a
-                            href="/candidate/detail"
+                            :href="`/candidate/detail/${candidate.id}`"
                             :class="[
                               active
                                 ? 'bg-gray-100 text-gray-900'
@@ -338,23 +341,41 @@
                         
                         <div>
                           <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
-                            Filter by role
+                            Filter by Vacancy
                           </h3>
-                          <SelectInput class="mt-1"></SelectInput>
+                          <SelectInput v-model="searchForm.vacancy_id" placeholder="Select Vacation" :items="vacancyList" class="mt-1"></SelectInput>
                         </div>
 
                         <div>
                           <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
-                            Filter by department
+                            Filter by Degree
                           </h3>
-                          <SelectInput class="mt-1"></SelectInput>
+                          <SelectInput placeholder="Select Degree" v-model="degree_class" :items="educationLevels" class="mt-1"></SelectInput>
                         </div>
 
                         <div>
-                          <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
-                            Filter by location
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
+                            Start Date
                           </h3>
-                          <SelectInput class="mt-1"></SelectInput>
+                          <DateInput
+                            type="date"
+                            v-model="searchForm.dob_start"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                        <div>
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
+                            End Date
+                          </h3>
+                          <DateInput
+                            type="date"
+                            v-model="searchForm.dob_end"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          />
                         </div>
                       </div>
                     </div>
@@ -367,12 +388,14 @@
                     >
                       Cancel
                     </button>
-                    <button
+                    <AppButton
                       type="submit"
+                      label="Search"
+                      :processing="processing"
+                      @click="searchCandidates"
                       class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
                     >
-                      Search
-                    </button>
+                    </AppButton>
                   </div>
                 </div>
               </DialogPanel>
@@ -408,42 +431,73 @@ import {
   DotsVerticalIcon,
   ClipboardListIcon
 } from "@heroicons/vue/solid";
-import { ref } from "vue";
+import { ref, watch, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { XIcon } from "@heroicons/vue/outline";
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    department: "Optimization",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-    image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    department: "Optimization",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-    image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    department: "Optimization",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-    image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-];
+import { useVacancies } from "../../stores/vacancies";
+import { useCandidates } from "../../stores/candidate";
+import { useMiscellaneous } from "../../stores/miscellaneous";
+import { FormatLongDate2 } from '../../util/Formatter';
+
+const { vacancies } = storeToRefs(useVacancies());
+const { candidates, processing } = storeToRefs(useCandidates());
+const candidateStore = useCandidates();
+const candidateList = ref([]);
+const vacancyList = ref([]);
+
+const {
+  educationLevels,
+} = storeToRefs(useMiscellaneous());
+
+const searchForm = ref({
+    keyword: "",
+    dob_start: "",
+    dob_end: "",
+    vacancy_id: "",
+    degree_class: "",
+});
+
 const open = ref(false);
 const router = useRouter();
 
 function goto(name) {
   router.push({ name: name });
 }
+
+function formatAppDate(dateValue) {
+  return FormatLongDate2(dateValue);
+}
+
+function fetchCandidates(slug = "") {
+  candidateStore.fetchAllCandidates(slug);
+}
+
+function searchCandidates() { 
+  var slug = "";
+  Object.keys(searchForm.value).forEach((key) => {
+    if (searchForm.value[key] !== "") {
+      slug += `${key}=${searchForm.value[key]}&`;
+    }
+  });
+
+  slug += "page_size=20";
+  fetchCandidates(slug);
+}
+
+async function refreshData() {
+  await fetchCandidates();
+}
+
+watch(() => candidates.value, (newValue) => {
+  candidateList.value = newValue.data;
+});
+
+onMounted(() => {
+  vacancyList.value = vacancies.value.data.map(item => {
+    return { id: item.id, name: item.title }
+  });
+  // candidateList.value = candidates.value.data;
+  // console.log(candidates.value);
+})
 </script>

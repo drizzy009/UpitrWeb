@@ -11,18 +11,20 @@
           <div class="flex-1 min-w-0">
             <!-- Profile -->
             <div class="flex items-center">
-              <img
+              <UserCircleIcon class="h-16 w-16 rounded-full sm:block"></UserCircleIcon>
+              <!-- <img
                 class="hidden h-16 w-16 rounded-full sm:block"
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
                 alt=""
-              />
+              /> -->
               <div>
                 <div class="flex items-center">
-                  <img
+                  <UserCircleIcon class="h-16 w-16 rounded-full sm:hidden"></UserCircleIcon>
+                  <!-- <img
                     class="h-16 w-16 rounded-full sm:hidden"
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
                     alt=""
-                  />
+                  /> -->
                   <h1 class="
                       ml-3
                       text-2xl
@@ -31,7 +33,7 @@
                       text-gray-900
                       sm:leading-9 sm:truncate
                     ">
-                    Hello, Emilia Birch
+                    Hello, {{ loginInfo.firstname }} {{ loginInfo.lastname }}
                   </h1>
                 </div>
                 <dl class="
@@ -52,7 +54,7 @@
                       class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                       aria-hidden="true"
                     />
-                    Duke street studio
+                    {{loginInfo.department.name}}
                   </dd>
                 </dl>
               </div>
@@ -163,7 +165,11 @@
         Recent Candidates
       </h2>
 
-      <div class="hidden sm:block">
+      <template v-if="applications.length === 0">
+        <SkeletonLoading></SkeletonLoading>
+      </template>
+
+      <div v-if="applications.length > 0" class="hidden sm:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex flex-col mt-4">
             <div class="
@@ -181,7 +187,7 @@
               >
                 <li
                   v-for="application in applications"
-                  :key="application.applicant.email"
+                  :key="application.email"
                 >
                   <a
                     :href="application.href"
@@ -192,7 +198,7 @@
                         <div class="flex-shrink-0">
                           <img
                             class="h-12 w-12 rounded-full"
-                            :src="application.applicant.imageUrl"
+                            :src="application.photo"
                             alt=""
                           />
                         </div>
@@ -209,7 +215,7 @@
                                 truncate
                                 font-semibold
                               ">
-                              {{ application.applicant.name }}
+                              {{ application.firstname }} {{ application.lastname }}
                             </p>
                             <p class="
                                 mt-2
@@ -228,7 +234,7 @@
                                 aria-hidden="true"
                               />
                               <span class="truncate">{{
-                                application.applicant.position
+                                application.job.title
                               }}</span>
                             </p>
                           </div>
@@ -237,9 +243,7 @@
                               <p class="text-sm text-gray-900">
                                 Applied on
                                 {{ " " }}
-                                <time :datetime="application.date">{{
-                                  application.dateFull
-                                }}</time>
+                                {{formatAppDate(application.created_at)}}
                               </p>
                               <p class="
                                   mt-2
@@ -257,7 +261,7 @@
                                   "
                                   aria-hidden="true"
                                 />
-                                {{ application.stage }}
+                                {{ application.job_workflow_stage.description }}
                               </p>
                             </div>
                           </div>
@@ -292,7 +296,11 @@
         Recent Vacancies
       </h2>
 
-      <div class="hidden sm:block">
+      <template v-if="recentVacancies.length === 0">
+        <SkeletonLoading></SkeletonLoading>
+      </template>
+
+      <div v-if="recentVacancies.length > 0" class="hidden sm:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="bg-white mt-4 shadow overflow-hidden sm:rounded-md ">
             <ul
@@ -300,8 +308,8 @@
               class="divide-y divide-gray-200"
             >
               <li
-                v-for="position in positions"
-                :key="position.id"
+                v-for="vacancy in recentVacancies"
+                :key="vacancy.id"
               >
                 <a
                   href="#"
@@ -311,8 +319,8 @@
                     <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                       <div class="truncate">
                         <div class="flex text-sm">
-                          <p class="font-semibold text-gray-600 truncate">{{ position.title }}</p>
-                          <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ position.department }}</p>
+                          <p class="font-semibold text-gray-600 truncate">{{ vacancy.title }}</p>
+                          <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ vacancy.department.name }}</p>
                         </div>
                         <div class="mt-2 flex">
                           <div class="flex items-center text-sm text-gray-500">
@@ -323,22 +331,22 @@
                             <p>
                               Closing on
                               {{ ' ' }}
-                              <time :datetime="position.closeDate">{{ position.closeDateFull }}</time>
+                              {{formatAppDate(vacancy.deadline)}}
                             </p>
                           </div>
                         </div>
                       </div>
-                      <div class="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">
+                      <!-- <div class="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">
                         <div class="flex overflow-hidden -space-x-1">
                           <img
-                            v-for="applicant in position.applicants"
+                            v-for="applicant in vacancy.applicants"
                             :key="applicant.email"
                             class="inline-block h-6 w-6 rounded-full ring-2 ring-white"
                             :src="applicant.imageUrl"
                             :alt="applicant.name"
                           />
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="ml-5 flex-shrink-0">
                       <ChevronRightIcon
@@ -351,7 +359,6 @@
               </li>
             </ul>
           </div>
-
         </div>
       </div>
 
@@ -359,74 +366,49 @@
   </main>
 </template>
 <script setup>
-import {} from "@headlessui/vue";
+import { ref, watch, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+// import {} from "@headlessui/vue";
 import {
   BriefcaseIcon,
   CheckCircleIcon,
   ChevronRightIcon,
   OfficeBuildingIcon,
   UserGroupIcon,
+  UserCircleIcon,
   CalendarIcon} from "@heroicons/vue/outline";
 import {
 } from "@heroicons/vue/solid";
 
+import { FormatLongDate2 } from '../../util/Formatter';
+import { useVacancies } from "../../stores/vacancies";
+import { useCandidates } from "../../stores/candidate";
+import { useAuthentication } from "./../../stores/authentication";
 
-const cards = [
-  { name: "Active Vacancies", href: "#", icon: BriefcaseIcon, amount: "50" },
+const { vacancies } = storeToRefs(useVacancies());
+const { candidates } = storeToRefs(useCandidates());
+const { loginInfo } = storeToRefs(useAuthentication());
+const recentVacancies = ref([]);
+const vacancyCount = ref(0);
+
+const cards = ref([
+  { name: "Active Vacancies", href: "#", icon: BriefcaseIcon, amount: "0" },
   {
     name: "Active Candidates",
     href: "#",
     icon: UserGroupIcon,
-    amount: "30,659",
+    amount: "0",
   },
   {
     name: "Shortlisted Candidates",
     href: "#",
     icon: UserGroupIcon,
-    amount: "1,659",
+    amount: "0",
   },
-];
-const applications = [
-  {
-    applicant: {
-      name: "Ricardo Cooper",
-      email: "ricardo.cooper@example.com",
-      position: "Accounting Officer",
-      imageUrl:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-    date: "2020-01-07",
-    dateFull: "January 7, 2020",
-    stage: "Computer Based Testing",
-    href: "#",
-  },
-  {
-    applicant: {
-      name: "Kristen Ramos",
-      email: "kristen.ramos@example.com",
-      position: "Product Manager",
-      imageUrl:
-        "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-    date: "2020-01-07",
-    dateFull: "January 7, 2020",
-    stage: "Phone Interview",
-    href: "#",
-  },
-  {
-    applicant: {
-      name: "Ted Fox",
-      email: "ted.fox@example.com",
-      position: "Network Administrator",
-      imageUrl:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-    date: "2020-01-07",
-    dateFull: "January 7, 2020",
-    stage: "Interview",
-    href: "#",
-  },
-];
+]);
+
+const applications = ref([]);
+
 const positions = [
   {
     id: 1,
@@ -516,5 +498,32 @@ const positions = [
     ],
   },
 ];
+
+function formatAppDate(dateValue) {
+  return FormatLongDate2(dateValue);
+}
+
+watch(() => vacancies.value, (newValue) => {
+  // vacancyCount.value = newValue.data.length;
+  cards.value[0].amount = newValue.data.length;
+  if (newValue.data.length > 0) {
+    recentVacancies.value = newValue.data.slice(0, 3);
+  }
+});
+
+watch(() => candidates.value, (newValue) => {
+  cards.value[1].amount = newValue.data.length;
+  cards.value[2].amount = newValue.data.length;
+
+  if(newValue.data.length > 0) {
+    applications.value = newValue.data.slice(0, 3);
+  }
+});
+
+onMounted(() => {
+  // console.clear();
+  // console.log(vacancies.value);
+  // vacancyCount.value = vacancies.value.data.length();
+})
 
 </script>

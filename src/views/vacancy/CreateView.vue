@@ -487,7 +487,7 @@
                           for="min-offer"
                           class="block text-sm font-medium text-gray-700"
                         >Deadline</label>
-                         <DateInput
+                        <DateInput
                           type="date"
                           name="deadline"
                           id="deadline"

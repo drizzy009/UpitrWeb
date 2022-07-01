@@ -32,9 +32,7 @@
                   <p class="text-sm text-gray-900">
                     Applied on
                     {{ " " }}
-                    <time :datetime="candidate.created_at">{{
-                      candidate.created_at
-                    }}</time>
+                    {{formatAppDate(candidate.created_at)}}
                   </p>
                   <p class="mt-2 flex items-center text-sm text-gray-500">
                     <CheckCircleIcon
@@ -48,7 +46,7 @@
             </div>
           </div>
           <div>
-            <a href="/candidate/detail">
+            <a :href="`/candidate/detail/${candidate.id}`">
               <ChevronRightIcon
                 class="h-5 w-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
@@ -67,9 +65,14 @@ import {
   CheckCircleIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/solid";
+import { FormatLongDate2 } from '../../util/Formatter';
 defineProps({
   candidates: Array,
 });
+
+function formatAppDate(dateValue) {
+  return FormatLongDate2(dateValue);
+}
 </script>
 
 <style></style>

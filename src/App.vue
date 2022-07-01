@@ -3,12 +3,16 @@ import { onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useDepartments } from "./stores/department";
+import { useVacancies } from "./stores/vacancies";
+import { useCandidates } from "./stores/candidate";
 import { useMiscellaneous } from "./stores/miscellaneous";
 import { useAuthentication } from "./stores/authentication";
 
 const router = useRouter();
+const vacancyStore = useVacancies();
 const miscStore = useMiscellaneous();
-const useDepartmentStore = useDepartments();
+const candidateStore = useCandidates();
+const departmentStore = useDepartments();
 
 const { isAuthenticated } = storeToRefs(useAuthentication());
 
@@ -25,8 +29,11 @@ onMounted(() => {
     miscStore.fetchExperienceLevels();
 
     if (isAuthenticated.value) {
-      useDepartmentStore.reset();
-      useDepartmentStore.fetchAllDepartments();
+      departmentStore.reset();
+
+      vacancyStore.fetchAllVacancies();
+      candidateStore.fetchAllCandidates();
+      departmentStore.fetchAllDepartments();
     }
 
     if (!isAuthenticated.value) {

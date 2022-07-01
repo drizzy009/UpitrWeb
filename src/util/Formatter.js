@@ -8,8 +8,16 @@ export const FormatShortDate = (dateValue) => {
     return moment(dateValue).format('DD-MM-YYYY');
 }
 
+export const FormatMonthYear = (dateValue) => {
+    return moment(dateValue).format('MMM, YYYY');
+}
+
 export const ConvertDateToDays = (dateValue) => {
     return moment(dateValue).endOf('days').fromNow();
+}
+
+export const FormatLongDate2 = (dateValue) => {
+    return moment(dateValue).format('MMMM D, YYYY');
 }
 // export const FormatNumber = (value) => {
 //     const num = new Intl.NumberFormat('en-US', { style: 'number' }).format(value);

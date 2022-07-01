@@ -65,6 +65,7 @@
 
             <button
               type="button"
+              @click="refreshData"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon
@@ -552,14 +553,14 @@
                           placeholder="Search by vacancy name"
                         ></FormInput>
 
-                        <div>
+                        <!-- <div>
                           <h3
                             class="text-xs mt-4 leading-6 font-medium text-gray-900"
                           >
                             Filter by role
                           </h3>
                           <SelectInput class="mt-1"></SelectInput>
-                        </div>
+                        </div> -->
 
                         <div>
                           <h3
@@ -567,16 +568,40 @@
                           >
                             Filter by department
                           </h3>
-                          <SelectInput class="mt-1"></SelectInput>
+                          <SelectInput :items="departmentList" v-model="searchForm.department" placeholder="Select department" class="mt-1"></SelectInput>
                         </div>
 
-                        <div>
+                        <!-- <div>
                           <h3
                             class="text-xs mt-4 leading-6 font-medium text-gray-900"
                           >
                             Filter by location
                           </h3>
                           <SelectInput class="mt-1"></SelectInput>
+                        </div> -->
+                        <div>
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
+                            Start Date
+                          </h3>
+                          <DateInput
+                            type="date"
+                            v-model="searchForm.deadline_start"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                        <div>
+                          <h3
+                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                          >
+                            End Date
+                          </h3>
+                          <DateInput
+                            type="date"
+                            v-model="searchForm.deadline_end"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          />
                         </div>
                       </div>
                     </div>
@@ -589,12 +614,14 @@
                     >
                       Cancel
                     </button>
-                    <button
+                    <AppButton
                       type="submit"
+                      :processing="loading"
+                      @click="searchVacancies"
+                      label="Search"
                       class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
                     >
-                      Search
-                    </button>
+                    </AppButton>
                   </div>
                 </div>
               </DialogPanel>
@@ -619,6 +646,7 @@ import {
   SearchIcon,
 } from "@heroicons/vue/solid";
 import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { DotsVerticalIcon, ClipboardListIcon } from "@heroicons/vue/solid";
 import {
@@ -634,8 +662,11 @@ import {
 } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/outline";
 import { ConvertDateToDays } from "../../util/Formatter";
+import { useDepartments } from "../../stores/department";
 import VacancyService from "../../service/vacancies.service";
 
+const { departments } = storeToRefs(useDepartments());
+const departmentList = ref([]);
 const open = ref(false);
 const loading = ref(false);
 const vacancies = ref([]);
@@ -648,41 +679,13 @@ const pagination = ref({
   currentPageNumber: 1,
 });
 
-const jobs = [
-  {
-    position: "Fullstack Developer",
-    department: "Engineering Department",
-    code: "ROV-001",
-    level: "Senior Developer",
-    duedate: "2020-01-07",
-    deadline: "5 Days",
-    location: "Lagos",
-    type: "Full time",
-    id: 1,
-  },
-  {
-    position: "Frontend Developer",
-    department: "Engineering Department",
-    code: "ROV-002",
-    level: "Senior Developer",
-    duedate: "2020-01-07",
-    deadline: "5 Days",
-    location: "Lagos",
-    type: "Full time",
-    id: 2,
-  },
-  {
-    position: "Backend Developer",
-    department: "Engineering Department",
-    code: "ROV-003",
-    level: "Senior Developer",
-    duedate: "2020-01-07",
-    deadline: "5 Days",
-    location: "Remote",
-    type: "Full time",
-    id: 3,
-  },
-];
+const searchForm = ref({
+    keyword: "",
+    deadline_start: "",
+    deadline_end: "",
+    department: "",
+});
+
 const router = useRouter();
 
 const headers = [
@@ -701,9 +704,9 @@ function getClosingDays(dateValue) {
   return ConvertDateToDays(dateValue);
 }
 
-onMounted(() => {
+function fetchVacancies(slug = "") {
   loading.value = true;
-  VacancyService.all().then((result) => {
+  VacancyService.all(slug).then((result) => {
     const resData = result.data;
     vacancies.value = resData.data.data;
     pagination.value.totalRecords = resData.data.total;
@@ -714,5 +717,26 @@ onMounted(() => {
   .finally(() => {
     loading.value = false;
   });
+}
+
+function searchVacancies() {
+  var slug = "";
+  Object.keys(searchForm.value).forEach((key) => {
+    if (searchForm.value[key] !== "") {
+      slug += `${key}=${searchForm.value[key]}&`;
+    }
+  });
+
+  slug += "page_size=20";
+  fetchVacancies(slug);
+}
+
+function refreshData() {
+  fetchVacancies("");
+}
+
+onMounted(() => {
+  departmentList.value = departments.value.data;
+  fetchVacancies();
 });
 </script>
