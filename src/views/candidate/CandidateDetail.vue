@@ -384,11 +384,11 @@ const tabs = ref([
     name: "Summary",
     current: true,
   },
-  {
-    id: "interview",
-    name: "Interview Scorecard",
-    current: false,
-  },
+  // {
+  //   id: "interview",
+  //   name: "Interview Scorecard",
+  //   current: false,
+  // },
 ]);
 
 function setActiveTab(index) {

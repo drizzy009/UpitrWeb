@@ -61,12 +61,14 @@
               </div>
 
               <div>
-                <button
+                <AppButton
                   @click="onLogin"
+                  :processing="authenticating"
+                  label="Sign in"
                   class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  {{ authenticating ? "Authenticating..." : "Sign in"}}
-                </button>
+                  <!-- {{ authenticating ? "Authenticating..." : "Sign in"}} -->
+                </AppButton>
               </div>
             </div>
           </div>
@@ -121,6 +123,7 @@ watch(() => error.value, (value) => {
 });
 
 async function onLogin() {
+  authenticating.value = true;
   const valid = await v$.value.$validate();
   if (valid) {
     AuthService.signIn(loginDetail.value).then(result => {

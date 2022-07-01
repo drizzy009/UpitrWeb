@@ -65,6 +65,7 @@
 
             <button
               type="button"
+              @click="refreshData"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon
@@ -76,7 +77,10 @@
         </div>
       </div>
     </div>
-
+    <template v-if="processing">
+      <SkeletonLoading></SkeletonLoading>
+      <SkeletonLoading></SkeletonLoading>
+    </template>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
@@ -126,7 +130,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody v-if="departmentList.length > 0" class="divide-y divide-gray-200 bg-white">
+            <tbody v-if="departmentList.length > 0 && !processing" class="divide-y divide-gray-200 bg-white">
               <tr v-for="department in departmentList" :key="department.id">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
@@ -305,7 +309,7 @@ const openAddDepartment = ref(false);
 const openEditDepartment = ref(false);
 const selectedDepartment = ref(false);
 const departmentList = ref([]);
-const { departments } = storeToRefs(useDepartments());
+const { departments, processing } = storeToRefs(useDepartments());
 
 function toggleAddDepartment() {
   openAddDepartment.value = !openAddDepartment.value;
@@ -337,6 +341,10 @@ function deleteDepartment(id) {
       }).catch(() => {})
     }
   });
+}
+
+function refreshData() {
+  departmentStore.fetchAllDepartments();
 }
 
 watch(() => departments.value, (newValue) => {

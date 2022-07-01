@@ -440,9 +440,10 @@ import { useCandidates } from "../../stores/candidate";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import { FormatLongDate2 } from '../../util/Formatter';
 
-const { vacancies } = storeToRefs(useVacancies());
-const { candidates, processing } = storeToRefs(useCandidates());
+const vacancyStore = useVacancies();
 const candidateStore = useCandidates();
+const { candidates, processing } = candidateStore
+const { vacancies } = vacancyStore;
 const candidateList = ref([]);
 const vacancyList = ref([]);
 
@@ -489,15 +490,14 @@ async function refreshData() {
   await fetchCandidates();
 }
 
-watch(() => candidates.value, (newValue) => {
+watch(() => candidates, (newValue) => {
   candidateList.value = newValue.data;
 });
 
 onMounted(() => {
-  vacancyList.value = vacancies.value.data.map(item => {
+  candidateList.value = candidates.data;
+  vacancyList.value = vacancies.data.map(item => {
     return { id: item.id, name: item.title }
   });
-  // candidateList.value = candidates.value.data;
-  // console.log(candidates.value);
 })
 </script>

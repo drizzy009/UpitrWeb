@@ -406,7 +406,8 @@ import { ConvertDateToDays } from "../../util/Formatter";
 import { useDepartments } from "../../stores/department";
 import VacancyService from "../../service/vacancies.service";
 
-const { departments } = storeToRefs(useDepartments());
+const departmentStore = useDepartments();
+const { departments } = departmentStore;
 const departmentList = ref([]);
 const open = ref(false);
 const loading = ref(false);
@@ -477,7 +478,7 @@ function refreshData() {
 }
 
 onMounted(() => {
-  departmentList.value = departments.value.data;
+  departmentList.value = departments.data;
   fetchVacancies();
 });
 </script>
