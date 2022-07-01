@@ -90,7 +90,6 @@
         <SkeletonLoading></SkeletonLoading>
       </template>
 
-
       <div class="align-middle min-w-full overflow-x-auto shadow-lg overflow-hidden rounded-lg">        
         <DataTable
           v-if="!loading"
@@ -421,6 +420,7 @@ const pagination = ref({
   currentPageNumber: 1,
 });
 
+<<<<<<< HEAD
 const searchForm = ref({
     keyword: "",
     deadline_start: "",
@@ -428,6 +428,8 @@ const searchForm = ref({
     department: "",
 });
 
+=======
+>>>>>>> 082561b (loading redesigned)
 const router = useRouter();
 
 const headers = [
