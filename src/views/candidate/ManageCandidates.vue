@@ -2,7 +2,7 @@
   <main class="flex-1 pb-8">
      <!-- Page header -->
     <div class="bg-white shadow">
-      <div class="px-4 sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-8">
+      <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
         <div
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
@@ -27,11 +27,9 @@
                 />
               </div>
             </form>
-
-            <!-- Profile -->
           </div>
           <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-            <button
+            <!-- <button
               type="button"
               @click="goto('CreateCandidate')"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
@@ -40,7 +38,7 @@
                 class="flex-shrink-0 h-5 w-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+            </button> -->
 
             <button
               type="button"
@@ -81,7 +79,7 @@
       <SkeletonLoading></SkeletonLoading>
       <SkeletonLoading></SkeletonLoading>
     </template>
-    <div v-if="candidates.data.length > 0" class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div v-if="candidates.data.length > 0" class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
           class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
@@ -208,7 +206,7 @@
                             Details
                           </a>
                         </MenuItem>
-                        <MenuItem v-slot="{ active }">
+                        <!-- <MenuItem v-slot="{ active }">
                           <a
                             href="#"
                             :class="[
@@ -224,7 +222,7 @@
                             />
                             Duplicate
                           </a>
-                        </MenuItem>
+                        </MenuItem> -->
                       </div>
                       <div class="py-1">
                         <MenuItem v-slot="{ active }">

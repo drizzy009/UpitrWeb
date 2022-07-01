@@ -1,12 +1,15 @@
 <template>
   <template v-if="vacancyDetail === null">
-    <SkeletonLoading></SkeletonLoading>
-    <SkeletonLoading></SkeletonLoading>
+    <div>
+      <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <SkeletonLoading v-for="n in 5"></SkeletonLoading>
+      </div>
+    </div>
   </template>
   <template v-if="vacancyDetail !== null">
     <header class="bg-gray-100 pt-3">
       <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between"
+        class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between"
       >
         <div class="flex-1 min-w-0">
           <h1
@@ -48,7 +51,7 @@
           </div>
         </div>
         <div class="mt-5 flex xl:mt-0 xl:ml-4">
-          <span class="hidden sm:block">
+          <!-- <span class="hidden sm:block">
             <button
               type="button"
               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
@@ -59,9 +62,9 @@
               />
               Edit
             </button>
-          </span>
+          </span> -->
 
-          <span class="hidden sm:block ml-3">
+          <!-- <span class="hidden sm:block ml-3">
             <button
               type="button"
               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
@@ -72,18 +75,19 @@
               />
               Candidates
             </button>
-          </span>
+          </span> -->
 
           <div class="sm:ml-3 relative z-0">
             <IconButton
               type="submit"
               @click="publishVacancy"
               :processing="processing"
-              :label="published ? 'Published' : 'Publish'"
-              :class="published ? 'bg-green-600' : 'bg-indigo-600'"
+              :label="published ? 'Unpublish' : 'Publish'"
+              :class="published ? 'bg-red-600' : 'bg-green-600'"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <CheckIcon v-if="published" class="h-5 w-5 mr-1" aria-hidden="true" />
+              <BanIcon v-if="published" class="h-5 w-5 mr-1" aria-hidden="true" />
+              <CheckIcon v-if="!published" class="h-5 w-5 mr-1" aria-hidden="true" />
             </IconButton>
             <!-- <Listbox as="div" v-model="selected">
               <ListboxLabel class="sr-only">
@@ -221,17 +225,15 @@
     </header>
 
     <main class="flex-1 pb-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+      <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
         <div class="flex flex-col mt-2">
           <div
             class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg p-6 bg-white"
           >
             <div class="px-4 sm:px-0">
-              <h2 class="text-lg font-medium text-gray-900">Candidates</h2>
               <div>
                 <div class="sm:hidden">
                   <label for="tabs" class="sr-only">Select a tab</label>
-                  <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                   <select
                     id="tabs"
                     name="tabs"
@@ -287,7 +289,7 @@
                 <CandidateView :candidates="sourcedCandidates"></CandidateView>
                 <h4 v-if="sourcedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- Pagination -->
-                <nav
+                <!-- <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
                   aria-label="Pagination"
                 >
@@ -310,7 +312,7 @@
                     >
                       1
                     </a>
-                    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200" -->
+                    
                     <a
                       href="#"
                       class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
@@ -355,7 +357,7 @@
                       />
                     </a>
                   </div>
-                </nav>
+                </nav> -->
               </div>
               <div v-if="tabIndex == 1">
                 <!-- Stacked list -->
@@ -431,7 +433,7 @@
               </ul> -->
 
                 <!-- Pagination -->
-                <nav
+                <!-- <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
                   aria-label="Pagination"
                 >
@@ -454,7 +456,7 @@
                     >
                       1
                     </a>
-                    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200" -->
+                    
                     <a
                       href="#"
                       class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
@@ -499,14 +501,14 @@
                       />
                     </a>
                   </div>
-                </nav>
+                </nav> -->
               </div>
               <div v-if="tabIndex == 2">
                 <!-- Stacked list -->
                 <CandidateView :candidates="assessedCandidates"></CandidateView>
                 <h4 v-if="assessedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- Pagination -->
-                <nav
+                <!-- <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
                   aria-label="Pagination"
                 >
@@ -529,7 +531,6 @@
                     >
                       1
                     </a>
-                    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200" -->
                     <a
                       href="#"
                       class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
@@ -574,7 +575,7 @@
                       />
                     </a>
                   </div>
-                </nav>
+                </nav> -->
               </div>
               <div v-if="tabIndex == 3">
                 <!-- Stacked list -->
@@ -650,7 +651,7 @@
               </ul> -->
 
                 <!-- Pagination -->
-                <nav
+                <!-- <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
                   aria-label="Pagination"
                 >
@@ -673,7 +674,6 @@
                     >
                       1
                     </a>
-                    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200" -->
                     <a
                       href="#"
                       class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
@@ -718,14 +718,14 @@
                       />
                     </a>
                   </div>
-                </nav>
+                </nav> -->
               </div>
               <div v-if="tabIndex == 4">
                 <!-- Stacked list -->
                 <CandidateView :candidates="hiredCandidates"></CandidateView>
                 <h4 v-if="hiredCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
                 <!-- Pagination -->
-                <nav
+                <!-- <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
                   aria-label="Pagination"
                 >
@@ -748,7 +748,7 @@
                     >
                       1
                     </a>
-                    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200" -->
+                    
                     <a
                       href="#"
                       class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
@@ -793,7 +793,7 @@
                       />
                     </a>
                   </div>
-                </nav>
+                </nav> -->
               </div>
               <div v-if="tabIndex == 5">
                 <!-- Stacked list -->
@@ -868,8 +868,7 @@
                 </li>
               </ul> -->
 
-                <!-- Pagination -->
-                <nav
+                <!-- <nav
                   class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
                   aria-label="Pagination"
                 >
@@ -892,7 +891,7 @@
                     >
                       1
                     </a>
-                    <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200" -->
+                    
                     <a
                       href="#"
                       class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
@@ -937,15 +936,16 @@
                       />
                     </a>
                   </div>
-                </nav>
+                </nav> -->
               </div>
             </div>
           </div>
         </div>
       </div>
     </main>
+
     <main class="pt-8 pb-16">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8"></div>
+      <div class="max-w-9xl mx-auto sm:px-6 lg:px-8"></div>
     </main>
   </template>
 </template>
@@ -970,6 +970,7 @@ import {
   LocationMarkerIcon,
   ArrowNarrowLeftIcon,
   ArrowNarrowRightIcon,
+  BanIcon
 } from "@heroicons/vue/solid";
 import CandidateView from "./CandidateView.vue";
 import VacancyService from "../../service/vacancies.service";

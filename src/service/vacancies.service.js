@@ -149,7 +149,7 @@ const VacancyService = {
   candidates(id) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/candidates?vacancy_id=${id}`)
+        .get(`/candidates?vacancy=${id}`)
         .then((result) => {
           resolve(result);
         })

@@ -88,12 +88,12 @@
               />
               My Activities
             </button> -->
-            <IconButton label="My Activities">
+            <!-- <IconButton label="My Activities">
               <CalendarIcon
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-white"
                 aria-hidden="true"
               />
-            </IconButton>
+            </IconButton> -->
           </div>
         </div>
       </div>

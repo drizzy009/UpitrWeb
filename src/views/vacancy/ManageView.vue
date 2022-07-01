@@ -1,3 +1,4 @@
+
 <template>
   <main class="flex-1 pb-8">
     <!-- Page header -->
@@ -85,9 +86,9 @@
     </div>
 
     <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+
       <template v-if="loading">
-        <SkeletonLoading></SkeletonLoading>
-        <SkeletonLoading></SkeletonLoading>
+        <SkeletonLoading v-for="n in 5"></SkeletonLoading>
       </template>
 
       <div class="align-middle min-w-full overflow-x-auto shadow-lg overflow-hidden rounded-lg">        
@@ -294,7 +295,7 @@
                     </div>
                     <div class="relative mt-6 flex-1 px-4 sm:px-6">
                       <div class="flex flex-col">
-                        <FormInput placeholder="Search by vacancy name"></FormInput>
+                        <FormInput v-model="searchForm.keyword" placeholder="Search by vacancy name/description"></FormInput>
 
                         <!-- <div>
                           <h3
