@@ -344,33 +344,33 @@ const navigation = [
     href: "/candidate/all",
     icon: UserGroupIcon,
   },
-  { 
-    name: "Activities", 
-    tag: "ManageActivities",
-    href: "/activity/all", 
-    icon: ClockIcon 
-  },
-  { 
-    name: "Users", 
-    tag: "ManageUsers",
-    href: "/users/all", 
-    icon: UserCircleIcon 
-  },
+  // { 
+  //   name: "Activities", 
+  //   tag: "ManageActivities",
+  //   href: "/activity/all", 
+  //   icon: ClockIcon 
+  // },
+  // { 
+  //   name: "Users", 
+  //   tag: "ManageUsers",
+  //   href: "/users/all", 
+  //   icon: UserCircleIcon 
+  // },
   {
     name: "Departments",
     tag: "ManageDepartments",
     href: "/department/all",
     icon: OfficeBuildingIcon,
   },
-  { 
-    name: "Reports", 
-    href: "#", 
-    icon: ChartPieIcon 
-  },
+  // { 
+  //   name: "Reports", 
+  //   href: "#", 
+  //   icon: ChartPieIcon 
+  // },
 ];
 const secondaryNavigation = [
   { name: "Settings", href: "/settings", icon: CogIcon },
-  { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
+  // { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
 ];
 
 const appStore = useAppStore();

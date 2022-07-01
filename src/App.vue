@@ -27,6 +27,7 @@ onMounted(() => {
     miscStore.fetchEmploymentTypes();
     miscStore.fetchEducationLevels();
     miscStore.fetchExperienceLevels();
+    miscStore.fetchDegreeClassification();
 
     if (isAuthenticated.value) {
       departmentStore.reset();

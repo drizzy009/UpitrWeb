@@ -96,6 +96,7 @@
           :headers="headers"
           :items="vacancies"
           show-index
+          hide-footer
           class="min-w-full divide-y divide-gray-300"
         >
           <template #item-title="item">
@@ -420,7 +421,6 @@ const pagination = ref({
   currentPageNumber: 1,
 });
 
-<<<<<<< HEAD
 const searchForm = ref({
     keyword: "",
     deadline_start: "",
@@ -428,8 +428,6 @@ const searchForm = ref({
     department: "",
 });
 
-=======
->>>>>>> 082561b (loading redesigned)
 const router = useRouter();
 
 const headers = [

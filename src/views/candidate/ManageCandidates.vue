@@ -77,11 +77,11 @@
         </div>
       </div>
     </div>
-    <template v-if="processing">
+    <template v-if="candidates.data.length === 0">
       <SkeletonLoading></SkeletonLoading>
       <SkeletonLoading></SkeletonLoading>
     </template>
-    <div v-if="!processing" class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div v-if="candidates.data.length > 0" class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
           class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
@@ -119,7 +119,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="candidate in candidateList" :key="candidate.email">
+              <tr v-for="candidate in candidates.data" :key="candidate.email">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
@@ -253,7 +253,7 @@
             </tbody>
           </table>
           <!-- Pagination -->
-          <nav
+          <!-- <nav
             class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
             aria-label="Pagination"
           >
@@ -288,7 +288,7 @@
                 Next
               </a>
             </div>
-          </nav>
+          </nav> -->
         </div>
       </div>
     </div>
@@ -350,7 +350,7 @@
                           <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
                             Filter by Degree
                           </h3>
-                          <SelectInput placeholder="Select Degree" v-model="degree_class" :items="educationLevels" class="mt-1"></SelectInput>
+                          <SelectInput placeholder="Select Degree" v-model="degree_class" :items="degreeClassifications" class="mt-1"></SelectInput>
                         </div>
 
                         <div>
@@ -442,13 +442,13 @@ import { FormatLongDate2 } from '../../util/Formatter';
 
 const vacancyStore = useVacancies();
 const candidateStore = useCandidates();
-const { candidates, processing } = candidateStore
+const { candidates } = candidateStore
 const { vacancies } = vacancyStore;
-const candidateList = ref([]);
+// const candidateList = ref([]);
 const vacancyList = ref([]);
 
 const {
-  educationLevels,
+  degreeClassifications
 } = storeToRefs(useMiscellaneous());
 
 const searchForm = ref({
@@ -486,16 +486,17 @@ function searchCandidates() {
   fetchCandidates(slug);
 }
 
-async function refreshData() {
-  await fetchCandidates();
+function refreshData() {
+  fetchCandidates();
 }
 
-watch(() => candidates, (newValue) => {
-  candidateList.value = newValue.data;
-});
+// watch(() => candidates, (newValue) => {
+//   candidateList.value = newValue.data;
+// });
 
 onMounted(() => {
-  candidateList.value = candidates.data;
+  // console.log(candidates)
+  // candidateList.value = candidates.data;
   vacancyList.value = vacancies.data.map(item => {
     return { id: item.id, name: item.title }
   });

@@ -178,6 +178,22 @@ const UserService = {
         });
     });
   },
+  getDegreeClassifications() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/${basePath}/degree-classifications`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
 };
 
 export default UserService;
