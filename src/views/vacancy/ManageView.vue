@@ -88,7 +88,7 @@
     <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
 
       <template v-if="loading">
-        <SkeletonLoading v-for="n in 5"></SkeletonLoading>
+        <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
       </template>
 
       <div class="align-middle min-w-full overflow-x-auto shadow-lg overflow-hidden rounded-lg">        

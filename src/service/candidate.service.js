@@ -66,10 +66,10 @@ const CandidateService = {
         });
     });
   },
-  move(id) {
+  move(id, payload) {
     return new Promise((resolve, reject) => {
       axios
-        .put(`/${basePath}/move/${id}`)
+        .put(`/${basePath}/move/${id}`, payload)
         .then((result) => {
           resolve(result);
         })

@@ -24,7 +24,7 @@
         <SkeletonLoading></SkeletonLoading>
       </template>
       <div class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
-        <span class="hidden sm:block">
+        <!-- <span class="hidden sm:block">
           <button
             type="button"
             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-emerald-500"
@@ -35,7 +35,7 @@
             />
             Schedule Interview
           </button>
-        </span>
+        </span> -->
 
         <Listbox
           as="div"
@@ -464,7 +464,11 @@ function onOptionChanged(item) {
     confirmButtonText: "Yes",
   }).then((result) => {
     if (result.isConfirmed) {
-      CandidateService.move(item.id).then(() => {
+      const payload = {
+        job_workflow_stage_id: item.id
+      }
+      
+      CandidateService.move(candidateDetail.value.id, payload).then(() => {
         toast("Candidate successfully moved");
       })
     }
