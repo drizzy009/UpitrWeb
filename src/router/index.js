@@ -11,7 +11,7 @@ import DashboardView from "../views/dashboard/DashboardView.vue";
 import UserListView from "../views/user/ListView.vue";
 import UserDetailView from "../views/user/DetailView.vue";
 
-import ManageVacancyView from "../views/vacancy/ManageView.vue";
+import ManageVacancyView from "../views/vacancy/ManageVacancies.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
 

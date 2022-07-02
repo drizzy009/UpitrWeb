@@ -2,6 +2,22 @@ import axios from "axios";
 const basePath = "vacancies";
 
 const VacancyService = {
+  get(url) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(url)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
   all(slug = "") {
     return new Promise((resolve, reject) => {
       axios

@@ -1,6 +1,6 @@
 <template>
   <main class="flex-1 pb-8">
-     <!-- Page header -->
+    <!-- Page header -->
     <div class="bg-white shadow">
       <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
         <div
@@ -75,11 +75,7 @@
         </div>
       </div>
     </div>
-    <template v-if="loading">
-      <SkeletonLoading></SkeletonLoading>
-      <SkeletonLoading></SkeletonLoading>
-    </template>
-    <div v-if="!loading" class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
           class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
@@ -108,16 +104,19 @@
                 <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  
-                </th>
+                ></th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <tr v-for="candidate in candidateList" :key="candidate.email">
+              <tr v-if="loading">
+                <td colspan="6">
+                  <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
+                </td>
+              </tr>
+              <tr v-for="candidate in serverResponse.data" :key="candidate.id">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
@@ -141,72 +140,72 @@
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <p class="text-sm text-gray-900">
-                    {{formatAppDate(candidate.created_at)}}
+                    {{ formatAppDate(candidate.created_at) }}
                   </p>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   {{ candidate.role }}
                 </td>
                 <td
-                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-              >
-                <Menu as="div" class="relative inline-block text-left">
-                  <div>
-                    <MenuButton
-                      class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
-                    >
-                      <span class="sr-only">Open options</span>
-                      <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
-                    </MenuButton>
-                  </div>
+                  class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                >
+                  <Menu as="div" class="relative inline-block text-left">
+                    <div>
+                      <MenuButton
+                        class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                      >
+                        <span class="sr-only">Open options</span>
+                        <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                      </MenuButton>
+                    </div>
 
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <MenuItems
-                      class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
                     >
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <PencilAltIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Edit
-                          </a>
-                        </MenuItem>
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            :href="`/candidate/detail/${candidate.id}`"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <ClipboardListIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Details
-                          </a>
-                        </MenuItem>
-                        <!-- <MenuItem v-slot="{ active }">
+                      <MenuItems
+                        class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                      >
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <a
+                              href="#"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <PencilAltIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Edit
+                            </a>
+                          </MenuItem>
+                          <MenuItem v-slot="{ active }">
+                            <a
+                              :href="`/candidate/detail/${candidate.id}`"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <ClipboardListIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Details
+                            </a>
+                          </MenuItem>
+                          <!-- <MenuItem v-slot="{ active }">
                           <a
                             href="#"
                             :class="[
@@ -223,35 +222,35 @@
                             Duplicate
                           </a>
                         </MenuItem> -->
-                      </div>
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-red-100 text-red-900'
-                                : 'text-red-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <TrashIcon
-                              class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
-                              aria-hidden="true"
-                            />
-                            Delete
-                          </a>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </transition>
-                </Menu>
+                        </div>
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <a
+                              href="#"
+                              :class="[
+                                active
+                                  ? 'bg-red-100 text-red-900'
+                                  : 'text-red-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <TrashIcon
+                                class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                                aria-hidden="true"
+                              />
+                              Delete
+                            </a>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
                 </td>
               </tr>
             </tbody>
           </table>
           <!-- Pagination -->
-          <!-- <nav
+          <nav
             class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
             aria-label="Pagination"
           >
@@ -259,150 +258,181 @@
               <p class="text-sm text-gray-700">
                 Showing
                 {{ " " }}
-                <span class="font-medium">1</span>
+                <span class="font-medium">{{ serverResponse.from }}</span>
                 {{ " " }}
                 to
                 {{ " " }}
-                <span class="font-medium">10</span>
+                <span class="font-medium">{{ serverResponse.to }}</span>
                 {{ " " }}
                 of
                 {{ " " }}
-                <span class="font-medium">20</span>
+                <span class="font-medium">{{ serverResponse.total }}</span>
                 {{ " " }}
                 results
               </p>
             </div>
             <div class="flex-1 flex justify-between sm:justify-end">
-              <a
-                href="#"
+              <div v-for="link in serverResponse.links" :key="link">
+                <AppButton
+                  @click="navigateTo(link.url)"
+                  :disabled="link.url === null || processing"
+                  :class="link.active ? 'bg-indigo-700 text-white' : 'text-gray-700 bg-white'"
+                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
+                  >
+                    {{formatLabel(link.label)}}
+                  </AppButton>
+              </div>
+              <!-- <AppButton
+                label="Previous"
+                :disabled="serverResponse.prev_page_url === null"
+                @click="previousPage"
                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
               >
-                Previous
-              </a>
-              <a
-                href="#"
+              </AppButton>
+              <AppButton
+                label="Next"
+                :disabled="serverResponse.next_page_url === null"
+                @click="nextPage"
                 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
               >
-                Next
-              </a>
+              </AppButton> -->
             </div>
-          </nav> -->
+          </nav>
         </div>
       </div>
     </div>
 
     <TransitionRoot as="template" :show="open">
-    <Dialog as="div" class="relative z-10" @close="open = false">
-      <div class="fixed inset-0" />
+      <Dialog as="div" class="relative z-10" @close="open = false">
+        <div class="fixed inset-0" />
 
-      <div class="fixed inset-0 overflow-hidden">
-        <div class="absolute inset-0 overflow-hidden">
-          <div
-            class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10"
-          >
-            <TransitionChild
-              as="template"
-              enter="transform transition ease-in-out duration-500 sm:duration-700"
-              enter-from="translate-x-full"
-              enter-to="translate-x-0"
-              leave="transform transition ease-in-out duration-500 sm:duration-700"
-              leave-from="translate-x-0"
-              leave-to="translate-x-full"
+        <div class="fixed inset-0 overflow-hidden">
+          <div class="absolute inset-0 overflow-hidden">
+            <div
+              class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10"
             >
-              <DialogPanel class="pointer-events-auto w-screen max-w-md">
-                <div
-                  class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
-                >
+              <TransitionChild
+                as="template"
+                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enter-from="translate-x-full"
+                enter-to="translate-x-0"
+                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leave-from="translate-x-0"
+                leave-to="translate-x-full"
+              >
+                <DialogPanel class="pointer-events-auto w-screen max-w-md">
                   <div
-                    class="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6"
+                    class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
                   >
-                    <div class="px-4 sm:px-6">
-                      <div class="flex items-start justify-between">
-                        <DialogTitle class="text-lg font-medium text-gray-900">
-                          Filter Candidates
-                        </DialogTitle>
-                        <div class="ml-3 flex h-7 items-center">
-                          <button
-                            type="button"
-                            class="rounded-md bg-white text-gray-400 hover:text-gray-500"
-                            @click="open = false"
+                    <div
+                      class="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6"
+                    >
+                      <div class="px-4 sm:px-6">
+                        <div class="flex items-start justify-between">
+                          <DialogTitle
+                            class="text-lg font-medium text-gray-900"
                           >
-                            <span class="sr-only">Close panel</span>
-                            <XIcon class="h-6 w-6" aria-hidden="true" />
-                          </button>
+                            Filter Candidates
+                          </DialogTitle>
+                          <div class="ml-3 flex h-7 items-center">
+                            <button
+                              type="button"
+                              class="rounded-md bg-white text-gray-400 hover:text-gray-500"
+                              @click="open = false"
+                            >
+                              <span class="sr-only">Close panel</span>
+                              <XIcon class="h-6 w-6" aria-hidden="true" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                        <div class="flex flex-col">
+                          <FormInput
+                            v-model="searchForm.keyword"
+                            placeholder="Search by keyword"
+                          ></FormInput>
+
+                          <div>
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
+                              Filter by Vacancy
+                            </h3>
+                            <SelectInput
+                              v-model="searchForm.vacancy"
+                              placeholder="Select Vacancy"
+                              :items="vacancyList"
+                              class="mt-1"
+                            ></SelectInput>
+                          </div>
+
+                          <div>
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
+                              Filter by Degree
+                            </h3>
+                            <SelectInput
+                              placeholder="Select Degree"
+                              v-model="searchForm.degree_class"
+                              :items="degreeClassifications"
+                              class="mt-1"
+                            ></SelectInput>
+                          </div>
+
+                          <div>
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
+                              Start Date
+                            </h3>
+                            <DateInput
+                              type="date"
+                              v-model="searchForm.dob_start"
+                              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                          </div>
+                          <div>
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
+                              End Date
+                            </h3>
+                            <DateInput
+                              type="date"
+                              v-model="searchForm.dob_end"
+                              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="relative mt-6 flex-1 px-4 sm:px-6">
-                      <div class="flex flex-col">
-                        <FormInput v-model="searchForm.keyword" placeholder="Search by keyword"></FormInput>
-                        
-                        <div>
-                          <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
-                            Filter by Vacancy
-                          </h3>
-                          <SelectInput v-model="searchForm.vacancy" placeholder="Select Vacancy" :items="vacancyList" class="mt-1"></SelectInput>
-                        </div>
-
-                        <div>
-                          <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
-                            Filter by Degree
-                          </h3>
-                          <SelectInput placeholder="Select Degree" v-model="searchForm.degree_class" :items="degreeClassifications" class="mt-1"></SelectInput>
-                        </div>
-
-                        <div>
-                          <h3
-                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
-                          >
-                            Start Date
-                          </h3>
-                          <DateInput
-                            type="date"
-                            v-model="searchForm.dob_start"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                          />
-                        </div>
-                        <div>
-                          <h3
-                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
-                          >
-                            End Date
-                          </h3>
-                          <DateInput
-                            type="date"
-                            v-model="searchForm.dob_end"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                          />
-                        </div>
-                      </div>
+                    <div class="flex flex-shrink-0 justify-end px-4 py-4">
+                      <button
+                        type="button"
+                        class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                        @click="closeSearch"
+                      >
+                        Cancel
+                      </button>
+                      <AppButton
+                        type="submit"
+                        label="Search"
+                        :processing="processing"
+                        @click="searchCandidates"
+                        class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
+                      >
+                      </AppButton>
                     </div>
                   </div>
-                  <div class="flex flex-shrink-0 justify-end px-4 py-4">
-                    <button
-                      type="button"
-                      class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                      @click="closeSearch"
-                    >
-                      Cancel
-                    </button>
-                    <AppButton
-                      type="submit"
-                      label="Search"
-                      :processing="processing"
-                      @click="searchCandidates"
-                      class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
-                    >
-                    </AppButton>
-                  </div>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
+                </DialogPanel>
+              </TransitionChild>
+            </div>
           </div>
         </div>
-      </div>
-    </Dialog>
-  </TransitionRoot>
+      </Dialog>
+    </TransitionRoot>
   </main>
 </template>
 <script setup>
@@ -418,51 +448,113 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import {
-  PlusCircleIcon,
   RefreshIcon,
   FilterIcon,
   DownloadIcon,
-  DuplicateIcon,
   PencilAltIcon,
   TrashIcon,
   SearchIcon,
   DotsVerticalIcon,
-  ClipboardListIcon
+  ClipboardListIcon,
 } from "@heroicons/vue/solid";
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { XIcon } from "@heroicons/vue/outline";
 import { useVacancies } from "../../stores/vacancies";
-import { useCandidates } from "../../stores/candidate";
 import { useMiscellaneous } from "../../stores/miscellaneous";
-import { FormatLongDate2 } from '../../util/Formatter';
+import { FormatLongDate2 } from "../../util/Formatter";
 import CandidateService from "../../service/candidate.service";
 
 const vacancyStore = useVacancies();
 const { vacancies } = vacancyStore;
-const candidateList = ref([]);
+// const candidateList = ref([]);
 const vacancyList = ref([]);
 const loading = ref(false);
+const processing = ref(false);
+const serverResponse = ref({
+  to: 0,
+  from: 0,
+  total: 0,
+  data: [],
+  links: [],
+  per_page: 0,
+  last_page: 0,
+  current_page: 0,
+  prev_page_url: null,
+  next_page_url: null,
+  last_page_url: null,
+  first_page_url: null,
+});
 
-const {
-  degreeClassifications
-} = storeToRefs(useMiscellaneous());
+const { degreeClassifications } = storeToRefs(useMiscellaneous());
 
 const searchForm = ref({
-    keyword: "",
-    dob_start: "",
-    dob_end: "",
-    vacancy: "",
-    degree_class: "",
+  keyword: "",
+  dob_start: "",
+  dob_end: "",
+  vacancy: "",
+  degree_class: "",
 });
 
 const open = ref(false);
-const router = useRouter();
+// const router = useRouter();
 
-function goto(name) {
-  router.push({ name: name });
+function formatLabel(label) {
+  if (label.includes('Prev')) {
+    return `<< Previous`;
+  }
+
+  if (label.includes('Next')) {
+    return 'Next >>';
+  }
+
+  return label;
 }
+
+function getCandidates(slug = "") {
+  serverResponse.value.data = [];
+  slug += "page_size=10";
+  loading.value = true;
+  CandidateService.all(slug)
+    .then((result) => {
+      serverResponse.value = result.data.data;
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
+function navigateTo(link) {
+  processing.value = true;
+  // serverResponse.value.data = [];
+  var url = `${link}&page_size=10&`;
+  Object.keys(searchForm.value).forEach((key) => {
+    if (searchForm.value[key] !== "") {
+      url += `${key}=${searchForm.value[key]}&`;
+    }
+  });
+
+  CandidateService.get(url)
+    .then((result) => {
+      serverResponse.value = result.data.data;
+    })
+    .catch(() => {})
+    .finally(() => {
+      processing.value = false;
+    });
+}
+
+// function nextPage() {
+//   const slug = `page=${serverResponse.value.current_page + 1}&`;
+//   getCandidates(slug);
+// }
+
+// function previousPage() {
+//   const slug = `page=${serverResponse.value.current_page - 1}&`;
+//   getCandidates(slug);
+// }
 
 function closeSearch() {
   open.value = false;
@@ -475,7 +567,7 @@ function formatAppDate(dateValue) {
   return FormatLongDate2(dateValue);
 }
 
-function searchCandidates() { 
+function searchCandidates() {
   var slug = "";
   Object.keys(searchForm.value).forEach((key) => {
     if (searchForm.value[key] !== "") {
@@ -493,22 +585,10 @@ function refreshData() {
   });
 }
 
-function getCandidates(slug = "") {
-  slug += "page_size=20"
-  loading.value = true;
-  CandidateService.all(slug).then((result) => {
-    const {data} = result.data.data;
-    candidateList.value = data;
-  }).catch(() => {})
-  .finally(() => {
-    loading.value = false;
-  })
-}
-
 onMounted(() => {
   getCandidates();
-  vacancyList.value = vacancies.data.map(item => {
-    return { id: item.id, name: item.title }
+  vacancyList.value = vacancies.data.map((item) => {
+    return { id: item.id, name: item.title };
   });
-})
+});
 </script>

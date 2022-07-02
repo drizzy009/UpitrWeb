@@ -283,18 +283,21 @@
                     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                       <div class="px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-6">
                         <div class="sm:col-span-10">
-                          <h3 class="text-lg leading-6 font-medium text-gray-900">Candidate Information</h3>
-                          <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+                          <h3 class="text-lg leading-6 font-medium text-gray-900">Assessment and Interview</h3>
+                          <p class="mt-1 max-w-2xl text-sm text-gray-500">Assessment and Interview responses</p>
                         </div>
-                        <div class="sm:col-span-2 text-right">
+                        <!-- <div class="sm:col-span-2 text-right">
                           <h2>Score/Overall</h2>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="border-t border-gray-200">
-                        <dl>
-                          <!-- <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-2 sm:px-6">
-                            <dt class="text-lg font-bold text-gray-500 sm:col-span-10">Communication Skills</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <dl
+                          v-for="response in candidateDetail.applicant_responses"
+                          :key="response.id"
+                        >
+                          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-2 sm:px-6">
+                            <dt class="text-lg font-bold text-gray-500 sm:col-span-10">{{response.job_question.question}}</dt>
+                            <!-- <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                               <RadioGroup v-model="mem">
                                 <RadioGroupLabel class="sr-only"> Choose feedback </RadioGroupLabel>
                                 <div class="grid grid-cols-3 gap-3 sm:grid-cols-3">
@@ -319,12 +322,13 @@
                                   </RadioGroupOption>
                                 </div>
                               </RadioGroup>
-                            </dd>
+                            </dd> -->
                           </div>
                           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500 sm:col-span-12">1. Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint</dt>
-                          </div> -->
-                          
+                            <dt class="text-sm font-medium text-gray-500 sm:col-span-12">
+                              {{response.response}}
+                            </dt>
+                          </div>
                         </dl>
                       </div>
                     </div>
@@ -384,11 +388,11 @@ const tabs = ref([
     name: "Summary",
     current: true,
   },
-  // {
-  //   id: "interview",
-  //   name: "Interview Scorecard",
-  //   current: false,
-  // },
+  {
+    id: "interview",
+    name: "Interview Scorecard",
+    current: false,
+  },
 ]);
 
 function setActiveTab(index) {
@@ -453,6 +457,7 @@ function getCandidateDetails(id) {
 function formatDate(dateValue) {
   return FormatMonthYear(dateValue);
 }
+
 function onOptionChanged(item) {
   const prevOption = selected.value;
   swal({
@@ -467,7 +472,7 @@ function onOptionChanged(item) {
       const payload = {
         job_workflow_stage_id: item.id
       }
-      
+
       CandidateService.move(candidateDetail.value.id, payload).then(() => {
         toast("Candidate successfully moved");
       })
@@ -476,6 +481,7 @@ function onOptionChanged(item) {
     if (!result.isConfirmed) selected.value = prevOption;
   });
 }
+
 onMounted(() => {
   const { id } = router.currentRoute.value.params;
   if (id !== undefined) {
