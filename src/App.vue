@@ -2,6 +2,7 @@
 import { onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import TokenService from "./service/token.service";
 import { useDepartments } from "./stores/department";
 import { useVacancies } from "./stores/vacancies";
 import { useCandidates } from "./stores/candidate";
@@ -16,8 +17,7 @@ const departmentStore = useDepartments();
 
 const { isAuthenticated } = storeToRefs(useAuthentication());
 
-onMounted(() => {
-  try {
+function fetchRequiredData () {
     miscStore.fetchCountries();
     miscStore.fetchCurrencies();
     miscStore.fetchIndustries();
@@ -29,16 +29,20 @@ onMounted(() => {
     miscStore.fetchExperienceLevels();
     miscStore.fetchDegreeClassification();
 
-    if (isAuthenticated.value) {
-      departmentStore.reset();
+    vacancyStore.fetchAllVacancies();
+    candidateStore.fetchAllCandidates();
+    departmentStore.fetchAllDepartments();
+}
 
-      vacancyStore.fetchAllVacancies();
-      candidateStore.fetchAllCandidates();
-      departmentStore.fetchAllDepartments();
+onMounted(() => {
+  try {
+    const token = TokenService.getToken();
+    if (isAuthenticated.value) {
+      fetchRequiredData();
     }
 
-    if (!isAuthenticated.value) {
-      router.push({ name: 'Login'})
+    if (!isAuthenticated.value || token === null) {
+      router.push({ name: 'Login' });
     }
   } catch (error) {
     // console.log(error);
@@ -47,8 +51,7 @@ onMounted(() => {
 
 watch(() => isAuthenticated.value, (value) => {
   if (value) {
-    useDepartmentStore.reset();
-    useDepartmentStore.fetchAllDepartments();
+    fetchRequiredData();
   }
 });
 </script>

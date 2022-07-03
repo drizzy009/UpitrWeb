@@ -26,9 +26,8 @@ const CoreService = {
         return response;
       },
       (error) => {
-        if (error.status == 401) {
-          console.log('unauthorised');
-          this.$router.push({ name: "Login" });
+        if (error.response.status == 401) {
+          TokenService.destroyToken();
         }
         return Promise.reject(error);
       }

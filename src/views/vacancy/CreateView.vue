@@ -1,10 +1,7 @@
 <template>
   <main class="flex-1 pb-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-      <nav
-        aria-label="Progress"
-        class="bg-white"
-      >
+      <nav aria-label="Progress" class="bg-white">
         <ol
           role="list"
           class="border border-gray-300 rounded-md divide-y divide-gray-300 md:flex md:divide-y-0"
@@ -21,11 +18,10 @@
               class="group flex items-center w-full"
             >
               <span class="px-6 py-4 flex items-center text-sm font-medium">
-                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800">
-                  <CheckIcon
-                    class="w-6 h-6 text-white"
-                    aria-hidden="true"
-                  />
+                <span
+                  class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800"
+                >
+                  <CheckIcon class="w-6 h-6 text-white" aria-hidden="true" />
                 </span>
                 <span class="ml-4 text-sm font-medium text-gray-900">{{
                   step.name
@@ -38,25 +34,28 @@
               class="px-6 py-4 flex items-center text-sm font-medium"
               aria-current="step"
             >
-              <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full">
+              <span
+                class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full"
+              >
                 <span class="text-indigo-600">{{ step.id }}</span>
               </span>
               <span class="ml-4 text-sm font-medium text-indigo-600">{{
                 step.name
               }}</span>
             </a>
-            <a
-              v-else
-              :href="step.href"
-              class="group flex items-center"
-            >
+            <a v-else :href="step.href" class="group flex items-center">
               <span class="px-6 py-4 flex items-center text-sm font-medium">
-                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full group-hover:border-gray-400">
+                <span
+                  class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full group-hover:border-gray-400"
+                >
                   <span class="text-gray-500 group-hover:text-gray-900">{{
                     step.id
                   }}</span>
                 </span>
-                <span class="ml-4 text-sm font-medium text-gray-500 group-hover:text-gray-900">{{ step.name }}</span>
+                <span
+                  class="ml-4 text-sm font-medium text-gray-500 group-hover:text-gray-900"
+                  >{{ step.name }}</span
+                >
               </span>
             </a>
             <template v-if="stepIdx !== steps.length - 1">
@@ -91,12 +90,24 @@
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6">
             <SideBar>
-              <h3 class="text-lg font-bold leading-6 text-gray-900">Vacancy Title</h3>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">
+                Vacancy Title
+              </h3>
               <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-              <p class="mt-1 text-xs text-gray-500">This information will be displayed publicly so be careful what you share.</p>
-              <p class="mt-4 text-xs text-gray-500">Use common job titles for searchability</p>
-              <p class="mt-4 text-xs text-gray-500">Advertise for just one job eg: Project Manager, not Project Manangers</p>
-              <p class="mt-4 text-xs text-gray-500">No general opportunities or events</p>
+              <p class="mt-1 text-xs text-gray-500">
+                This information will be displayed publicly so be careful what
+                you share.
+              </p>
+              <p class="mt-4 text-xs text-gray-500">
+                Use common job titles for searchability
+              </p>
+              <p class="mt-4 text-xs text-gray-500">
+                Advertise for just one job eg: Project Manager, not Project
+                Manangers
+              </p>
+              <p class="mt-4 text-xs text-gray-500">
+                No general opportunities or events
+              </p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
@@ -107,8 +118,13 @@
                         <label
                           for="title"
                           class="block text-sm font-medium text-gray-700"
-                        >Title</label>
-                        <FormInput v-model="jobDetail.title" :error="v$.title.$error" id="title"></FormInput>
+                          >Title</label
+                        >
+                        <FormInput
+                          v-model="jobDetail.title"
+                          :error="v$.title.$error"
+                          id="title"
+                        ></FormInput>
                         <!-- <input
                           type="text"
                           name="job-title"
@@ -122,7 +138,8 @@
                         <label
                           for="first-name"
                           class="block text-sm font-medium text-gray-700"
-                        >Department</label>
+                          >Department</label
+                        >
                         <SelectInput
                           class="mt-1"
                           :items="departmentList"
@@ -135,8 +152,13 @@
                         <label
                           for="code"
                           class="block text-sm font-medium text-gray-700"
-                        >Internal Code</label>
-                        <FormInput v-model="jobDetail.code" :error="v$.code.$error" id="code"></FormInput>
+                          >Internal Code</label
+                        >
+                        <FormInput
+                          v-model="jobDetail.code"
+                          :error="v$.code.$error"
+                          id="code"
+                        ></FormInput>
                       </div>
                     </div>
                   </div>
@@ -146,25 +168,29 @@
             </div>
           </div>
         </div>
-       
+
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
             <SideBar>
-                <h3 class="text-lg font-bold leading-6 text-gray-900">Location Information</h3>
-                <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-                <p class="mt-1 text-xs text-gray-500">Use a specific, full location to attract the most candidates</p>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">
+                Location Information
+              </h3>
+              <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
+              <p class="mt-1 text-xs text-gray-500">
+                Use a specific, full location to attract the most candidates
+              </p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
-                      
                       <div class="col-span-6 sm:col-span-6">
                         <label
                           for="country"
                           class="block text-sm font-medium text-gray-700"
-                        >Country</label>
+                          >Country</label
+                        >
                         <SelectInput
                           placeholder="Select Country"
                           v-model="jobDetail.country_id"
@@ -178,7 +204,8 @@
                         <label
                           for="state"
                           class="block text-sm font-medium text-gray-700"
-                        >State</label>
+                          >State</label
+                        >
                         <SelectInput
                           placeholder="Select State"
                           v-model="jobDetail.region_id"
@@ -191,7 +218,8 @@
                         <label
                           for="city"
                           class="block text-sm font-medium text-gray-700"
-                        >City </label>
+                          >City
+                        </label>
                         <SelectInput
                           placeholder="Select City"
                           v-model="jobDetail.city_id"
@@ -204,8 +232,13 @@
                         <label
                           for="street-address"
                           class="block text-sm font-medium text-gray-700"
-                        >Street address</label>
-                        <FormInput v-model="jobDetail.location" name="location" id="location"></FormInput>
+                          >Street address</label
+                        >
+                        <FormInput
+                          v-model="jobDetail.location"
+                          name="location"
+                          id="location"
+                        ></FormInput>
                       </div>
                     </div>
                     <div class="flex items-start mt-6">
@@ -219,16 +252,13 @@
                         />
                       </div>
                       <div class="ml-3 text-sm">
-                        <label
-                          for="comments"
-                          class="font-medium text-gray-700"
-                        >JOB IS FULLY REMOTE</label>
+                        <label for="comments" class="font-medium text-gray-700"
+                          >JOB IS FULLY REMOTE</label
+                        >
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    
-                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -238,51 +268,106 @@
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
             <SideBar>
-              <h3 class="text-lg font-bold leading-6 text-gray-900">Job Description</h3>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">
+                Job Description
+              </h3>
               <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-              <p class="mt-1 text-xs text-gray-500">Format into sections and lists to improve readability</p>
-              <p class="mt-4 text-xs text-gray-500">Avoid targeting specific demographics e.g. gender, nationality and age</p>
-              <p class="mt-4 text-xs text-gray-500">No need to add a link to apply (one is added automatically)</p>
+              <p class="mt-1 text-xs text-gray-500">
+                Format into sections and lists to improve readability
+              </p>
+              <p class="mt-4 text-xs text-gray-500">
+                Avoid targeting specific demographics e.g. gender, nationality
+                and age
+              </p>
+              <p class="mt-4 text-xs text-gray-500">
+                No need to add a link to apply (one is added automatically)
+              </p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
-              <form
-              >
+              <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-0 bg-white sm:p-6">
                     <div>
-                      <label for="about" class="block text-sm font-medium text-gray-700"> Description </label>
+                      <label
+                        for="about"
+                        class="block text-sm font-medium text-gray-700"
+                      >
+                        Description
+                      </label>
                       <div class="mt-1">
                         <!-- <ckeditor class="h-48 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" :editor="editor" v-model="jobDetail.description" :config="editorConfig"></ckeditor> -->
-                        <TextArea v-model="jobDetail.description" id="description" name="description" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" />
+                        <TextArea
+                          rows="5"
+                          id="description"
+                          name="description"
+                          v-model="jobDetail.description"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          placeholder="Describe job in detail here"
+                        />
                       </div>
                     </div>
 
                     <div class="mt-6">
-                      <label for="about" class="block text-sm font-medium text-gray-700"> Responsibilities </label>
+                      <label
+                        for="about"
+                        class="block text-sm font-medium text-gray-700"
+                      >
+                        Responsibilities
+                      </label>
                       <div class="mt-1">
-                        <TextArea v-model="jobDetail.responsibilities" id="responsibilities" name="responsibilities" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" />
+                        <TextArea
+                          v-model="jobDetail.responsibilities"
+                          id="responsibilities"
+                          name="responsibilities"
+                          rows="5"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          placeholder="List job responsibilities"
+                        />
                         <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" /> -->
                       </div>
                     </div>
 
                     <div class="mt-6">
-                      <label for="about" class="block text-sm font-medium text-gray-700"> Requirements </label>
+                      <label
+                        for="about"
+                        class="block text-sm font-medium text-gray-700"
+                      >
+                        Requirements
+                      </label>
                       <div class="mt-1">
-                        <TextArea v-model="jobDetail.requirements" id="requirements" name="requirements" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" />
+                        <TextArea
+                          v-model="jobDetail.requirements"
+                          id="requirements"
+                          name="requirements"
+                          rows="5"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          placeholder="List job requirements"
+                        />
                         <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" /> -->
                       </div>
                     </div>
 
                     <div class="mt-6">
-                      <label for="about" class="block text-sm font-medium text-gray-700"> Benefits </label>
+                      <label
+                        for="about"
+                        class="block text-sm font-medium text-gray-700"
+                      >
+                        Benefits
+                      </label>
                       <div class="mt-1">
-                        <TextArea v-model="jobDetail.benefits" id="benefits" name="benefits" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" />
+                        <TextArea
+                          v-model="jobDetail.benefits"
+                          id="benefits"
+                          name="benefits"
+                          rows="5"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          placeholder="List job benefits"
+                        />
                         <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" /> -->
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -292,22 +377,29 @@
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
             <SideBar>
-              <h3 class="text-lg font-bold leading-6 text-gray-900">Employment Information</h3>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">
+                Employment Information
+              </h3>
               <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-              <p class="mt-1 text-xs text-gray-500">Include as many details as possible to boost the job’s performance on some job boards</p>
-              <p class="mt-4 text-xs text-gray-500">Include as many keywords as possible to increase searchability</p>
+              <p class="mt-1 text-xs text-gray-500">
+                Include as many details as possible to boost the job’s
+                performance on some job boards
+              </p>
+              <p class="mt-4 text-xs text-gray-500">
+                Include as many keywords as possible to increase searchability
+              </p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
-                      
                       <div class="col-span-6 sm:col-span-3">
                         <label
                           for="jobFunction"
                           class="block text-sm font-medium text-gray-700"
-                        >Job Function</label>
+                          >Job Function</label
+                        >
                         <SelectInput
                           placeholder="Select Job Function"
                           v-model="jobDetail.job_function_id"
@@ -320,7 +412,8 @@
                         <label
                           for="employmentType"
                           class="block text-sm font-medium text-gray-700"
-                        >Employment Type</label>
+                          >Employment Type</label
+                        >
                         <SelectInput
                           placeholder="Select Employment Type"
                           v-model="jobDetail.employment_type_id"
@@ -333,7 +426,8 @@
                         <label
                           for="experience"
                           class="block text-sm font-medium text-gray-700"
-                        >Experience </label>
+                          >Experience
+                        </label>
                         <SelectInput
                           placeholder="Select Experience"
                           v-model="jobDetail.experience_level_id"
@@ -346,8 +440,9 @@
                         <label
                           for="educationLevel"
                           class="block text-sm font-medium text-gray-700"
-                        >Education </label>
-                        
+                          >Education
+                        </label>
+
                         <SelectInput
                           placeholder="Select Education Level"
                           v-model="jobDetail.education_level_id"
@@ -360,7 +455,8 @@
                         <label
                           for="industry"
                           class="block text-sm font-medium text-gray-700"
-                        >Industries </label>
+                          >Industries
+                        </label>
                         <SelectInput
                           placeholder="Select Industries"
                           v-model="jobDetail.industry_id"
@@ -368,24 +464,27 @@
                           id="industry"
                         ></SelectInput>
                       </div>
-                      
+
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                         <label
                           for="street-address"
                           class="block text-sm font-medium text-gray-700"
-                        >Keywords</label>
-                        <FormInput
+                          >Keywords</label
+                        >
+                        <TagInput @on-tags-changed="keywordsChange" v-model="jobDetail.keywords"></TagInput>
+                        <!-- <FormInput
                           name="keywords"
                           id="keywords"
                           v-model="jobDetail.keywords"
                           placeholder="Keywords are comma separated"
-                        ></FormInput>
+                        ></FormInput> -->
                       </div>
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                         <label
                           for="headcount"
                           class="block text-sm font-medium text-gray-700"
-                        >Head Count</label>
+                          >Head Count</label
+                        >
                         <NumberInput
                           type="number"
                           name="headcount"
@@ -396,9 +495,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    
-                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -408,35 +505,41 @@
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
             <SideBar>
-              <h3 class="text-lg font-bold leading-6 text-gray-900">Salary Information</h3>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">
+                Salary Information
+              </h3>
               <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-              <p class="mt-1 text-xs text-gray-500">Adding the salary here will improve performance on some job boards. You can also include the salary in the job description</p>
+              <p class="mt-1 text-xs text-gray-500">
+                Adding the salary here will improve performance on some job
+                boards. You can also include the salary in the job description
+              </p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
-                      
                       <div class="col-span-6 sm:col-span-3">
                         <label
                           for="min-offer"
                           class="block text-sm font-medium text-gray-700"
-                        >Minimum Offer</label>
-                         <NumberInput
-                            type="number"
-                            name="min-offer"
-                            id="min-offer"
-                            v-model="jobDetail.salary_min"
-                            class="mt-1"
-                          />
+                          >Minimum Offer</label
+                        >
+                        <NumberInput
+                          type="number"
+                          name="min-offer"
+                          id="min-offer"
+                          v-model="jobDetail.salary_min"
+                          class="mt-1"
+                        />
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                         <label
                           for="max-offer"
                           class="block text-sm font-medium text-gray-700"
-                        >Maximum Offer</label>
+                          >Maximum Offer</label
+                        >
                         <NumberInput
                           type="number"
                           name="max-offer"
@@ -450,7 +553,8 @@
                         <label
                           for="currency"
                           class="block text-sm font-medium text-gray-700"
-                        >Currency </label>
+                          >Currency
+                        </label>
                         <SelectInput
                           placeholder="Select Currency"
                           v-model="jobDetail.salary_currency_id"
@@ -460,9 +564,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    
-                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -472,21 +574,26 @@
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
             <SideBar>
-              <h3 class="text-lg font-bold leading-6 text-gray-900">Application Deadline</h3>
+              <h3 class="text-lg font-bold leading-6 text-gray-900">
+                Application Deadline
+              </h3>
               <h4 class="mt-1 text-sm font-bold text-gray-500">Tips</h4>
-              <p class="mt-1 text-xs text-gray-500">Adding a deadline will automatically close applications on the set date</p>
+              <p class="mt-1 text-xs text-gray-500">
+                Adding a deadline will automatically close applications on the
+                set date
+              </p>
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
                 <div class="shadow overflow-hidden sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
-                      
                       <div class="col-span-6 sm:col-span-6">
                         <label
                           for="min-offer"
                           class="block text-sm font-medium text-gray-700"
-                        >Deadline</label>
+                          >Deadline</label
+                        >
                         <DateInput
                           type="date"
                           name="deadline"
@@ -497,9 +604,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    
-                  </div>
+                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -515,7 +620,7 @@
             <AppButton
               type="submit"
               label="Continue"
-              @click="submitVacancyDetail"              
+              @click="submitVacancyDetail"
               :processing="processing"
               class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></AppButton>
@@ -529,7 +634,7 @@
         @nextPage="gotoPage(3)"
         v-if="stepNo === 2"
       ></ApplicationFormView>
-      
+
       <div
         v-if="stepNo === 3"
         class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
@@ -542,55 +647,58 @@
   </main>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, inject } from "vue";
 import { storeToRefs } from "pinia";
 // import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import useVuelidate from '@vuelidate/core';
-import { required, helpers } from '@vuelidate/validators';
+import useVuelidate from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
 import { CheckIcon } from "@heroicons/vue/solid";
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
 import { useDepartments } from "../../stores/department";
 import { useMiscellaneous } from "../../stores/miscellaneous";
-import MiscService from '../../service/miscellaneous.service';
-import VacancyService from '../../service/vacancies.service';
+import MiscService from "../../service/miscellaneous.service";
+import VacancyService from "../../service/vacancies.service";
 
 const jobDetail = ref({
-  title: '',
+  title: "",
   department_id: 0,
-  code: '',
-  country_id: '',
-  region_id: '',
-  city_id: '',
+  code: "",
+  country_id: "",
+  region_id: "",
+  city_id: "",
   isRemote: false,
-  description: '',
-  responsibilities: '',
-  requirements: '',
-  benefits: '',
-  job_function_id: '',
-  employment_type_id: '',
-  experience_level_id: '',
-  education_level_id: '',
-  salary_currency_id: '',
-  deadline: '',
-  zip_code: '',
-  location: '',
-  industry_id: '',
-  keywords: '',
-  salary_min: '',
-  salary_max: '',
-  head_count: '',
+  description: "",
+  responsibilities: "",
+  requirements: "",
+  benefits: "",
+  job_function_id: "",
+  employment_type_id: "",
+  experience_level_id: "",
+  education_level_id: "",
+  salary_currency_id: "",
+  deadline: "",
+  zip_code: "",
+  location: "",
+  industry_id: "",
+  keywords: [],
+  salary_min: "",
+  salary_max: "",
+  head_count: "",
 });
 
 const rules = {
-  title: { required: helpers.withMessage('Vacancy title is required', required) },
+  title: {
+    required: helpers.withMessage("Vacancy title is required", required),
+  },
   department_id: { required },
   code: { required },
-  country_id: { required },
-  region_id: { required },
-}
+  // deadline: { required },
+  // description: { required },
+  // requirements: { required }
+};
 
 const v$ = useVuelidate(rules, jobDetail);
 
@@ -612,8 +720,10 @@ const {
 
 const { departments } = storeToRefs(useDepartments());
 const toast = useToast();
+const swal = inject("$swal");
 // const router = useRouter();
 
+const jobKeywords = ref([]);
 const stepNo = ref(1);
 const vacancyId = ref(0);
 const countryStates = ref([]);
@@ -662,6 +772,10 @@ const departmentList = ref([]);
 //   }
 // }
 
+function keywordsChange(items) {
+  jobKeywords.value = items;
+}
+
 function onRemoteChange(evt) {
   jobDetail.value.isRemote = evt.target.checked;
 }
@@ -674,50 +788,108 @@ function gotoPage(step) {
   // steps.value[step].status = "upcoming";
 }
 
+function showErrorMessage(errorMessage) {
+  swal({
+    title: "Invalid Data",
+    text: errorMessage,
+    icon: "error",
+  });
+}
+
+function showErrorMessages(errors) {
+  var errorMessage = "";
+  Object.keys(errors).forEach((key) => {
+    errorMessage += `${errors[key][0]}\n`;
+  });
+
+  swal({
+    title: "Invalid Data",
+    text: errorMessage,
+    icon: "error",
+  });
+}
+
 async function submitVacancyDetail() {
   const valid = await v$.value.$validate();
   if (valid) {
     processing.value = true;
-    VacancyService.create(jobDetail.value).then(result => {
-      const { data } = result.data;
-      vacancyId.value = data.id;
-      gotoPage(2);
-    }).catch(() => {
-      toast.error('Something went wrong, please try again later');
-    }).finally(() => {
-      processing.value = false;
-    })
+    if (vacancyId.value === 0) {
+      if (jobKeywords.value.length > 0) {
+        jobDetail.value.keywords = jobKeywords.value.join();
+      }
+      VacancyService.create(jobDetail.value)
+        .then((result) => {
+          const { data } = result.data;
+          vacancyId.value = data.id;
+          gotoPage(2);
+        })
+        .catch((error) => {
+          const { data } = error;
+          if (data.code === "062") {
+            showErrorMessages(data.data);
+          } else {
+            showErrorMessage(data.message);
+          }
+        })
+        .finally(() => {
+          processing.value = false;
+        });
+    }
+
+    if (vacancyId.value > 0) {
+      VacancyService.update(vacancyId.value, jobDetail.value)
+        .then(() => {
+          // const { data } = result.data;
+          // vacancyId.value = data.id;
+          gotoPage(2);
+        })
+        .catch((error) => {
+          const { data } = error;
+          if (data.code === "062") {
+            showErrorMessages(data.data);
+          } else {
+            showErrorMessage(data.message);
+          }
+        })
+        .finally(() => {
+          processing.value = false;
+        });
+    }
   }
 
   if (!valid) {
-    toast.error('Please provide all required data');
+    toast.error("Please provide all required data");
     return;
   }
 }
 
-
 onMounted(() => {
-  // console.log(departments.value.data);
-  departmentList.value = departments.value.data
+  departmentList.value = departments.value.data;
   jobDetail.value.country_id = countries.value[0].id;
-  MiscService.getRegions(countries.value[0].id).then(result => {
+  MiscService.getRegions(countries.value[0].id).then((result) => {
     countryStates.value = result.data.data;
-  })
-})
-
-watch(() => jobDetail.value.region_id, (newValue) => {
-  cities.value = [];
-  const id = Number(newValue);
-  MiscService.getCities(id).then(result => {
-    cities.value = result.data.data;
-  })
+  });
 });
 
-watch(() => jobDetail.value.country_id, (newValue) => {
-  countryStates.value = [];
-  const id = Number(newValue);
-  MiscService.getRegions(id).then(result => {
-    countryStates.value = result.data.data;
-  })
-});
+watch(
+  () => jobDetail.value.region_id,
+  (newValue) => {
+    cities.value = [];
+    const id = Number(newValue);
+    MiscService.getCities(id).then((result) => {
+      cities.value = result.data.data;
+    });
+  }
+);
+
+watch(
+  () => jobDetail.value.country_id,
+  (newValue) => {
+    countryStates.value = [];
+    const id = Number(newValue);
+    MiscService.getRegions(id).then((result) => {
+      countryStates.value = result.data.data;
+    });
+  }
+);
 </script>

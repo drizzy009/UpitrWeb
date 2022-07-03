@@ -142,12 +142,23 @@
                                 />
                               </div>
                             </div>
+                            <div v-if="showOption" class="col-span-6 sm:col-span-6">
+                              <label
+                                for="question"
+                                class="block text-sm font-medium text-gray-700"
+                                >Option Items</label
+                              >
+                              <div class="mt-1">
+                                <TagInput @on-tags-changed="onItemsChange" v-model="items"></TagInput>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div class="px-4 py-3 bg-gray-100 text-right sm:px-6">
                           <AppButton
                             @click="addQuestion"
                             label="Add Question"
+                            type="button"
                             :processing="savingQuestion"
                             class="inline-flex cursor-pointer justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-500 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 sm:text-sm sm:leading-5"
                           >
@@ -197,7 +208,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
@@ -210,6 +221,8 @@ import VacancySettingService from "../../service/vacancy-settings.service";
 
 const props = defineProps({
   jobId: Number,
+  settingsId: Number,
+  existingQuestions: Array,
 });
 
 const {
@@ -220,14 +233,18 @@ const toast = useToast();
 const router = useRouter();
 const savingQuestion = ref(false);
 const deletingQuestion = ref(false);
-const applicantInfo = ref(applicationData);
 const questionPanel = ref(false);
-const emits = defineEmits(['nextPage']);
+const settingsId = ref(0);
+const applicantInfo = ref(applicationData);
+// const emits = defineEmits(['nextPage']);
 
 const questions = ref([]);
 const processing = ref(false);
 const question = ref("");
 const questionType = ref(0);
+const selectedType = ref(null);
+const showOption = ref(false);
+const options = ref("");
 
 function addQuestion() {
   const currentQuestion = {
@@ -235,6 +252,10 @@ function addQuestion() {
     question: question.value,
     job_question_type_id: Number(questionType.value)
   };
+
+  if (selectedType.value.has_options === 1 && options.value !== "") {
+    Object.assign(currentQuestion, {question_options: options.value.split(',')});
+  }
 
   savingQuestion.value = true;
   VacancyService.createQuestion(currentQuestion).then(result => {
@@ -249,9 +270,15 @@ function addQuestion() {
   .finally(() => {
     savingQuestion.value = false;
   })
-  // questionPanel.value == true
-  //   ? (questionPanel.value = false)
-  //   : (questionPanel.value = true);
+  questionPanel.value == true
+    ? (questionPanel.value = false)
+    : (questionPanel.value = true);
+}
+
+function onItemsChange(items) {
+  if (items.length > 0) {
+    options.value = items.join();
+  }
 }
 
 function saveApplicantInfo() {
@@ -294,16 +321,28 @@ function saveApplicantInfo() {
     }
   )
 
-  VacancySettingService.create(payload).then(() => {
-    toast.success('Application form successfully saved');
-    router.push(`detail/${props.jobId}`);
-    // router.push({ name: 'VacancyDetail', params: { ...props.jobId } });
-    // emits('nextPage');
-  }).catch(() => {
-    toast.error('Unable to save application form, please try again later');
-  }).finally(() => {
-    processing.value = false;
-  })
+  if (settingsId.value === 0) {
+    VacancySettingService.create(payload).then(() => {
+      toast.success('Application form successfully saved');
+      router.push(`detail/${props.jobId}`);
+      // emits('nextPage');
+    }).catch(() => {
+      toast.error('Unable to save application form, please try again later');
+    }).finally(() => {
+      processing.value = false;
+    })
+  }
+
+  if (settingsId.value > 0) {
+    VacancySettingService.update(settingsId.value, payload).then(() => {
+      toast.success('Application form successfully saved');
+      router.push(`detail/${props.jobId}`);
+    }).catch(() => {
+      toast.error('Unable to save application form, please try again later');
+    }).finally(() => {
+      processing.value = false;
+    })
+  }
 }
 
 function setDefault(item) {
@@ -332,6 +371,18 @@ function deleteQuestion(id) {
     deletingQuestion.value = false;
   })
 }
+
+watch(() => props.existingQuestions, (value) => {
+  if (value.length > 0) {
+    questions.value = value;
+  }
+});
+
+watch(() => questionType.value, (value) => {
+  const getType = questionTypes.value.find(item => item.id === Number(value));
+  selectedType.value = getType;
+  showOption.value = getType.has_options === 1;
+});
 
 </script>
 

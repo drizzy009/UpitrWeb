@@ -325,7 +325,7 @@
                     :disabled="link.url === null || processing"
                     :class="
                       link.active
-                        ? 'bg-indigo-700 text-white'
+                        ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
                         : 'text-gray-700 bg-white'
                     "
                     class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"

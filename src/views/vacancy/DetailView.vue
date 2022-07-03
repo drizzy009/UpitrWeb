@@ -1,8 +1,8 @@
 <template>
-  <template v-if="vacancyDetail === null">
+  <template v-if="loading">
     <div>
       <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <SkeletonLoading v-for="n in 5"></SkeletonLoading>
+        <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
       </div>
     </div>
   </template>
@@ -15,7 +15,7 @@
           <h1
             class="mt-2 text-xl font-medium leading-7 uppercase text-gray-700 sm:text-xl sm:truncate"
           >
-            {{vacancyDetail.title}}
+            {{ vacancyDetail.title }}
           </h1>
           <div
             class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-8"
@@ -25,7 +25,7 @@
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              {{vacancyDetail.employment_type.name}}
+              {{ vacancyDetail.employment_type.name }}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <LocationMarkerIcon
@@ -39,7 +39,8 @@
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              {{vacancyDetail.salary_min}} &ndash; {{vacancyDetail.salary_max}}
+              {{ vacancyDetail.salary_min }} &ndash;
+              {{ vacancyDetail.salary_max }}
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500">
               <CalendarIcon
@@ -86,92 +87,17 @@
               :class="published ? 'bg-red-600' : 'bg-green-600'"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <BanIcon v-if="published" class="h-5 w-5 mr-1" aria-hidden="true" />
-              <CheckIcon v-if="!published" class="h-5 w-5 mr-1" aria-hidden="true" />
+              <BanIcon
+                v-if="published"
+                class="h-5 w-5 mr-1"
+                aria-hidden="true"
+              />
+              <CheckIcon
+                v-if="!published"
+                class="h-5 w-5 mr-1"
+                aria-hidden="true"
+              />
             </IconButton>
-            <!-- <Listbox as="div" v-model="selected">
-              <ListboxLabel class="sr-only">
-                Change published status
-              </ListboxLabel>
-              <div class="relative">
-                <div
-                  class="inline-flex shadow-sm rounded-md divide-x divide-indigo-600"
-                >
-                  <div
-                    class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-indigo-600"
-                  >
-                    <div
-                      class="relative inline-flex items-center bg-indigo-500 py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white"
-                    >
-                      <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                      <p class="ml-2.5 text-sm font-medium">
-                        {{ selected.name }}
-                      </p>
-                    </div>
-                    <ListboxButton
-                      class="relative inline-flex items-center bg-indigo-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
-                    >
-                      <span class="sr-only">Change published status</span>
-                      <ChevronDownIcon
-                        class="h-5 w-5 text-white"
-                        aria-hidden="true"
-                      />
-                    </ListboxButton>
-                  </div>
-                </div>
-
-                <transition
-                  leave-active-class="transition ease-in duration-100"
-                  leave-from-class="opacity-100"
-                  leave-to-class="opacity-0"
-                >
-                  <ListboxOptions
-                    class="origin-top-right absolute left-0 mt-2 -mr-1 w-72 rounded-md shadow-lg overflow-hidden bg-white divide-y divide-gray-200 ring-1 ring-black ring-opacity-5 focus:outline-none sm:left-auto sm:right-0"
-                  >
-                    <ListboxOption
-                      as="template"
-                      v-for="option in publishingOptions"
-                      :key="option.name"
-                      :value="option"
-                      v-slot="{ active, selected }"
-                    >
-                      <li
-                        :class="[
-                          active ? 'text-white bg-indigo-500' : 'text-gray-900',
-                          'cursor-default select-none relative p-4 text-sm',
-                        ]"
-                      >
-                        <div class="flex flex-col">
-                          <div class="flex justify-between">
-                            <p
-                              :class="
-                                selected ? 'font-semibold' : 'font-normal'
-                              "
-                            >
-                              {{ option.name }}
-                            </p>
-                            <span
-                              v-if="selected"
-                              :class="active ? 'text-white' : 'text-indigo-500'"
-                            >
-                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                            </span>
-                          </div>
-                          <p
-                            :class="[
-                              active ? 'text-indigo-200' : 'text-gray-500',
-                              'mt-2',
-                            ]"
-                          >
-                            {{ option.description }}
-                          </p>
-                        </div>
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox> -->
           </div>
 
           <!-- Dropdown -->
@@ -283,661 +209,71 @@
                 </div>
               </div>
 
-              <div v-if="tabIndex == 0">
-                <!-- Stacked list -->
-                <!-- <CandidateView :candidates="candidates"></CandidateView> -->
-                <CandidateView :candidates="sourcedCandidates"></CandidateView>
-                <h4 v-if="sourcedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
-                <!-- Pagination -->
-                <!-- <nav
-                  class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div class="-mt-px w-0 flex-1 flex">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      <ArrowNarrowLeftIcon
-                        class="mr-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      Previous
-                    </a>
-                  </div>
-                  <div class="hidden md:-mt-px md:flex">
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      1
-                    </a>
-                    
-                    <a
-                      href="#"
-                      class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                      aria-current="page"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      3
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      4
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      5
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      6
-                    </a>
-                  </div>
-                  <div class="-mt-px w-0 flex-1 flex justify-end">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      Next
-                      <ArrowNarrowRightIcon
-                        class="ml-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                </nav> -->
+              <CandidateView v-if="serverResponse.data.length > 0" :candidates="serverResponse.data"></CandidateView>
+              <div v-if="loadingCandidates" class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+                <SkeletonLoading></SkeletonLoading>
               </div>
-              <div v-if="tabIndex == 1">
-                <!-- Stacked list -->
-                <CandidateView :candidates="appliedCandidates"></CandidateView>
-                 <h4 v-if="appliedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
-                <!-- <ul
-                role="list"
-                class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
+              <h4
+                v-if="serverResponse.data.length === 0 && !loadingCandidates"
+                class="text-center p-6"
               >
-                <li v-for="candidate in appliedCandidates" :key="candidate.email">
-                  <a href="#" class="group block">
-                    <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
-                      <div class="min-w-0 flex-1 flex items-center">
-                        <div class="flex-shrink-0">
-                          <img
-                            class="h-12 w-12 rounded-full group-hover:opacity-75"
-                            :src="candidate.imageUrl"
-                            alt=""
-                          />
-                        </div>
-                        <div
-                          class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
-                        >
-                          <div>
-                            <p
-                              class="text-sm font-medium text-indigo-600 truncate"
-                            >
-                              {{ candidate.name }}
-                            </p>
-                            <p
-                              class="mt-2 flex items-center text-sm text-gray-500"
-                            >
-                              <MailIcon
-                                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <span class="truncate">{{
-                                candidate.email
-                              }}</span>
-                            </p>
-                          </div>
-                          <div class="hidden md:block">
-                            <div>
-                              <p class="text-sm text-gray-900">
-                                Applied on
-                                {{ " " }}
-                                <time :datetime="candidate.appliedDatetime">{{
-                                  candidate.applied
-                                }}</time>
-                              </p>
-                              <p
-                                class="mt-2 flex items-center text-sm text-gray-500"
-                              >
-                                <CheckCircleIcon
-                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                                  aria-hidden="true"
-                                />
-                                {{ candidate.status }}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <ChevronRightIcon
-                          class="h-5 w-5 text-gray-400 group-hover:text-gray-700"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul> -->
-
-                <!-- Pagination -->
-                <!-- <nav
-                  class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div class="-mt-px w-0 flex-1 flex">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      <ArrowNarrowLeftIcon
-                        class="mr-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      Previous
-                    </a>
-                  </div>
-                  <div class="hidden md:-mt-px md:flex">
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      1
-                    </a>
-                    
-                    <a
-                      href="#"
-                      class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                      aria-current="page"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      3
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      4
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      5
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      6
-                    </a>
-                  </div>
-                  <div class="-mt-px w-0 flex-1 flex justify-end">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      Next
-                      <ArrowNarrowRightIcon
-                        class="ml-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                </nav> -->
-              </div>
-              <div v-if="tabIndex == 2">
-                <!-- Stacked list -->
-                <CandidateView :candidates="assessedCandidates"></CandidateView>
-                <h4 v-if="assessedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
-                <!-- Pagination -->
-                <!-- <nav
-                  class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div class="-mt-px w-0 flex-1 flex">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      <ArrowNarrowLeftIcon
-                        class="mr-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      Previous
-                    </a>
-                  </div>
-                  <div class="hidden md:-mt-px md:flex">
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      1
-                    </a>
-                    <a
-                      href="#"
-                      class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                      aria-current="page"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      3
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      4
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      5
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      6
-                    </a>
-                  </div>
-                  <div class="-mt-px w-0 flex-1 flex justify-end">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      Next
-                      <ArrowNarrowRightIcon
-                        class="ml-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                </nav> -->
-              </div>
-              <div v-if="tabIndex == 3">
-                <!-- Stacked list -->
-                <CandidateView :candidates="offeredCandidates"></CandidateView>
-                <h4 v-if="offeredCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
-                <!-- <ul
-                role="list"
-                class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
+                No candidate(s)
+              </h4>
+              <nav
+                class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
+                aria-label="Pagination"
               >
-                <li v-for="candidate in appliedCandidates" :key="candidate.email">
-                  <a href="#" class="group block">
-                    <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
-                      <div class="min-w-0 flex-1 flex items-center">
-                        <div class="flex-shrink-0">
-                          <img
-                            class="h-12 w-12 rounded-full group-hover:opacity-75"
-                            :src="candidate.imageUrl"
-                            alt=""
-                          />
-                        </div>
-                        <div
-                          class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
-                        >
-                          <div>
-                            <p
-                              class="text-sm font-medium text-indigo-600 truncate"
-                            >
-                              {{ candidate.name }}
-                            </p>
-                            <p
-                              class="mt-2 flex items-center text-sm text-gray-500"
-                            >
-                              <MailIcon
-                                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <span class="truncate">{{
-                                candidate.email
-                              }}</span>
-                            </p>
-                          </div>
-                          <div class="hidden md:block">
-                            <div>
-                              <p class="text-sm text-gray-900">
-                                Applied on
-                                {{ " " }}
-                                <time :datetime="candidate.appliedDatetime">{{
-                                  candidate.applied
-                                }}</time>
-                              </p>
-                              <p
-                                class="mt-2 flex items-center text-sm text-gray-500"
-                              >
-                                <CheckCircleIcon
-                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                                  aria-hidden="true"
-                                />
-                                {{ candidate.status }}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <ChevronRightIcon
-                          class="h-5 w-5 text-gray-400 group-hover:text-gray-700"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
+                <div class="-mt-px w-0 flex-1 flex">
+                  <a
+                    @click="navigateTo(serverResponse.prev_page_url)"
+                    :disabled="serverResponse.prev_page_url === null"
+                    :class="
+                      serverResponse.prev_page_url !== null
+                        ? 'cursor-pointer'
+                        : 'cursor-not-allowed'
+                    "
+                    class="border-t-2 border-transparent pt-3 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
+                  >
+                    <ArrowNarrowLeftIcon
+                      class="mr-3 h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                    Previous
                   </a>
-                </li>
-              </ul> -->
-
-                <!-- Pagination -->
-                <!-- <nav
-                  class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div class="-mt-px w-0 flex-1 flex">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      <ArrowNarrowLeftIcon
-                        class="mr-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      Previous
-                    </a>
-                  </div>
-                  <div class="hidden md:-mt-px md:flex">
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      1
-                    </a>
-                    <a
-                      href="#"
-                      class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                      aria-current="page"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      3
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      4
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      5
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      6
-                    </a>
-                  </div>
-                  <div class="-mt-px w-0 flex-1 flex justify-end">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      Next
-                      <ArrowNarrowRightIcon
-                        class="ml-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                </nav> -->
-              </div>
-              <div v-if="tabIndex == 4">
-                <!-- Stacked list -->
-                <CandidateView :candidates="hiredCandidates"></CandidateView>
-                <h4 v-if="hiredCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
-                <!-- Pagination -->
-                <!-- <nav
-                  class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div class="-mt-px w-0 flex-1 flex">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      <ArrowNarrowLeftIcon
-                        class="mr-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      Previous
-                    </a>
-                  </div>
-                  <div class="hidden md:-mt-px md:flex">
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      1
-                    </a>
-                    
-                    <a
-                      href="#"
-                      class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                      aria-current="page"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      3
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      4
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      5
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      6
-                    </a>
-                  </div>
-                  <div class="-mt-px w-0 flex-1 flex justify-end">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      Next
-                      <ArrowNarrowRightIcon
-                        class="ml-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                </nav> -->
-              </div>
-              <div v-if="tabIndex == 5">
-                <!-- Stacked list -->
-                <CandidateView :candidates="disqualifiedCandidates"></CandidateView>
-                <h4 v-if="disqualifiedCandidates.length === 0" class="text-center p-6">No candidate(s)</h4>
-                <!-- <ul
-                role="list"
-                class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
-              >
-                <li v-for="candidate in appliedCandidates" :key="candidate.email">
-                  <a href="#" class="group block">
-                    <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
-                      <div class="min-w-0 flex-1 flex items-center">
-                        <div class="flex-shrink-0">
-                          <img
-                            class="h-12 w-12 rounded-full group-hover:opacity-75"
-                            :src="candidate.imageUrl"
-                            alt=""
-                          />
-                        </div>
-                        <div
-                          class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
-                        >
-                          <div>
-                            <p
-                              class="text-sm font-medium text-indigo-600 truncate"
-                            >
-                              {{ candidate.name }}
-                            </p>
-                            <p
-                              class="mt-2 flex items-center text-sm text-gray-500"
-                            >
-                              <MailIcon
-                                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <span class="truncate">{{
-                                candidate.email
-                              }}</span>
-                            </p>
-                          </div>
-                          <div class="hidden md:block">
-                            <div>
-                              <p class="text-sm text-gray-900">
-                                Applied on
-                                {{ " " }}
-                                <time :datetime="candidate.appliedDatetime">{{
-                                  candidate.applied
-                                }}</time>
-                              </p>
-                              <p
-                                class="mt-2 flex items-center text-sm text-gray-500"
-                              >
-                                <CheckCircleIcon
-                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                                  aria-hidden="true"
-                                />
-                                {{ candidate.status }}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <ChevronRightIcon
-                          class="h-5 w-5 text-gray-400 group-hover:text-gray-700"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
+                </div>
+                <div v-for="link in serverResponse.links" :key="link.label" class="hidden md:-mt-px md:flex">
+                  <a
+                    v-if="showPageNumber(link.label)"
+                    @click="navigateTo(link.url)"
+                    :class="
+                      link.active
+                        ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
+                        : 'text-gray-700 bg-white'
+                    "
+                    class="cursor-pointer relative inline-flex items-center px-4 py-2 mt-4 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
+                  >
+                    {{link.label}}
                   </a>
-                </li>
-              </ul> -->
-
-                <!-- <nav
-                  class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
-                  aria-label="Pagination"
-                >
-                  <div class="-mt-px w-0 flex-1 flex">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      <ArrowNarrowLeftIcon
-                        class="mr-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      Previous
-                    </a>
-                  </div>
-                  <div class="hidden md:-mt-px md:flex">
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      1
-                    </a>
-                    
-                    <a
-                      href="#"
-                      class="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                      aria-current="page"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      3
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      4
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      5
-                    </a>
-                    <a
-                      href="#"
-                      class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
-                    >
-                      6
-                    </a>
-                  </div>
-                  <div class="-mt-px w-0 flex-1 flex justify-end">
-                    <a
-                      href="#"
-                      class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
-                    >
-                      Next
-                      <ArrowNarrowRightIcon
-                        class="ml-3 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                </nav> -->
-              </div>
+                </div>
+                <div class="-mt-px w-0 flex-1 flex justify-end">
+                  <a
+                    @click="navigateTo(serverResponse.next_page_url)"
+                    :disabled="serverResponse.next_page_url === null"
+                    :class="
+                      serverResponse.next_page_url !== null
+                        ? 'cursor-pointer'
+                        : 'cursor-not-allowed'
+                    "
+                    class="border-t-2 border-transparent pt-3 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
+                  >
+                    Next
+                    <ArrowNarrowRightIcon
+                      class="ml-3 h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </div>
+              </nav>
             </div>
           </div>
         </div>
@@ -953,12 +289,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import {
-  Menu,
-  MenuItem,
-  MenuItems,
-  MenuButton,
-} from "@headlessui/vue";
+import { Menu, MenuItem, MenuItems, MenuButton } from "@headlessui/vue";
 import {
   CheckIcon,
   PencilIcon,
@@ -970,24 +301,36 @@ import {
   LocationMarkerIcon,
   ArrowNarrowLeftIcon,
   ArrowNarrowRightIcon,
-  BanIcon
+  BanIcon,
 } from "@heroicons/vue/solid";
 import CandidateView from "./CandidateView.vue";
 import VacancyService from "../../service/vacancies.service";
 import { FormatShortDate } from "../../util/Formatter";
 // import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 var tabIndex = ref(0);
+const vacancyId = ref(0);
+const loading = ref(false);
+const loadingCandidates = ref(false);
 const router = useRouter();
 const published = ref(false);
 const processing = ref(false);
 const vacancyDetail = ref(null);
-const hiredCandidates = ref([]);
-const appliedCandidates = ref([]);
-const offeredCandidates = ref([]);
-const sourcedCandidates = ref([]);
-const assessedCandidates = ref([]);
-const disqualifiedCandidates = ref([]);
 const remoteOffice = ref("On-site");
+
+const serverResponse = ref({
+  to: 0,
+  from: 0,
+  total: 0,
+  data: [],
+  links: [],
+  per_page: 0,
+  last_page: 0,
+  current_page: 0,
+  prev_page_url: null,
+  next_page_url: null,
+  last_page_url: null,
+  first_page_url: null,
+});
 
 const tabs = [
   { name: "Sourced", href: "#", count: "2", current: true },
@@ -998,24 +341,27 @@ const tabs = [
   { name: "Disqualified", href: "#", current: false },
 ];
 
-function changeTab(tabIdx) {
-  tabIndex.value = tabIdx;
+function showPageNumber(label) {
+  const labelNumber = Number(label);
+  return !isNaN(labelNumber);
 }
 
-const publishingOptions = [
-  {
-    name: "Published",
-    description: "This job posting can be viewed by anyone who has the link.",
-    current: true,
-  },
-  {
-    name: "Draft",
-    description: "This job posting will no longer be publicly accessible.",
-    current: false,
-  },
-];
+function navigateTo(url) {
+  const pageUrl = `${url}&vacancy=${vacancyId.value}&stage=${tabIndex.value + 1}`;
+  serverResponse.value.data = [];
+  loadingCandidates.value = true;
+  VacancyService.get(pageUrl).then((response) => {
+    serverResponse.value = response.data.data;
+  }).catch(() => {})
+  .finally(() => {
+    loadingCandidates.value = false;
+  });
+}
 
-const selected = ref(publishingOptions[0]);
+function changeTab(tabIdx) {
+  tabIndex.value = tabIdx;
+  getVacancyCandidates(tabIdx + 1);
+}
 
 function formatClosingData(dateValue) {
   return FormatShortDate(dateValue);
@@ -1026,51 +372,63 @@ function publishVacancy() {
   const id = vacancyDetail.value.id;
 
   if (!published.value) {
-    VacancyService.publish(id).then(() => {
-      getVacancyDetail(id);
-      published.value = true;
-    }).catch(() => {})
-    .finally(() => {
-      processing.value = false;
-    })
+    VacancyService.publish(id)
+      .then(() => {
+        getVacancyDetail(id);
+        published.value = true;
+      })
+      .catch(() => {})
+      .finally(() => {
+        processing.value = false;
+      });
   }
 
   if (published.value) {
-    VacancyService.unPublish(id).then(() => {
-      getVacancyDetail(id);
-      published.value = false;
-    }).catch(() => {})
-    .finally(() => {
-      processing.value = false;
-    })
+    VacancyService.unPublish(id)
+      .then(() => {
+        getVacancyDetail(id);
+        published.value = false;
+      })
+      .catch(() => {})
+      .finally(() => {
+        processing.value = false;
+      });
   }
 }
 
+function getVacancyCandidates(stageId) {
+  serverResponse.value.data = [];
+  loadingCandidates.value = true;
+  VacancyService.candidatesByStageId(vacancyId.value, stageId).then((response) => {
+    serverResponse.value = response.data.data;
+  }).catch(() => {})
+  .finally(() => {
+    loadingCandidates.value = false;
+  });
+}
+
 function getVacancyDetail(id) {
+  loading.value = true;
   VacancyService.single(id).then((response) => {
     const { data } = response.data;
     vacancyDetail.value = data;
     published.value = data.is_published;
     if (vacancyDetail.value.is_remote !== null) {
-      remoteOffice.value = vacancyDetail.value.is_remote ? 'Remote' : 'On-site';
+      remoteOffice.value = vacancyDetail.value.is_remote ? "Remote" : "On-site";
     }
-  });
 
-  VacancyService.candidates(id).then(response => {
-    const responseData = response.data.data;
-    sourcedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 1);
-    appliedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 2);
-    assessedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 3);
-    offeredCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 4);
-    hiredCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 5);
-    disqualifiedCandidates.value = responseData.data.filter(item => item.job_workflow_stage.order === 6);
-  })
+    getVacancyCandidates(1);
+  }).catch(() => {})
+  .finally(() => {
+    loading.value = false;
+  });
 }
 
 onMounted(() => {
   const { id } = router.currentRoute.value.params;
   if (id !== undefined) {
-    getVacancyDetail(Number(id));
+    vacancyId.value = Number(id);
+    getVacancyDetail(vacancyId.value);
   }
 });
 </script>

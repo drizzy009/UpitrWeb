@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
+// import Vue3TagsInput from 'vue3-tags-input';
 import VueSweetalert2 from 'vue-sweetalert2';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -22,6 +23,7 @@ import AppModal from './components/commons/modal/AppModal.vue';
 import SkeletonLoading from './components/layout/SkeletonLoading.vue';
 import CoreService from  './service/core.service';
 // import TokenService from './service/token.service';
+import TagInput from "./components/forms/TagInput.vue";
 import { useAppStore } from './stores/app';
 
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -62,7 +64,8 @@ app.component('PasswordInput', PasswordInput);
 app.component('DataTable', Vue3EasyDataTable);
 app.component('TextInputGroup', TextInputGroup);
 app.component('SkeletonLoading', SkeletonLoading);
-
+// app.component('TagInput', Vue3TagsInput);
+app.component("TagInput", TagInput);
 app.component('HtmlEditor', Editor);
 app.use(Toast, options);
 

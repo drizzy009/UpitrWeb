@@ -324,7 +324,6 @@ function editDepartment(item) {
   openEditDepartment.value = true;
 }
 
-
 function deleteDepartment(id) {
   swal({
     title: "Confirm Delete",

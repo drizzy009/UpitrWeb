@@ -13,13 +13,6 @@ export const useDepartments = defineStore({
     }),
     getters:{},
     actions: {
-        reset() {
-            this.isError = false;
-            this.isSuccess = false;
-            this.processing = false;
-            this.errorMessage = "";
-            this.departments = [];
-        },
         fetchAllDepartments() {
             this.processing = true;
             DepartmentService.all().then(response => {

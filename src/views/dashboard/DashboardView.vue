@@ -165,11 +165,11 @@
         Recent Candidates
       </h2>
 
-      <template v-if="applications.length === 0">
+      <template v-if="loading">
         <SkeletonLoading></SkeletonLoading>
       </template>
 
-      <div v-if="applications.length > 0" class="hidden sm:block">
+      <div v-if="!loading" class="hidden sm:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex flex-col mt-4">
             <div class="
@@ -186,11 +186,11 @@
                 class="divide-y divide-gray-200"
               >
                 <li
-                  v-for="application in applications"
-                  :key="application.email"
+                  v-for="candidate in dashboardData.candidates"
+                  :key="candidate.email"
                 >
                   <a
-                    :href="application.href"
+                    :href="candidate.href"
                     class="block hover:bg-gray-50"
                   >
                     <div class="flex items-center px-4 py-4 sm:px-6">
@@ -198,7 +198,7 @@
                         <div class="flex-shrink-0">
                           <img
                             class="h-12 w-12 rounded-full"
-                            :src="application.photo"
+                            :src="candidate.photo"
                             alt=""
                           />
                         </div>
@@ -215,7 +215,7 @@
                                 truncate
                                 font-semibold
                               ">
-                              {{ application.firstname }} {{ application.lastname }}
+                              {{ candidate.firstname }} {{ candidate.lastname }}
                             </p>
                             <p class="
                                 mt-2
@@ -233,9 +233,9 @@
                                 "
                                 aria-hidden="true"
                               />
-                              <span class="truncate">{{
-                                application.job.title
-                              }}</span>
+                              <!-- <span class="truncate">{{
+                                candidate.job.title
+                              }}</span> -->
                             </p>
                           </div>
                           <div class="hidden md:block">
@@ -243,7 +243,7 @@
                               <p class="text-sm text-gray-900">
                                 Applied on
                                 {{ " " }}
-                                {{formatAppDate(application.created_at)}}
+                                {{formatAppDate(candidate.created_at)}}
                               </p>
                               <p class="
                                   mt-2
@@ -261,7 +261,7 @@
                                   "
                                   aria-hidden="true"
                                 />
-                                {{ application.job_workflow_stage.description }}
+                                <!-- {{ candidate.job_workflow_stage.description }} -->
                               </p>
                             </div>
                           </div>
@@ -269,7 +269,7 @@
                       </div>
                       <div>
                         <a
-                          :href="`/candidate/detail/${application.id}`">
+                          :href="`/candidate/detail/${candidate.id}`">
                           <ChevronRightIcon
                             class="h-5 w-5 text-gray-400"
                             aria-hidden="true"
@@ -299,11 +299,11 @@
         Recent Vacancies
       </h2>
 
-      <template v-if="recentVacancies.length === 0">
+      <template v-if="loading">
         <SkeletonLoading></SkeletonLoading>
       </template>
 
-      <div v-if="recentVacancies.length > 0" class="hidden sm:block">
+      <div v-if="!loading" class="hidden sm:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="bg-white mt-4 shadow overflow-hidden sm:rounded-md ">
             <ul
@@ -311,7 +311,7 @@
               class="divide-y divide-gray-200"
             >
               <li
-                v-for="vacancy in recentVacancies"
+                v-for="vacancy in dashboardData.vacancies"
                 :key="vacancy.id"
               >
                 <a
@@ -323,7 +323,7 @@
                       <div class="truncate">
                         <div class="flex text-sm">
                           <p class="font-semibold text-gray-600 truncate">{{ vacancy.title }}</p>
-                          <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ vacancy.department.name }}</p>
+                          <!-- <p class="ml-1 flex-shrink-0 font-normal text-gray-500">in {{ vacancy.department.name }}</p> -->
                         </div>
                         <div class="mt-2 flex">
                           <div class="flex items-center text-sm text-gray-500">
@@ -372,7 +372,7 @@
   </main>
 </template>
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 // import {} from "@headlessui/vue";
 import {
@@ -387,16 +387,19 @@ import {
 } from "@heroicons/vue/solid";
 
 import { FormatLongDate2 } from '../../util/Formatter';
-import { useVacancies } from "../../stores/vacancies";
-import { useCandidates } from "../../stores/candidate";
 import { useAuthentication } from "./../../stores/authentication";
+import DashboardService from "../../service/dashboard.service";
 
-const vacancyStore = useVacancies();
-const candidateStore = useCandidates();
-const { vacancies } = vacancyStore;
-const { candidates } = candidateStore;
 const { loginInfo } = storeToRefs(useAuthentication());
-const recentVacancies = ref([]);
+const loading = ref(false);
+const dashboardData = ref({
+  active_candidates: 0,
+  active_vacancies: 0,
+  activities: [],
+  candidates: [],
+  upcoming_activities: 0,
+  vacancies: []
+})
 
 const cards = ref([
   { name: "Active Vacancies", href: "#", icon: BriefcaseIcon, amount: "0" },
@@ -406,39 +409,30 @@ const cards = ref([
     icon: UserGroupIcon,
     amount: "0",
   },
-  {
-    name: "Shortlisted Candidates",
-    href: "#",
-    icon: UserGroupIcon,
-    amount: "0",
-  },
+  // {
+  //   name: "Shortlisted Candidates",
+  //   href: "#",
+  //   icon: UserGroupIcon,
+  //   amount: "0",
+  // },
 ]);
-
-const applications = ref([]);
 
 function formatAppDate(dateValue) {
   return FormatLongDate2(dateValue);
 }
 
-watch(() => vacancies, (newValue) => {
-  // vacancyCount.value = newValue.data.length;
-  cards.value[0].amount = newValue.data.length;
-  recentVacancies.value = newValue.data.slice(0, 5);
-});
-
-watch(() => candidates, (newValue) => {
-  cards.value[1].amount = newValue.data.length;
-  cards.value[2].amount = newValue.data.length;
-  applications.value = newValue.data.slice(0, 5);
-});
 
 onMounted(() => {
-  cards.value[0].amount = vacancies.data.length;
-  recentVacancies.value = vacancies.data.slice(0, 5);
-
-  cards.value[1].amount = candidates.data.length;
-  cards.value[2].amount = candidates.data.length;
-  applications.value = candidates.data.slice(0, 5);
+  loading.value = true;
+  DashboardService.get().then(response => {
+    const { data } = response.data;
+    dashboardData.value = data;
+    cards.value[0].amount = dashboardData.value.active_vacancies;
+    cards.value[1].amount = dashboardData.value.active_candidates;
+  }).catch(() => {})
+  .finally(() => {
+    loading.value = false;
+  })
 })
 
 </script>
