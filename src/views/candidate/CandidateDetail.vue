@@ -1,18 +1,23 @@
 <template>
-  <main class="flex-1 pb-8">
-    <div class="max-w-3xl mt-4 mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
-      <div v-if="!loading && candidateDetail !== null" class="flex items-center space-x-5">
+  <CandidateLoading v-if="loading"></CandidateLoading>
+  <main v-if="!loading && candidateDetail !== null" class="flex-1 pb-8">
+    <div class="max-w-9xl mt-4 mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5">
+      <div class="flex items-center space-x-5">
         <div class="flex-shrink-0">
           <div class="relative">
-            <img
+            <img v-if="candidateDetail.photo"
               class="h-16 w-16 rounded-full"
               :src="candidateDetail.photo"
               alt=""
             />
+            <UserCircleIcon
+              v-else
+              class="h-16 w-16 text-indigo-400"
+            />
             <span
               class="absolute inset-0 shadow-inner rounded-full"
               aria-hidden="true"
-            />
+            ></span>
           </div>
         </div>
         <div>
@@ -20,14 +25,11 @@
           <p class="text-sm font-medium text-gray-500">{{candidateDetail.headline}}</p>
         </div>
       </div>
-      <template v-if="loading">
-        <SkeletonLoading></SkeletonLoading>
-      </template>
       <div class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
-        <!-- <span class="hidden sm:block">
+        <span class="hidden sm:block">
           <button
             type="button"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-emerald-500"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
           >
             <CalendarIcon
               class="-ml-1 mr-2 h-5 w-5 text-gray-400"
@@ -35,7 +37,19 @@
             />
             Schedule Interview
           </button>
-        </span> -->
+        </span>
+        <span class="hidden sm:block">
+          <button
+            type="button"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+          >
+            <CalendarIcon
+              class="-ml-1 mr-2 h-5 w-5 text-gray-400"
+              aria-hidden="true"
+            />
+            Schedule Assessment
+          </button>
+        </span>
 
         <Listbox
           as="div"
@@ -45,9 +59,9 @@
             Change candidate status
           </ListboxLabel>
           <div class="relative">
-            <div class="inline-flex shadow-sm rounded-md divide-x divide-emerald-600">
-              <div class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-emerald-600">
-                <div class="relative inline-flex items-center bg-emerald-500 py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white">
+            <div class="inline-flex shadow-sm rounded-md divide-x divide-indigo-600">
+              <div class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-indigo-600">
+                <div class="relative inline-flex items-center bg-indigo-500 py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white">
                   <UserCircleIcon
                     class="h-5 w-5"
                     aria-hidden="true"
@@ -56,7 +70,7 @@
                     {{ selected.name }}
                   </p>
                 </div>
-                <ListboxButton class="relative inline-flex items-center bg-emerald-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-emerald-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-emerald-500">
+                <ListboxButton class="relative inline-flex items-center bg-indigo-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
                   <span class="sr-only">Change candidate status</span>
                   <ChevronDownIcon
                     class="h-5 w-5"
@@ -80,7 +94,7 @@
                   v-slot="{ active, selected }"
                 >
                   <li @click="onOptionChanged(option)" :class="[
-                        active ? 'text-white bg-emerald-500' : 'text-gray-900',
+                        active ? 'text-white bg-indigo-500' : 'text-gray-900',
                         'cursor-pointer select-none relative p-4 text-sm',
                       ]">
                     <div class="flex flex-col">
@@ -90,7 +104,7 @@
                         </p>
                         <span
                           v-if="selected"
-                          :class="active ? 'text-white' : 'text-emerald-500'"
+                          :class="active ? 'text-white' : 'text-indigo-500'"
                         >
                           <CheckIcon
                             class="h-5 w-5"
@@ -99,7 +113,7 @@
                         </span>
                       </div>
                       <p :class="[
-                            active ? 'text-emerald-200' : 'text-gray-500',
+                            active ? 'text-indigo-200' : 'text-gray-500',
                             'mt-2',
                           ]">
                         {{ option.description }}
@@ -113,7 +127,7 @@
         </Listbox>
       </div>
     </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="w-full px-2 sm:px-0">
         <TabGroup
           :selectedIndex="selectedTab"
@@ -127,11 +141,11 @@
               v-slot="{ selected }"
             >
               <button :class="[
-                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-emerald-500',
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-indigo-500',
                   'ring-white',
                   selected
-                    ? 'bg-emerald-200'
-                    : 'text-white hover:bg-emerald/[0.12] hover:text-emerald-700',
+                    ? 'bg-indigo-200'
+                    : 'text-white hover:bg-indigo/[0.12] hover:text-indigo-700',
                 ]">
                 {{ tab.name }}
               </button>
@@ -140,10 +154,7 @@
 
           <TabPanels class="mt-6">
             <TabPanel :class="['rounded-xl', 'ring-white ring-opacity-60',]">
-              <template v-if="loading">
-                <SkeletonLoading></SkeletonLoading>
-              </template>
-              <div v-if="!loading && candidateDetail !== null" class="max-w-7xl mx-auto mt-6">
+              <div class="max-w-9xl mx-auto mt-6">
                 <div class="flex flex-col mt-2">
                   <div class="
                     align-middle
@@ -172,10 +183,6 @@
                             <dt class="text-sm font-medium text-gray-500">Email address</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{candidateDetail.email}}</dd>
                           </div>
-                          <!-- <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Salary expectation</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">$120,000</dd>
-                          </div> -->
                           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">About</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{candidateDetail.summary}}</dd>
@@ -199,7 +206,7 @@
                                     <a
                                       :href="candidateDetail.cover_letter"
                                       target="_blank"
-                                      class="font-medium text-emerald-600 hover:text-emerald-500"
+                                      class="font-medium text-indigo-600 hover:text-indigo-500"
                                     > Download </a>
                                   </div>
                                 </li>
@@ -215,7 +222,7 @@
                                     <a
                                       :href="candidateDetail.resume"
                                       target="_blank"
-                                      class="font-medium text-emerald-600 hover:text-emerald-500"
+                                      class="font-medium text-indigo-600 hover:text-indigo-500"
                                     > Download </a>
                                   </div>
                                 </li>
@@ -309,12 +316,12 @@
                                     :disabled="!option.inStock"
                                     v-slot="{ active, checked }"
                                   >
-                                    <div :class="[option.inStock ? 'cursor-pointer focus:outline-none' : 'opacity-25 cursor-not-allowed', active ? 'ring-2 ring-offset-2 ring-emerald-500' : '', checked ? 'bg-emerald-600 border-transparent text-white hover:bg-emerald-700' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50', 'border rounded-md py-2 px-2 flex items-center justify-center text-sm font-medium uppercase sm:flex-1']">
+                                    <div :class="[option.inStock ? 'cursor-pointer focus:outline-none' : 'opacity-25 cursor-not-allowed', active ? 'ring-2 ring-offset-2 ring-indigo-500' : '', checked ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50', 'border rounded-md py-2 px-2 flex items-center justify-center text-sm font-medium uppercase sm:flex-1']">
                                       <RadioGroupLabel as="span">
                                         <component
                                           :is="option.icon"
                                           class="flex-shrink-0 h-4 w-4"
-                                          :class="[ checked ? 'text-white' : 'text-emerald-600']"
+                                          :class="[ checked ? 'text-white' : 'text-indigo-600']"
                                           aria-hidden="true"
                                         />
                                       </RadioGroupLabel>
@@ -348,9 +355,9 @@ import {
   ChevronDownIcon,
   UserCircleIcon,
   CalendarIcon,
-  ThumbUpIcon,
-  ThumbDownIcon,
-  StarIcon,
+  //ThumbUpIcon,
+  //ThumbDownIcon,
+  //StarIcon,
 } from "@heroicons/vue/solid";
 
 import { ref, onMounted, inject } from "vue";
@@ -364,21 +371,22 @@ import {
   ListboxOptions,
 } from "@headlessui/vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+//import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 import CandidateService from '../../service/candidate.service';
 import { FormatMonthYear } from "../../util/Formatter";
+import CandidateLoading from '../../components/layout/CandidateDetailSkeleton.vue';
 
-const memoryOptions = [
-  { name: "Definitely", inStock: true, icon: StarIcon },
-  { name: "Yes", inStock: true, icon: ThumbUpIcon },
-  { name: "No", inStock: true, icon: ThumbDownIcon },
-];
+// const memoryOptions = [
+//   { name: "Definitely", inStock: true, icon: StarIcon },
+//   { name: "Yes", inStock: true, icon: ThumbUpIcon },
+//   { name: "No", inStock: true, icon: ThumbDownIcon },
+// ];
 
 const router = useRouter();
 const toast = useToast();
 const candidateDetail = ref(null);
 const loading = ref(false);
-const mem = ref(memoryOptions[2]);
+// const mem = ref(memoryOptions[2]);
 const swal = inject('$swal');
 const selectedTab = ref(0);
 

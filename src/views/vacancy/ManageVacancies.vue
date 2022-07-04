@@ -79,10 +79,6 @@
     </div>
 
     <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-      <!-- <template v-if="loading">
-        <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
-      </template> -->
-      <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
         <div class="flex flex-col mt-2">
           <div
             class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
@@ -338,7 +334,6 @@
           </div>
         </div>
       </div>
-    </div>
   </main>
   <TransitionRoot as="template" :show="open">
     <Dialog as="div" class="relative z-10" @close="open = false">
