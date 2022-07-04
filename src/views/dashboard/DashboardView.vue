@@ -2,7 +2,7 @@
   <main class="flex-1 pb-8">
     <!-- Page header -->
     <div class="bg-white shadow">
-      <div class="px-4 sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-8">
+      <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
         <div class="
             py-6
             md:flex md:items-center md:justify-between
@@ -11,20 +11,14 @@
           <div class="flex-1 min-w-0">
             <!-- Profile -->
             <div class="flex items-center">
-              <UserCircleIcon class="h-16 w-16 rounded-full sm:block"></UserCircleIcon>
-              <!-- <img
+              <img
                 class="hidden h-16 w-16 rounded-full sm:block"
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
+                src="../../assets/images/user-avatar.png"
                 alt=""
-              /> -->
+              />
               <div>
                 <div class="flex items-center">
-                  <UserCircleIcon class="h-16 w-16 rounded-full sm:hidden"></UserCircleIcon>
-                  <!-- <img
-                    class="h-16 w-16 rounded-full sm:hidden"
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
-                    alt=""
-                  /> -->
+                  
                   <h1 class="
                       ml-3
                       text-2xl
@@ -100,7 +94,7 @@
     </div>
 
     <div class="mt-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-lg leading-6 font-medium text-gray-900">Overview</h2>
         <div class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Card -->
@@ -151,7 +145,7 @@
         </div>
       </div>
 
-      <h2 class=" max-w-7xl
+      <h2 class=" max-w-9xl
           mx-auto
           mt-8
           px-4
@@ -163,14 +157,10 @@
           lg:px-8
         ">
         Recent Candidates
-      </h2>
+      </h2>      
 
-      <template v-if="loading">
-        <SkeletonLoading></SkeletonLoading>
-      </template>
-
-      <div v-if="!loading" class="hidden sm:block">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="hidden sm:block">
+        <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex flex-col mt-4">
             <div class="
                 bg-white 
@@ -181,7 +171,10 @@
                 overflow-hidden
                 sm:rounded-lg
               ">
-              <ul
+              <template v-if="loading">
+                <SkeletonLoading></SkeletonLoading>
+              </template>
+              <ul v-if="!loading"
                 role="list"
                 class="divide-y divide-gray-200"
               >
@@ -196,10 +189,13 @@
                     <div class="flex items-center px-4 py-4 sm:px-6">
                       <div class="min-w-0 flex-1 flex items-center">
                         <div class="flex-shrink-0">
-                          <img
+                          <img v-if="candidate.photo"
                             class="h-12 w-12 rounded-full"
                             :src="candidate.photo"
                             alt=""
+                          />
+                          <UserCircleIcon v-if="!candidate.photo"
+                          class="h-14 w-14 text-indigo-400"
                           />
                         </div>
                         <div class="
@@ -285,7 +281,7 @@
         </div>
       </div>
 
-      <h2 class=" max-w-7xl
+      <h2 class=" max-w-9xl
           mx-auto
           mt-8
           px-4
@@ -298,15 +294,16 @@
         ">
         Recent Vacancies
       </h2>
+ 
 
-      <template v-if="loading">
-        <SkeletonLoading></SkeletonLoading>
-      </template>
-
-      <div v-if="!loading" class="hidden sm:block">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="hidden sm:block">
+        <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="bg-white mt-4 shadow overflow-hidden sm:rounded-md ">
-            <ul
+            <template v-if="loading">
+              <SkeletonLoading></SkeletonLoading>
+            </template>
+
+            <ul v-if="!loading"
               role="list"
               class="divide-y divide-gray-200"
             >
@@ -402,17 +399,21 @@ const dashboardData = ref({
 })
 
 const cards = ref([
-  { name: "Active Vacancies", href: "#", icon: BriefcaseIcon, amount: "0" },
+  { 
+    name: "Active Vacancies", 
+    href: "/vacancy/all", icon: 
+    BriefcaseIcon, amount: "0" 
+  },
   {
     name: "Active Candidates",
-    href: "#",
+    href: "/candidate/all",
     icon: UserGroupIcon,
     amount: "0",
   },
   {
-    name: "Shortlisted Candidates",
-    href: "#",
-    icon: UserGroupIcon,
+    name: "Upcoming Activities",
+    href: "/activity/all",
+    icon: CalendarIcon,
     amount: "0",
   },
 ]);
@@ -429,6 +430,7 @@ onMounted(() => {
     dashboardData.value = data;
     cards.value[0].amount = dashboardData.value.active_vacancies;
     cards.value[1].amount = dashboardData.value.active_candidates;
+    cards.value[2].amount = dashboardData.value.upcoming_activities;
   }).catch(() => {})
   .finally(() => {
     loading.value = false;

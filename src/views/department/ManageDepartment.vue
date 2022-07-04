@@ -2,7 +2,7 @@
   <main class="flex-1 pb-8">
      <!-- Page header -->
     <div class="bg-white shadow">
-      <div class="px-4 sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-8">
+      <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
         <div
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
@@ -81,7 +81,7 @@
       <SkeletonLoading></SkeletonLoading>
       <SkeletonLoading></SkeletonLoading>
     </template>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
           class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"

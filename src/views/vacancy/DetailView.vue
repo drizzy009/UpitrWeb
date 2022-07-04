@@ -292,9 +292,9 @@ import { useRouter } from "vue-router";
 import { Menu, MenuItem, MenuItems, MenuButton } from "@headlessui/vue";
 import {
   CheckIcon,
-  PencilIcon,
+  //PencilIcon,
   CalendarIcon,
-  UserGroupIcon,
+  //UserGroupIcon,
   BriefcaseIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,

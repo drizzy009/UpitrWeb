@@ -2,7 +2,7 @@
   <main class="flex-1 pb-8">
     <!-- Page header -->
     <div class="bg-white shadow">
-      <div class="px-4 sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-8">
+      <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
         <div
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
@@ -67,18 +67,8 @@
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-      <div class="bg-white shadow sm:rounded-lg p-8">
-        <div class="sm:flex sm:items-center">
-          <div class="sm:flex-auto">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">
-              Calendar
-            </h3>
-            <p class="max-w-2xl text-sm text-gray-500 pb-3">
-              Manage your upcoming events
-            </p>
-          </div>
-        </div>
+    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+      <div class="bg-white shadow sm:rounded-lg px-8">
         <div v-if="loading">
           <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
         </div>
