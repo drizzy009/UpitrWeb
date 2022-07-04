@@ -150,86 +150,71 @@
                     </div>
                   </div>
                 </td>
-                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="text-gray-500">{{ department.jobCount }}</div>
-                </td> -->
-                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="text-gray-500">{{ department.location }}</div>
-                </td> -->
-                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <span
-                    class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
-                    >Active</span
-                  >
-                </td> -->
-                <!-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="text-gray-500">{{ department.dateCreated }}</div>
-                </td> -->
                 <td
-                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-              >
-                <Menu as="div" class="relative inline-block text-left">
-                  <div>
-                    <MenuButton
-                      class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
-                    >
-                      <span class="sr-only">Open options</span>
-                      <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
-                    </MenuButton>
-                  </div>
+                  class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                >
+                  <Menu as="div" class="relative inline-block text-left">
+                    <div>
+                      <MenuButton
+                        class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                      >
+                        <span class="sr-only">Open options</span>
+                        <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                      </MenuButton>
+                    </div>
 
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <MenuItems
-                      class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
                     >
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            @click="editDepartment(department)"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm cursor-pointer',
-                            ]"
-                          >
-                            <PencilAltIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Edit
-                          </a>
-                        </MenuItem>
-                      </div>
-                      <div class="py-1">
-                        <MenuItem v-slot="{ active }">
-                          <a
-                            @click="deleteDepartment(department.id)"
-                            :class="[
-                              active
-                                ? 'bg-red-100 text-red-900'
-                                : 'text-red-700',
-                              'group flex items-center px-4 py-2 text-sm cursor-pointer',
-                            ]"
-                          >
-                            <TrashIcon
-                              class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
-                              aria-hidden="true"
-                            />
-                            Delete
-                          </a>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </transition>
-                </Menu>
+                      <MenuItems
+                        class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                      >
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <a
+                              @click="editDepartment(department)"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'group flex items-center px-4 py-2 text-sm cursor-pointer',
+                              ]"
+                            >
+                              <PencilAltIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Edit
+                            </a>
+                          </MenuItem>
+                        </div>
+                        <div class="py-1">
+                          <MenuItem v-slot="{ active }">
+                            <a
+                              @click="deleteDepartment(department.id)"
+                              :class="[
+                                active
+                                  ? 'bg-red-100 text-red-900'
+                                  : 'text-red-700',
+                                'group flex items-center px-4 py-2 text-sm cursor-pointer',
+                              ]"
+                            >
+                              <TrashIcon
+                                class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                                aria-hidden="true"
+                              />
+                              Delete
+                            </a>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
                 </td>
               </tr>
             </tbody>

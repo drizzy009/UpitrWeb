@@ -10,9 +10,12 @@ export const useMiscellaneous = defineStore({
         designations: [],
         jobFunctions: [],
         questionTypes: [],
+        activityTypes: [],
         employmentTypes: [],
         educationLevels: [],
         experienceLevels: [],
+        activityRelations: [],
+        activityImportance: [],
         degreeClassifications: [],
     }),
     getters: {
@@ -66,6 +69,21 @@ export const useMiscellaneous = defineStore({
         fetchDegreeClassification() {
             MiscService.getDegreeClassifications().then(result => {
                 this.degreeClassifications = result.data.data;
+            })
+        },
+        fetchActivityImportance() {
+            MiscService.getActivityImportance().then(result => {
+                this.activityImportance = result.data.data;
+            })
+        },
+        fetchActivityType() {
+            MiscService.getActivityType().then(result => {
+                this.activityTypes = result.data.data;
+            })
+        },
+        fetchActivityRelations() {
+            MiscService.getActivityRelations().then(result => {
+                this.activityRelations = result.data.data;
             })
         }
     },

@@ -344,12 +344,12 @@ const navigation = [
     href: "/candidate/all",
     icon: UserGroupIcon,
   },
-  // { 
-  //   name: "Activities", 
-  //   tag: "ManageActivities",
-  //   href: "/activity/all", 
-  //   icon: ClockIcon 
-  // },
+  { 
+    name: "Activities", 
+    tag: "ManageActivities",
+    href: "/activity/all", 
+    icon: ClockIcon 
+  },
   // { 
   //   name: "Users", 
   //   tag: "ManageUsers",

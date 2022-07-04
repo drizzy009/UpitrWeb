@@ -17,8 +17,13 @@ export const ConvertDateToDays = (dateValue) => {
 }
 
 export const FormatLongDate2 = (dateValue) => {
-    return moment(dateValue).format('MMMM D, YYYY');
+    return moment(dateValue).format('MMMM Do, YYYY');
 }
+
+export const FormatTime = (dateValue) => {
+    return moment(dateValue).format('h:mm:ss a');
+}
+
 // export const FormatNumber = (value) => {
 //     const num = new Intl.NumberFormat('en-US', { style: 'number' }).format(value);
 //     return num;

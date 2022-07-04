@@ -23,10 +23,13 @@ function fetchRequiredData () {
     miscStore.fetchIndustries();
     miscStore.fetchDesignations();
     miscStore.fetchJobFunctions();
+    miscStore.fetchActivityType();
     miscStore.fetchQuestionTypes();
     miscStore.fetchEmploymentTypes();
     miscStore.fetchEducationLevels();
     miscStore.fetchExperienceLevels();
+    miscStore.fetchActivityRelations();
+    miscStore.fetchActivityImportance();
     miscStore.fetchDegreeClassification();
 
     vacancyStore.fetchAllVacancies();

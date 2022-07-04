@@ -233,9 +233,9 @@
                                 "
                                 aria-hidden="true"
                               />
-                              <!-- <span class="truncate">{{
+                              <span class="truncate">{{
                                 candidate.job.title
-                              }}</span> -->
+                              }}</span>
                             </p>
                           </div>
                           <div class="hidden md:block">
@@ -261,7 +261,7 @@
                                   "
                                   aria-hidden="true"
                                 />
-                                <!-- {{ candidate.job_workflow_stage.description }} -->
+                                {{ candidate.job_workflow_stage.description }}
                               </p>
                             </div>
                           </div>
@@ -409,12 +409,12 @@ const cards = ref([
     icon: UserGroupIcon,
     amount: "0",
   },
-  // {
-  //   name: "Shortlisted Candidates",
-  //   href: "#",
-  //   icon: UserGroupIcon,
-  //   amount: "0",
-  // },
+  {
+    name: "Shortlisted Candidates",
+    href: "#",
+    icon: UserGroupIcon,
+    amount: "0",
+  },
 ]);
 
 function formatAppDate(dateValue) {

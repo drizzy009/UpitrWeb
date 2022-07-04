@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
-// import Vue3TagsInput from 'vue3-tags-input';
+import Multiselect from '@vueform/multiselect'
 import VueSweetalert2 from 'vue-sweetalert2';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -29,6 +29,7 @@ import { useAppStore } from './stores/app';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import "vue-toastification/dist/index.css";
 import 'vue3-easy-data-table/dist/style.css';
+import "@vueform/multiselect/themes/default.css";
 
 const options = {
     transition: "Vue-Toastification__bounce",
@@ -64,7 +65,7 @@ app.component('PasswordInput', PasswordInput);
 app.component('DataTable', Vue3EasyDataTable);
 app.component('TextInputGroup', TextInputGroup);
 app.component('SkeletonLoading', SkeletonLoading);
-// app.component('TagInput', Vue3TagsInput);
+app.component('MultiSelect', Multiselect);
 app.component("TagInput", TagInput);
 app.component('HtmlEditor', Editor);
 app.use(Toast, options);

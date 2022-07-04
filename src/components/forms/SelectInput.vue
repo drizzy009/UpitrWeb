@@ -7,8 +7,8 @@
       class="select-input"
       :class="[!error ? 'select-input' : 'select-input-error']"
     >
-      <option value="0">{{ placeholder }}</option> 
-      <option v-for="item in items" :key="item.id" :value="item.id">
+      <option value="-1">{{ placeholder }}</option> 
+      <option v-for="item in items" :key="item.id || item.value" :value="item.id || item.value">
           {{ item.name }}
       </option>
     </select>

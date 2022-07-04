@@ -59,7 +59,6 @@ const showAddDepartment = ref(false);
 const formData = ref({
   name: '',
   description: '',
-  // locationId: '',
 });
 
 const rules = {

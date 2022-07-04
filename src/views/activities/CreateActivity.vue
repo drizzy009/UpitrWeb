@@ -1,5 +1,5 @@
 <template>
-  <AppModal :showModal="showAddActivity" @closeModal="closeCreateActivity" @submit="saveActivity" title="Add Activity">
+  <AppModal :processing="savingActivity" :showModal="showAddActivity" @closeModal="closeCreateActivity" @submit="saveActivity" title="Add Activity">
     <div class="grid grid-cols-6">
       <div class="col-span-6">
         <label
@@ -8,48 +8,34 @@
         >Activity Title</label>
         <FormInput :error="v$.title.$error" id="activityTitle" v-model="formData.title"></FormInput>
       </div>
-      <div class="col-span-6 mt-2 md:mt-4">
-        <Listbox as="div" v-model="selected">
-          <ListboxLabel class="block text-sm font-medium text-gray-700"> Task Category </ListboxLabel>
-          <div class="mt-1 relative">
-            <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              <span class="flex items-center">
-                <component
-                  :is="selected.icon"
-                  class="flex-shrink-0 h-4 w-4 rounded-full"
-                  aria-hidden="true"
-                />
-                <span class="ml-3 block truncate">{{ selected.name }}</span>
-              </span>
-              <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-              </span>
-            </ListboxButton>
-
-            <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-              <ListboxOptions class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                <ListboxOption as="template" v-for="taskType in taskTypes" :key="taskType.id" :value="taskType" v-slot="{ active, selected }">
-                  <li :class="[active ? 'text-white bg-indigo-600 cursor-pointer' : 'text-gray-900', 'select-none relative py-2 pl-3 pr-9']">
-                    <div class="flex items-center">
-                      <component
-                        :is="taskType.icon"
-                        :class="['flex-shrink-0 h-4 w-4 rounded-full', active ? 'text-white': 'text-indigo-600']"
-                        aria-hidden="true"
-                      />
-                      <span :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">
-                        {{ taskType.name }}
-                      </span>
-                    </div>
-
-                    <span v-if="selected" :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">
-                      <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </li>
-                </ListboxOption>
-              </ListboxOptions>
-            </transition>
+      <div class="col-span-6 mt-2 md:mt-4  mb-2">
+        <div class="flex flex-row">
+          <div class="w-1/2 mr-1">
+            <label
+              for="type"
+              class="block text-sm font-medium text-gray-700"
+            >Activity Type</label>
+            <SelectInput
+              id="relatedTo"
+              placeholder="Select..."
+              :items="activityTypes"
+              v-model="formData.activity_type_id"
+              class="block"
+            ></SelectInput>
           </div>
-        </Listbox>
+          <div class="w-1/2">
+            <label
+              for="relatedTo"
+              class="block text-sm font-medium text-gray-700"
+            >Importance</label>
+            <SelectInput
+              id="relatedTo"
+              placeholder="Select..."
+              :items="activityImportance"
+              v-model="formData.importance_id"
+            ></SelectInput>
+          </div>
+        </div>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
@@ -57,50 +43,74 @@
           class="block text-sm font-medium text-gray-700 mb-2"
         >Related To</label>
         <SelectInput
-          placeholder=""
-          :items="[
-            { name: 'Vacancy', id: 1 },
-            { name: 'Candidate', id: 2 },
-            { name: 'Assessment', id: 3 },
-            { name: 'Interview', id: 4 },
-          ]"
           id="relatedTo"
+          placeholder="Select..."
+          :items="activityRelations"
+          v-model="formData.related_to_id"
         ></SelectInput>
       </div>
-      <div class="col-span-6 mt-2 md:mt-4">
+      <div v-if="showVacancy" class="col-span-6 mt-2 md:mt-4">
         <label
-          for="relatedTo"
+          for="vacancy"
           class="block text-sm font-medium text-gray-700 mb-2"
-        >Date & Time</label>
-        <Datepicker v-model="date"></Datepicker>
+        >Vacancy</label>
+        <SelectInput
+          id="vacancy"
+          placeholder="Select a vacancy"
+          :items="vacancyList"
+          v-model="formData.job_id"
+        ></SelectInput>
+      </div>
+      <div v-if="showVacancy" class="col-span-6 mt-2 md:mt-4">
+        <label
+          for="candidate"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >Candidate</label>
+        <SelectInput
+          id="candidate"
+          placeholder="Select a candidate"
+          :items="candidateList"
+          v-model="formData.job_applicant_id"
+        ></SelectInput>
+      </div>
+      <div class="col-span-6 mt-2 md:mt-4 mb-2">
+        <div class="flex flex-row">
+          <div class="w-1/2 mr-1">
+            <label
+              for="startDate"
+              class="block text-sm font-medium text-gray-700"
+            >Start Date & Time</label>
+            <Datepicker v-model="formData.start"></Datepicker>
+          </div>
+          <div class="w-1/2">
+            <label
+              for="endDate"
+              class="block text-sm font-medium text-gray-700"
+            >End Date & Time</label>
+            <Datepicker v-model="formData.end"></Datepicker>
+          </div>
+        </div>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
-          for="attendees"
+          for="assignees"
           class="block text-sm font-medium text-gray-700 mb-2"
-        >Attendees</label>
-        <FormInput id="attendees" v-model="formData.attendees"></FormInput>
+        >Assignees</label>
+        <MultiSelect closeOnSelect="false" valueProp="id" value="id" label="label" mode="tags" searchable :options="options" v-model="formData.assignees"></MultiSelect>
+      </div>
+      <div class="col-span-6 mt-2 md:mt-4">
+        <label
+          for="meetingUrl"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >Meeting URL</label>
+        <FormInput id="url" v-model="formData.meeting_url"></FormInput>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
           for="location"
           class="block text-sm font-medium text-gray-700 mb-2"
         >Location</label>
-        <SelectInput
-          v-model="formData.locationId"
-          placeholder=""
-          :error="v$.locationId.$error"
-          :items="[
-            { name: 'Lagos', id: 1 },
-            { name: 'Ogun', id: 2 },
-            { name: 'Rivers', id: 3 },
-            { name: 'Oyo', id: 4 },
-            { name: 'Enugu', id: 5 },
-            { name: 'Kano', id: 5 },
-            { name: 'Kaduna', id: 5 },
-          ]"
-          id="location"
-        ></SelectInput>
+        <FormInput id="location" v-model="formData.location"></FormInput>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
@@ -114,80 +124,212 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, inject, onMounted } from 'vue';
+import { useToast } from "vue-toastification";
+import { storeToRefs } from "pinia";
 import useVuelidate from '@vuelidate/core';
-import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
-import { CheckIcon, SelectorIcon, PhoneIcon, UserGroupIcon, CalendarIcon, MailIcon, UserCircleIcon} from '@heroicons/vue/solid'
 import { required } from '@vuelidate/validators';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import { useMiscellaneous } from "../../stores/miscellaneous";
+import UserService from "../../service/user.service";
+import VacancyService from "../../service/vacancies.service";
+import ActivityService from "../../service/activity.service";
+import CandidateService from "../../service/candidate.service";
 
-const emits = defineEmits(['toggleActivity']);
+const toast = useToast();
+const swal = inject("$swal");
+
+const {
+  activityTypes,
+  activityRelations,
+  activityImportance
+} = storeToRefs(useMiscellaneous());
+const emits = defineEmits(['toggleActivity', 'loadActivity']);
 const props = defineProps({
   toggle: Boolean,
 });
-
+const showVacancy = ref(false);
+const savingActivity = ref(false);
 const showAddActivity = ref(false);
+const options = ref([]);
+const vacancyList = ref([]);
+const candidateList = ref([]);
 
 const formData = ref({
+  end: '',
+  start: '',
   title: '',
-  attendees: '',
-  relatedTo: '',
+  job_id: '',
+  location: '',
+  status_id: 0,
+  assignees: [],
   description: '',
-  locationId: '',
+  meeting_url: '',
+  related_to_id: 0,
+  importance_id: 0,
+  job_applicant_id: 0,
+  activity_type_id: 0,
 });
 
 const rules = {
   title: { required },
-  locationId: { required }
+  location: { required }
 }
 
-const taskTypes = [
-  {
-    id: 1,
-    name: 'Call',
-    icon: PhoneIcon,
-  },
-  {
-    id: 2,
-    name: 'Meeting',
-    icon: UserGroupIcon,
-  },
-  {
-    id: 3,
-    name: 'Task',
-    icon: CalendarIcon,
-  },
-  {
-    id: 4,
-    name: 'Email',
-    icon: MailIcon,
-  },
-  {
-    id: 5,
-    name: 'Interview',
-    icon: UserCircleIcon,
-  }
-]
+// const taskTypes = [
+//   {
+//     id: 1,
+//     name: 'Call',
+//     icon: PhoneIcon,
+//   },
+//   {
+//     id: 2,
+//     name: 'Meeting',
+//     icon: UserGroupIcon,
+//   },
+//   {
+//     id: 3,
+//     name: 'Task',
+//     icon: CalendarIcon,
+//   },
+//   {
+//     id: 4,
+//     name: 'Email',
+//     icon: MailIcon,
+//   },
+//   {
+//     id: 5,
+//     name: 'Interview',
+//     icon: UserCircleIcon,
+//   }
+// ]
 
-const selected = ref(taskTypes[0]);
-const date = ref();
+// const selected = ref(taskTypes[0]);
+// const date = ref();
 
 const v$ = useVuelidate(rules, formData);
+
+function showErrorMessage(errorMessage) {
+  swal({
+    title: "Invalid Data",
+    text: errorMessage,
+    icon: "error",
+  });
+}
+
+function showErrorMessages(errors) {
+  var errorMessage = "";
+  Object.keys(errors).forEach((key) => {
+    errorMessage += `${errors[key][0]}\n`;
+  });
+
+  swal({
+    title: "Invalid Data",
+    text: errorMessage,
+    icon: "error",
+  });
+}
+
+function getCandidates(id) {
+  CandidateService.all(`vacancy=${id}`).then(result => {
+    const { data } = result.data.data;
+    if (data.length > 0) {
+      candidateList.value = data.map((item) => {
+        return { name: `${item.firstname} ${item.lastname}`, id: item.id }
+      })
+    }
+  })
+}
+
+function clearForm() {
+  Object.keys(formData.value).forEach((key) => {
+    if (key === 'assignees') {
+      formData.value[key] = [];
+    } else {
+      formData.value[key] = "";
+    }
+  })
+}
+
+function closeCreateActivity() {
+  showAddActivity.value = false
+  clearForm();
+  emits('toggleActivity');
+}
+
+async function saveActivity() {
+  savingActivity.value = true;
+  console.clear();
+  console.log(formData.value);
+  formData.value.job_id = Number(formData.value.job_id);
+  formData.value.importance_id = Number(formData.value.importance_id);
+  formData.value.related_to_id = Number(formData.value.related_to_id);
+  formData.value.job_applicant_id = Number(formData.value.job_applicant_id);
+  formData.value.activity_type_id = Number(formData.value.activity_type_id);
+  formData.value.status_id = 0;
+
+  ActivityService.create(formData.value).then(() => {
+    toast.success("Activity successfully created");
+    emits('loadActivity');
+    closeCreateActivity();
+  }).catch(error => {
+    const { data } = error;
+    if (data.code === "062") {
+      showErrorMessages(data.data);
+    } else {
+      showErrorMessage(data.message);
+    }
+  }).finally(() => {
+    savingActivity.value = false;
+  })
+ // const valid = await v$.value.$validate();
+}
 
 watch(() => props.toggle, (newValue) => {
   showAddActivity.value = newValue;
 });
 
-function closeCreateActivity() {
-  showAddActivity.value = false
-  emits('toggleActivity');
-}
+watch(() => formData.value.related_to_id, (value) => {
+  const id = Number(value);
+  showVacancy.value = false;
+  // formData.value.job_id = 0;
 
-async function saveActivity() {
- // const valid = await v$.value.$validate();
-}
+  if (id !== -1) {
+    const relatedTo = activityRelations.value.find(item => item.value === id);
+    if (relatedTo.name.includes('Vacancy')) showVacancy.value = true;
+    if (relatedTo.name.includes('Candidate')) {
+      showVacancy.value = true;
+      formData.value.job_applicant_id = 0;
+    }
+  }
+});
 
+watch(() => formData.value.job_id, (value) => {
+  const id = Number(value);
+  if (id !== -1) {
+    getCandidates(id);
+  }
+});
+
+onMounted(() => {
+  UserService.all().then(result => {
+    const { data } = result.data.data;
+    options.value = data.map((item) => {
+      const newObject = Object.assign(item, { label: `${item.firstname} ${item.lastname}`})
+      return newObject;
+    });
+  })
+
+  VacancyService.all("page_size=50").then(result => {
+    const { data } = result.data.data;
+    if (data.length > 0) {
+      vacancyList.value = data.map((item) => {
+        return { name: item.title, id: item.id }
+      })
+    }
+  })
+})
 </script>
 
 <style>
