@@ -2,8 +2,9 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
-import Multiselect from '@vueform/multiselect'
 import VueSweetalert2 from 'vue-sweetalert2';
+import Multiselect from '@vueform/multiselect';
+import { QuillEditor } from '@vueup/vue-quill';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
@@ -18,6 +19,7 @@ import AppButton from './components/forms/AppButton.vue';
 import IconButton from './components/forms/IconButton.vue';
 import AutoComplete from './components/forms/AutoComplete.vue';
 import SelectInput from './components/forms/SelectInput.vue';
+import SelectInput2 from './components/forms/SelectInput2.vue';
 import CancelButton from './components/forms/CancelButton.vue';
 import AppModal from './components/commons/modal/AppModal.vue';
 import SkeletonLoading from './components/layout/SkeletonLoading.vue';
@@ -30,6 +32,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import "vue-toastification/dist/index.css";
 import 'vue3-easy-data-table/dist/style.css';
 import "@vueform/multiselect/themes/default.css";
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const options = {
     transition: "Vue-Toastification__bounce",
@@ -59,6 +62,7 @@ app.component('AppButton', AppButton);
 app.component('IconButton', IconButton);
 app.component('SelectInput', SelectInput);
 app.component('NumberInput', NumberInput);
+app.component('SelectInput2', SelectInput2);
 app.component('AutoComplete', AutoComplete);
 app.component('CancelButton', CancelButton);
 app.component('PasswordInput', PasswordInput);
@@ -68,6 +72,7 @@ app.component('SkeletonLoading', SkeletonLoading);
 app.component('MultiSelect', Multiselect);
 app.component("TagInput", TagInput);
 app.component('HtmlEditor', Editor);
+app.component('QuillEditor', QuillEditor)
 app.use(Toast, options);
 
 const appStore = useAppStore();

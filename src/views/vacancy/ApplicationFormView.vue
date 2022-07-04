@@ -197,7 +197,7 @@
             class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></CancelButton>
           <AppButton
-            label="Save Vacancy"
+            label="Continue"
             @click="saveApplicantInfo"
             :processing="processing"
             class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -208,9 +208,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { PlusSmIcon, TrashIcon } from "@heroicons/vue/solid";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
@@ -230,13 +229,12 @@ const {
 } = storeToRefs(useMiscellaneous());
 
 const toast = useToast();
-const router = useRouter();
 const savingQuestion = ref(false);
 const deletingQuestion = ref(false);
 const questionPanel = ref(false);
 const settingsId = ref(0);
 const applicantInfo = ref(applicationData);
-// const emits = defineEmits(['nextPage']);
+const emits = defineEmits(['nextPage']);
 
 const questions = ref([]);
 const processing = ref(false);
@@ -264,15 +262,13 @@ function addQuestion() {
     questions.value.push(currentQuestion);
     toast.info('Question successfully added');
     questionPanel.value = !questionPanel.value;
+    question.value = "";
   }).catch(() => {
     toast.error('Unable to add question, please try again later');
   })
   .finally(() => {
     savingQuestion.value = false;
   })
-  questionPanel.value == true
-    ? (questionPanel.value = false)
-    : (questionPanel.value = true);
 }
 
 function onItemsChange(items) {
@@ -324,8 +320,7 @@ function saveApplicantInfo() {
   if (settingsId.value === 0) {
     VacancySettingService.create(payload).then(() => {
       toast.success('Application form successfully saved');
-      router.push(`detail/${props.jobId}`);
-      // emits('nextPage');
+      emits('nextPage');
     }).catch(() => {
       toast.error('Unable to save application form, please try again later');
     }).finally(() => {
@@ -336,7 +331,7 @@ function saveApplicantInfo() {
   if (settingsId.value > 0) {
     VacancySettingService.update(settingsId.value, payload).then(() => {
       toast.success('Application form successfully saved');
-      router.push(`detail/${props.jobId}`);
+      emits('nextPage');
     }).catch(() => {
       toast.error('Unable to save application form, please try again later');
     }).finally(() => {
@@ -372,6 +367,13 @@ function deleteQuestion(id) {
   })
 }
 
+function getApplicationQuestions(id) {
+  VacancyService.single(id).then(result => {
+    const { data } = result.data;
+    questions.value = data.job_questions
+  })
+}
+
 watch(() => props.existingQuestions, (value) => {
   if (value.length > 0) {
     questions.value = value;
@@ -384,6 +386,11 @@ watch(() => questionType.value, (value) => {
   showOption.value = getType.has_options === 1;
 });
 
+onMounted(() => {
+  if (props.jobId > 0) {
+    getApplicationQuestions(props.jobId);
+  }
+})
 </script>
 
 <style></style>

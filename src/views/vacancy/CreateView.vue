@@ -136,16 +136,18 @@
 
                       <div class="col-span-6 sm:col-span-3">
                         <label
-                          for="first-name"
+                          for="department"
                           class="block text-sm font-medium text-gray-700"
                           >Department</label
                         >
-                        <SelectInput
-                          class="mt-1"
-                          :items="departmentList"
-                          placeholder="Select Department"
+                        <MultiSelect
+                          searchable
                           v-model="jobDetail.department_id"
-                        ></SelectInput>
+                          :options="departmentList"
+                          placeholder="Select a department"
+                        >
+                        </MultiSelect>
+                        <!-- <SelectInput2 placeholder="Select a department" :items="departmentList" :modelValue="jobDetail.department_id"></SelectInput2> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-3">
@@ -191,13 +193,26 @@
                           class="block text-sm font-medium text-gray-700"
                           >Country</label
                         >
-                        <SelectInput
+                        <MultiSelect
+                          required
+                          searchable
+                          id="country"
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          v-model="jobDetail.country_id"
+                          :options="countries"
+                          placeholder="Select a country"
+                          @change="onCountryChanged"
+                        >
+                        </MultiSelect>
+                        <!-- <SelectInput
                           placeholder="Select Country"
                           v-model="jobDetail.country_id"
-                          :items="countries"
+                          :items="countryList"
                           id="country"
                           @change="onCountryChanged"
-                        ></SelectInput>
+                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
@@ -206,12 +221,24 @@
                           class="block text-sm font-medium text-gray-700"
                           >State</label
                         >
-                        <SelectInput
+                        <MultiSelect
+                          required
+                          searchable
+                          id="state"
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          :loading="loadingRegion"
+                          v-model="jobDetail.region_id"
+                          :options="countryStates"
+                          placeholder="Select a state"
+                        ></MultiSelect>
+                        <!-- <SelectInput
                           placeholder="Select State"
                           v-model="jobDetail.region_id"
                           :items="countryStates"
                           id="state"
-                        ></SelectInput>
+                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
@@ -220,12 +247,24 @@
                           class="block text-sm font-medium text-gray-700"
                           >City
                         </label>
-                        <SelectInput
+                        <MultiSelect
+                          required
+                          searchable
+                          id="city"
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          :loading="loadingCity"
+                          v-model="jobDetail.city_id"
+                          :options="cities"
+                          placeholder="Select a city"
+                        ></MultiSelect>
+                        <!-- <SelectInput
                           placeholder="Select City"
                           v-model="jobDetail.city_id"
                           :items="cities"
                           id="city"
-                        ></SelectInput>
+                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6">
@@ -295,15 +334,14 @@
                         Description
                       </label>
                       <div class="mt-1">
-                        <!-- <ckeditor class="h-48 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe job in detail here" :editor="editor" v-model="jobDetail.description" :config="editorConfig"></ckeditor> -->
-                        <TextArea
-                          rows="5"
+                        <QuillEditor 
+                          theme="snow"
                           id="description"
                           name="description"
-                          v-model="jobDetail.description"
-                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          contentType="html"
                           placeholder="Describe job in detail here"
-                        />
+                          v-model:content="jobDetail.description"
+                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" />
                       </div>
                     </div>
 
@@ -315,15 +353,14 @@
                         Responsibilities
                       </label>
                       <div class="mt-1">
-                        <TextArea
-                          v-model="jobDetail.responsibilities"
+                        <QuillEditor
+                          contentType="html"
+                          v-model:content="jobDetail.responsibilities"
                           id="responsibilities"
                           name="responsibilities"
-                          rows="5"
-                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                           placeholder="List job responsibilities"
                         />
-                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job responsibilities" /> -->
                       </div>
                     </div>
 
@@ -335,15 +372,14 @@
                         Requirements
                       </label>
                       <div class="mt-1">
-                        <TextArea
-                          v-model="jobDetail.requirements"
+                        <QuillEditor
+                          contentType="html"
+                          v-model:content="jobDetail.requirements"
                           id="requirements"
                           name="requirements"
-                          rows="5"
-                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                           placeholder="List job requirements"
                         />
-                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job requirements" /> -->
                       </div>
                     </div>
 
@@ -355,12 +391,12 @@
                         Benefits
                       </label>
                       <div class="mt-1">
-                        <TextArea
-                          v-model="jobDetail.benefits"
+                        <QuillEditor
+                          contentType="html"
+                          v-model:content="jobDetail.benefits"
                           id="benefits"
                           name="benefits"
-                          rows="5"
-                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                           placeholder="List job benefits"
                         />
                         <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" /> -->
@@ -400,12 +436,23 @@
                           class="block text-sm font-medium text-gray-700"
                           >Job Function</label
                         >
-                        <SelectInput
-                          placeholder="Select Job Function"
+                        <MultiSelect
+                          required
+                          searchable
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          id="jobFunction"
+                          v-model="jobDetail.job_function_id"
+                          :options="jobFunctions"
+                          placeholder="Select job function"
+                        ></MultiSelect>
+                        <!-- <SelectInput
+                          placeholder="Select job function"
                           v-model="jobDetail.job_function_id"
                           :items="jobFunctions"
                           id="jobFunction"
-                        ></SelectInput>
+                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
@@ -414,12 +461,16 @@
                           class="block text-sm font-medium text-gray-700"
                           >Employment Type</label
                         >
-                        <SelectInput
-                          placeholder="Select Employment Type"
-                          v-model="jobDetail.employment_type_id"
-                          :items="employmentTypes"
+                        <MultiSelect
+                          searchable
+                          value="id"
+                          label="name"
+                          valueProp="id"
                           id="employmentType"
-                        ></SelectInput>
+                          placeholder="Select employment type"
+                          v-model="jobDetail.employment_type_id"
+                          :options="employmentTypes"
+                        ></MultiSelect>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
@@ -428,12 +479,22 @@
                           class="block text-sm font-medium text-gray-700"
                           >Experience
                         </label>
-                        <SelectInput
+                        <MultiSelect
+                          searchable
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          id="experience"
+                          placeholder="Select job experience"
+                          v-model="jobDetail.experience_level_id"
+                          :options="experienceLevels"
+                        ></MultiSelect>
+                        <!-- <SelectInput
                           placeholder="Select Experience"
                           v-model="jobDetail.experience_level_id"
                           :items="experienceLevels"
                           id="experience"
-                        ></SelectInput>
+                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
@@ -441,14 +502,17 @@
                           for="educationLevel"
                           class="block text-sm font-medium text-gray-700"
                           >Education
-                        </label>
-
-                        <SelectInput
-                          placeholder="Select Education Level"
-                          v-model="jobDetail.education_level_id"
-                          :items="educationLevels"
+                        </label>                        
+                        <MultiSelect
+                          searchable
+                          value="id"
+                          label="name"
+                          valueProp="id"
                           id="educationLevel"
-                        ></SelectInput>
+                          placeholder="Select education level"
+                          v-model="jobDetail.education_level_id"
+                          :options="educationLevels"
+                        ></MultiSelect>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
@@ -457,12 +521,22 @@
                           class="block text-sm font-medium text-gray-700"
                           >Industries
                         </label>
-                        <SelectInput
+                        <!-- <SelectInput
                           placeholder="Select Industries"
                           v-model="jobDetail.industry_id"
                           :items="industries"
                           id="industry"
-                        ></SelectInput>
+                        ></SelectInput> -->
+                        <MultiSelect
+                          searchable
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          id="industry"
+                          placeholder="Select industries"
+                          v-model="jobDetail.industry_id"
+                          :options="industries"
+                        ></MultiSelect>
                       </div>
 
                       <div class="col-span-6 sm:col-span-3 lg:col-span-3">
@@ -555,12 +629,22 @@
                           class="block text-sm font-medium text-gray-700"
                           >Currency
                         </label>
-                        <SelectInput
+                        <MultiSelect
+                          searchable
+                          value="id"
+                          label="name"
+                          valueProp="id"
+                          id="currency"
+                          placeholder="Select a currency"
+                          v-model="jobDetail.salary_currency_id"
+                          :options="currencies"
+                        ></MultiSelect>
+                        <!-- <SelectInput
                           placeholder="Select Currency"
                           v-model="jobDetail.salary_currency_id"
                           :items="currencies"
                           id="currency"
-                        ></SelectInput>
+                        ></SelectInput> -->
                       </div>
                     </div>
                   </div>
@@ -640,7 +724,7 @@
         class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
       >
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-          <WorkFlowView @prevPage="gotoPage(2)"></WorkFlowView>
+          <WorkFlowView :interviewId="interviewId" :jobId="vacancyId" @prevPage="gotoPage(2)"></WorkFlowView>
         </div>
       </div>
     </div>
@@ -705,7 +789,7 @@ const v$ = useVuelidate(rules, jobDetail);
 const steps = ref([
   { id: 1, name: "Job details", href: "#", status: "current" },
   { id: 2, name: "Application form", href: "#", status: "upcoming" },
-  // { id: 3, name: "Workflow", href: "#", status: "upcoming" },
+  { id: 3, name: "Workflow", href: "#", status: "upcoming" },
 ]);
 
 const {
@@ -722,7 +806,7 @@ const { departments } = storeToRefs(useDepartments());
 const toast = useToast();
 const swal = inject("$swal");
 // const router = useRouter();
-
+const interviewId = ref(0);
 const jobKeywords = ref([]);
 const stepNo = ref(1);
 const vacancyId = ref(0);
@@ -730,6 +814,8 @@ const countryStates = ref([]);
 const cities = ref([]);
 const processing = ref(false);
 const departmentList = ref([]);
+const loadingRegion = ref(false);
+const loadingCity = ref(false);
 // const samplePayload = {
 //   benefits: "Competitive Salary",
 //   city_id: "76932",
@@ -756,21 +842,6 @@ const departmentList = ref([]);
 //   title: "Sale Rep",
 //   zip_code: "",
 // }
-// const editor = ClassicEditor;
-// const description = ref("");
-// const editorConfig = {
-//   toolbar: {
-//     items: [
-//       'heading',
-//       'bold',
-//       'italic',
-//       '|',
-//       'undo',
-//       'redo',
-//       'list'
-//     ]
-//   }
-// }
 
 function keywordsChange(items) {
   jobKeywords.value = items;
@@ -785,7 +856,7 @@ function gotoPage(step) {
   steps.value[step - 1].status = "current";
 
   steps.value[step - 2].status = "complete";
-  // steps.value[step].status = "upcoming";
+  steps.value[step].status = "upcoming";
 }
 
 function showErrorMessage(errorMessage) {
@@ -811,6 +882,7 @@ function showErrorMessages(errors) {
 
 async function submitVacancyDetail() {
   const valid = await v$.value.$validate();
+  // samplePayload.code  = Math.floor(Math.random() * 1000000).toString();
   if (valid) {
     processing.value = true;
     if (vacancyId.value === 0) {
@@ -820,6 +892,7 @@ async function submitVacancyDetail() {
       VacancyService.create(jobDetail.value)
         .then((result) => {
           const { data } = result.data;
+          interviewId.value = data.interviews[0].id;
           vacancyId.value = data.id;
           gotoPage(2);
         })
@@ -864,10 +937,8 @@ async function submitVacancyDetail() {
 }
 
 onMounted(() => {
-  departmentList.value = departments.value.data;
-  jobDetail.value.country_id = countries.value[0].id;
-  MiscService.getRegions(countries.value[0].id).then((result) => {
-    countryStates.value = result.data.data;
+  departmentList.value = departments.value.data.map((item) => {
+    return { label: item.name, value: item.id };
   });
 });
 
@@ -876,8 +947,14 @@ watch(
   (newValue) => {
     cities.value = [];
     const id = Number(newValue);
+    loadingCity.value = true;
     MiscService.getCities(id).then((result) => {
       cities.value = result.data.data;
+      // cityList.value = cities.value.map((item) => {
+      //   return { label: item.name, value: item.id };
+      // });
+    }).finally(() => {
+      loadingCity.value = false;
     });
   }
 );
@@ -887,8 +964,14 @@ watch(
   (newValue) => {
     countryStates.value = [];
     const id = Number(newValue);
+    loadingRegion.value = true;
     MiscService.getRegions(id).then((result) => {
       countryStates.value = result.data.data;
+      // countryStateList.value = countryStates.value.map((item) => {
+      //   return { label: item.name, value: item.id };
+      // });
+    }).finally(() => {
+      loadingRegion.value = false;
     });
   }
 );

@@ -410,7 +410,7 @@ const cards = ref([
     amount: "0",
   },
   {
-    name: "Shortlisted Candidates",
+    name: "Pending Activities",
     href: "#",
     icon: UserGroupIcon,
     amount: "0",
@@ -421,7 +421,6 @@ function formatAppDate(dateValue) {
   return FormatLongDate2(dateValue);
 }
 
-
 onMounted(() => {
   loading.value = true;
   DashboardService.get().then(response => {
@@ -429,6 +428,7 @@ onMounted(() => {
     dashboardData.value = data;
     cards.value[0].amount = dashboardData.value.active_vacancies;
     cards.value[1].amount = dashboardData.value.active_candidates;
+    cards.value[2].amount = dashboardData.value.upcoming_activities
   }).catch(() => {})
   .finally(() => {
     loading.value = false;

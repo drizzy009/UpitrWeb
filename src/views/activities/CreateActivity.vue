@@ -293,8 +293,6 @@ watch(() => props.toggle, (newValue) => {
 watch(() => formData.value.related_to_id, (value) => {
   const id = Number(value);
   showVacancy.value = false;
-  // formData.value.job_id = 0;
-
   if (id !== -1) {
     const relatedTo = activityRelations.value.find(item => item.value === id);
     if (relatedTo.name.includes('Vacancy')) showVacancy.value = true;

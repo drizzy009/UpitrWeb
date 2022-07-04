@@ -11,6 +11,8 @@ export const useVacancies = defineStore({
         errorMessage: "",
         successMessage: "",
         processing: false,
+        vacancyInterviews: null,
+        vacancyAssessments: null,
     }),
     getters:{},
     actions: {
@@ -41,6 +43,12 @@ export const useVacancies = defineStore({
             }).finally(() => {
                 this.processing = false;
             })
+        },
+        updateVacancyAssessment(payload) {
+            this.vacancyAssessments = payload;
+        },
+        updateVacancyInterview(payload) {
+            this.vacancyInterviews = payload;
         }
     },
     persist: true

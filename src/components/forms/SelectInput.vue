@@ -7,8 +7,10 @@
       class="select-input"
       :class="[!error ? 'select-input' : 'select-input-error']"
     >
-      <option value="-1">{{ placeholder }}</option> 
-      <option v-for="item in items" :key="item.id || item.value" :value="item.id || item.value">
+      <option value="0">
+        {{ selectedLabel !== "" ? selectedLabel : placeholder }}
+      </option> 
+      <option v-for="item in items" :key="item.id" :value="item.id">
           {{ item.name }}
       </option>
     </select>
@@ -22,11 +24,23 @@
 </template>
 
 <script setup>
-defineProps({
+import { ref, watch } from "vue";
+const props = defineProps({
   items: Array,
   modelValue: [String, Number],
   error: Boolean,
   placeholder: String
+})
+
+const selectedLabel = ref("");
+
+
+watch(() => props.modelValue, (value) => {
+  console.log(value);
+  const selected = props.items.find(item => item.id === Number(value));
+  if (selected) {
+    selectedLabel.value = selected.name;
+  }
 })
 </script>
 

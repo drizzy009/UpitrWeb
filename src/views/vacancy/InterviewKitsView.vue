@@ -113,6 +113,10 @@ let showEmptyKit = ref(true);
 
 let sections = ref([]);
 
+const props = defineProps({
+  interviewId: Number
+});
+
 function toggleEmptyKit() {
   showEmptyKit.value = false;
   showAddKit.value = true;  

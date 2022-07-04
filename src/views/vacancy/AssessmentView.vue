@@ -7,30 +7,41 @@
     <div class="grid grid-cols-6 gap-4">
       <div class="col-start-1 col-end-6">
         <label class="text-base font-medium text-gray-900">
-        <span class="pr-3">{{ index+1 }}.</span>  {{ question.name }}</label>
+          <span class="pr-3">{{ index + 1 }}.</span> {{ question.name }}</label
+        >
         <fieldset class="mt-4">
           <div class="space-y-4">
-            <ol
+            <div
               v-for="option in question.options"
               :key="option"
               class="flex items-center"
             >
-              <li>
-                <label
-                  :for="option"
-                  class="ml-3 block text-sm font-medium text-gray-700"
-                >
-                  <i class="fa-solid fa-circle-dot pr-2"></i> {{ option.name }}
-                </label>
-              </li>
-            </ol>
+              <input
+                :id="option.id"
+                :name="question.name"
+                type="radio"
+                :checked="option.is_answer"
+                v-bind:value="option.is_answer"
+                @change="optionChange(question.id, option)"
+                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+              />
+              <label
+                :for="option.id"
+                class="ml-3 block text-sm font-medium text-gray-700"
+              >
+                {{ option.value }}
+              </label>
+            </div>
           </div>
         </fieldset>
       </div>
       <div class="col-end-7 col-span-1">
         <div class="flex flex-row-reverse">
-          <TrashIcon class="h-6 w-6 text-red-500 cursor-pointer"></TrashIcon>
-          <PencilIcon class="h-6 w-6 text-indigo-500 cursor-pointer"></PencilIcon>
+          <TrashIcon
+            @click="onDelete(question.id)"
+            class="h-6 w-6 text-red-500 cursor-pointer"
+          ></TrashIcon>
+          <!-- <PencilIcon class="h-6 w-6 text-indigo-500 cursor-pointer"></PencilIcon> -->
         </div>
       </div>
     </div>
@@ -38,14 +49,20 @@
 </template>
 
 <script setup>
-import {
-  TrashIcon,
-  PencilIcon,
-} from "@heroicons/vue/solid";
-//import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import { TrashIcon } from "@heroicons/vue/solid";
 defineProps({
   questions: Array,
 });
+
+const emits = defineEmits(["removeQuestion", "answerSelected"]);
+
+function onDelete(id) {
+  emits("removeQuestion", id);
+}
+
+function optionChange(id, item) {
+  emits('answerSelected', { questionId: id, optionId: item.id})
+}
 </script>
 
 <style></style>

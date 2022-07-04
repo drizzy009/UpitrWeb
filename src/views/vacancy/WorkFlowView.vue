@@ -33,7 +33,7 @@
               class="flex rounded-md"
             >
               <div class="space-y-1">
-                <AssessmentView :questions="assessments"></AssessmentView>
+                <AssessmentView @answerSelected="updateAnswer" @removeQuestion="deleteQuestion" :jobId="jobId" :questions="assessments"></AssessmentView>
               </div>
             </div>
             <div
@@ -75,6 +75,22 @@
               </div>
             </div>
           </div>
+          <div class="pt-5" v-if="assessments.length > 0">
+            <div class="flex justify-start">
+              <CancelButton
+                label="Cancel"
+                @click="cancelAssessments"
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              ></CancelButton>
+              <AppButton
+                @click="saveAssessments"
+                type="button"
+                label="Save Assessments"
+                :processing="savingAssessment"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              ></AppButton>
+            </div>
+          </div>
         </TabPanel>
         <TabPanel>
           <div v-if="showMainPanel">
@@ -99,6 +115,8 @@
           <div v-if="showInterview" id="interviewKits">
             <InterviewKitsView
               @toggleMain="toggleMainPanel"
+              :jobId="jobId"
+              :interviewId="interviewId"
             ></InterviewKitsView>
           </div>
           <div v-if="showAssessment" id="interviewAssessments">
@@ -170,6 +188,7 @@
           class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         ></CancelButton>
         <AppButton
+          @click="onSubmit"
           type="submit"
           label="Submit"
           class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -182,12 +201,21 @@
 <script setup>
 import readXlsxFile from 'read-excel-file'
 import { ref, onMounted } from "vue";
+import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 import {
 } from "@heroicons/vue/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import InterviewKitsView from "./InterviewKitsView.vue";
 import AssessmentView from "./AssessmentView.vue";
 import questions from "../../data/interviewKits";
+import VacancyAssessmentService from "../../service/vacancy-assessments.service";
+import VacancyAssessmentQuestionService from "../../service/vacancy-assessments-question.service";
+
+const props = defineProps({
+  jobId: Number,
+  interviewId: Number
+});
 
 const tabList = [
   {
@@ -212,7 +240,7 @@ const tabList = [
     id: 4,
     name: "interview",
     title: "Interview",
-    enabled: true,
+    enabled: false,
   },
   {
     id: 5,
@@ -228,11 +256,110 @@ const tabList = [
   },
 ];
 
+const toast = useToast();
+const router = useRouter();
+const assessmentId = ref(0);
+const savingAssessment = ref(false);
 const showInterview = ref(false);
 const showAssessment = ref(false);
 const showMainPanel = ref(true);
 
 const assessments = ref([]);
+
+function assessmentsPayload(assessmentId) {
+  const questions = assessments.value.map(item => {
+    const newOptions = item.options.map(item => {
+      return { value: item.value, is_answer: item.is_answer }
+    })
+    const assessment = {
+      question_type_id: 1,
+      question: item.name,
+      options: newOptions,
+    }
+
+    return assessment;
+  });
+
+  const newPayload = {
+    questions,
+    assesment_id: assessmentId,
+  }
+
+  return newPayload;
+}
+
+function deleteQuestion(id) {
+  assessments.value = assessments.value.filter(item => item.id !== id);
+  VacancyAssessmentQuestionService.delete(id);
+}
+
+function getAssessment(id) {
+  VacancyAssessmentQuestionService.all(`assessment=${id}`).then(result => {
+    const { data } = result.data;
+    
+    let sno = 0;
+    const cbtQuestions = [];
+      data.forEach(item => {
+        const optionList = item.assesment_question_options;
+        const list = optionList.map((o) => {
+          return {
+            id: o.id,
+            value: o.value,
+            is_answer: o.is_answer,
+          }
+        });
+
+        sno += sno;
+        const question = {
+          sno,
+          id: item.id,
+          name: item.question,
+          model: `question-${sno}`,
+          options: list
+        }
+
+        cbtQuestions.push(question);
+      });
+      assessments.value = cbtQuestions;
+  })
+}
+
+function saveAssessments() {
+  savingAssessment.value = true;
+  const payload = {
+    job_id: props.jobId,
+    is_timed: true,
+    duration: 60,
+    pass_score: 70
+  }
+
+  if (assessmentId.value === 0) {
+    VacancyAssessmentService.create(payload).then(result => {
+      assessmentId.value = result.data.data.id;
+      const assessmentData = assessmentsPayload(assessmentId.value);
+      VacancyAssessmentQuestionService.createBulk(assessmentData);
+      toast.success('Assessment successfully saved');
+    }).catch(() => {})
+    .finally(() => {
+      savingAssessment.value = false;
+    })
+  }
+
+  if (assessmentId.value > 0) {
+    VacancyAssessmentService.update(assessmentId.value, payload).then(() => {
+      toast.info('Assessment successfully updated');
+      const assessmentData = assessmentsPayload(assessmentId.value);
+      VacancyAssessmentQuestionService.createBulk(assessmentData);
+    }).catch(() => {})
+    .finally(() => {
+      savingAssessment.value = false;
+    })
+  }
+}
+
+function cancelAssessments() {
+  assessments.value = [];
+}
 
 function toggleInterview() {
   showInterview.value = !showInterview.value;
@@ -245,36 +372,60 @@ function toggleMainPanel() {
   showAssessment.value = false;
 }
 
+function updateAnswer(data) {
+  const question = assessments.value.find(item => item.id === data.questionId);
+  const option = question.options.find(item => item.id === data.optionId);
+  const questionIndex = assessments.value.indexOf(question);
+  const optionIndex = question.options.indexOf(option);
+
+  for (let index = 0; index < question.options.length; index++) {
+    question.options[index].is_answer = false;
+  }
+  question.options[optionIndex].is_answer = true;
+  assessments.value[questionIndex] = question;
+}
+
 function uploadAssessment(data) {
-  console.clear();
   readXlsxFile(data.target.files[0]).then((rows) => {
     if (rows.length > 1) {
       const newRows = rows.slice(1, rows.length);
       const cbtQuestions = [];
       let sno = 0;
       newRows.forEach(item => {
-        const optionList = item.slice(1, item.length);
-        const list = optionList.map((o) => {
-          return {
-            id: ++sno,
-            name: o
+        var optionList = item.slice(1, item.length);
+        optionList = optionList.filter(item => item !== null);
+        const answer = optionList[optionList.length - 1];
+        optionList = optionList.slice(0, optionList.length - 1);
+        const newOptions = optionList.map((o) => {
+          if (o !== "") {
+            return {
+              id: ++sno,
+              value: o,
+              is_answer: false,
+            }
           }
         });
 
+        newOptions[answer - 1].is_answer = true;
+
         sno += sno;
         const question = {
+          sno,
           id: sno,
           name: item[0],
           model: `question-${sno}`,
-          options: list
+          options: newOptions
         }
 
         cbtQuestions.push(question);
       });
-      console.log(cbtQuestions);
       assessments.value = cbtQuestions;
     }
   })
+}
+
+function onSubmit() {
+  router.push(`detail/${props.jobId}`);
 }
 
 onMounted(() => {
@@ -282,6 +433,8 @@ onMounted(() => {
     showInterview.value = !showInterview.value;
     showMainPanel.value = false;
   }
+
+  getAssessment(assessmentId.value);
 });
 </script>
 

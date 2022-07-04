@@ -371,7 +371,7 @@
                             <h3
                               class="text-xs mt-4 leading-6 font-medium text-gray-900"
                             >
-                              Filter by Degree
+                              Filter by Degree Classification
                             </h3>
                             <SelectInput
                               placeholder="Select Degree"
