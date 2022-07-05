@@ -66,17 +66,12 @@
               <div class="px-4 py-3 bg-gray-100 sm:px-6">
                 <AppButton
                   type="button"
+                  :processing="savingQuestion"
                   @click="saveSection(section)"
                   :disabled="interviewSectionId === 0 || section.title === '' || section.question === ''"
                   class="inline-flex justify-center mr-2 w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 rounded-md sm:text-sm sm:leading-5"
                 >
-                  <template v-if="savingQuestion">
-                    <div class="loading"><div></div><div></div><div></div><div></div></div>
-                    Processing...
-                  </template>
-                  <template v-if="!savingQuestion">
-                    Save Section
-                  </template>
+                  Save Section
                 </AppButton>
                 <span
                   @click="deleteSection(index)"
