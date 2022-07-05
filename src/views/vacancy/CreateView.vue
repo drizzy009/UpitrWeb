@@ -733,12 +733,10 @@
 <script setup>
 import { ref, onMounted, watch, inject } from "vue";
 import { storeToRefs } from "pinia";
-// import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 import { CheckIcon } from "@heroicons/vue/solid";
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
 import { useDepartments } from "../../stores/department";
@@ -774,14 +772,15 @@ const jobDetail = ref({
 });
 
 const rules = {
-  title: {
-    required: helpers.withMessage("Vacancy title is required", required),
-  },
-  department_id: { required },
-  code: { required },
-  // deadline: { required },
-  // description: { required },
-  // requirements: { required }
+  deadline: { required: helpers.withMessage("Deadline", required) },
+  code: { required: helpers.withMessage("Internal Code", required) },
+  title: { required: helpers.withMessage("Vacancy title", required) },
+  description: { required: helpers.withMessage("Description", required) },
+  department_id: { required: helpers.withMessage("Department", required) },
+  salary_max: { required: helpers.withMessage("Maximum Salary", required) },
+  salary_min: { required: helpers.withMessage("Minimum Salary", required) },
+  requirements: { required: helpers.withMessage("Requirements", required) },
+  salary_currency_id: { required: helpers.withMessage("Currency", required) },
 };
 
 const v$ = useVuelidate(rules, jobDetail);
@@ -882,7 +881,7 @@ function showErrorMessages(errors) {
 
 async function submitVacancyDetail() {
   const valid = await v$.value.$validate();
-  // samplePayload.code  = Math.floor(Math.random() * 1000000).toString();
+
   if (valid) {
     processing.value = true;
     if (vacancyId.value === 0) {
@@ -931,8 +930,20 @@ async function submitVacancyDetail() {
   }
 
   if (!valid) {
-    toast.error("Please provide all required data");
-    return;
+    console.clear();
+    let errorMessage = 'The following fields are required ';
+    const errors = [];
+    v$.value.$errors.forEach(error => {
+      errors.push(error.$message);
+    });
+
+    errorMessage = `${errorMessage}${errors.join(", ")}`
+
+    swal({
+      title: "Invalid Data",
+      text: errorMessage,
+      icon: "error",
+    });
   }
 }
 
