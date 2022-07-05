@@ -321,8 +321,9 @@ function saveApplicantInfo() {
     VacancySettingService.create(payload).then(() => {
       toast.success('Application form successfully saved');
       emits('nextPage');
-    }).catch(() => {
-      toast.error('Unable to save application form, please try again later');
+    }).catch((ex) => {
+      console.log(ex);
+      // toast.error('Unable to save application form, please try again later');
     }).finally(() => {
       processing.value = false;
     })
@@ -332,8 +333,9 @@ function saveApplicantInfo() {
     VacancySettingService.update(settingsId.value, payload).then(() => {
       toast.success('Application form successfully saved');
       emits('nextPage');
-    }).catch(() => {
-      toast.error('Unable to save application form, please try again later');
+    }).catch((ex) => {
+      console.log(ex);
+      // toast.error('Unable to save application form, please try again later');
     }).finally(() => {
       processing.value = false;
     })

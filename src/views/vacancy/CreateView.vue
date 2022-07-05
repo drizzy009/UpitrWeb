@@ -806,16 +806,16 @@ const { departments } = storeToRefs(useDepartments());
 const toast = useToast();
 const swal = inject("$swal");
 // const router = useRouter();
-const interviewId = ref(0);
-const jobKeywords = ref([]);
 const stepNo = ref(1);
 const vacancyId = ref(0);
-const countryStates = ref([]);
+const interviewId = ref(0);
 const cities = ref([]);
-const processing = ref(false);
+const jobKeywords = ref([]);
+const countryStates = ref([]);
 const departmentList = ref([]);
-const loadingRegion = ref(false);
+const processing = ref(false);
 const loadingCity = ref(false);
+const loadingRegion = ref(false);
 // const samplePayload = {
 //   benefits: "Competitive Salary",
 //   city_id: "76932",

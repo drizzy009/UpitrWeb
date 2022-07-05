@@ -240,7 +240,7 @@ const tabList = [
     id: 4,
     name: "interview",
     title: "Interview",
-    enabled: false,
+    enabled: true,
   },
   {
     id: 5,
@@ -330,7 +330,8 @@ function saveAssessments() {
     job_id: props.jobId,
     is_timed: true,
     duration: 60,
-    pass_score: 70
+    pass_score: 70,
+    questions_per_candidate: 100
   }
 
   if (assessmentId.value === 0) {
