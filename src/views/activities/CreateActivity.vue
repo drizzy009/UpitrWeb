@@ -15,25 +15,29 @@
               for="type"
               class="block text-sm font-medium text-gray-700"
             >Activity Type</label>
-            <SelectInput
-              id="relatedTo"
-              placeholder="Select..."
-              :items="activityTypes"
+            <MultiSelect
+              value="value"
+              label="name"
+              valueProp="value"
               v-model="formData.activity_type_id"
-              class="block"
-            ></SelectInput>
+              :options="activityTypes"
+              placeholder="Select...."
+            />
           </div>
           <div class="w-1/2">
             <label
               for="relatedTo"
               class="block text-sm font-medium text-gray-700"
             >Importance</label>
-            <SelectInput
-              id="relatedTo"
-              placeholder="Select..."
-              :items="activityImportance"
+            <MultiSelect
+              id="activityImportance"
+              value="value"
+              label="name"
+              valueProp="value"
               v-model="formData.importance_id"
-            ></SelectInput>
+              :options="activityImportance"
+              placeholder="Select...."
+            />
           </div>
         </div>
       </div>
@@ -42,36 +46,48 @@
           for="relatedTo"
           class="block text-sm font-medium text-gray-700 mb-2"
         >Related To</label>
-        <SelectInput
+        <MultiSelect
           id="relatedTo"
+          value="value"
+          label="name"
+          valueProp="value"
           placeholder="Select..."
-          :items="activityRelations"
+          :options="activityRelations"
           v-model="formData.related_to_id"
-        ></SelectInput>
+        ></MultiSelect>
       </div>
       <div v-if="showVacancy" class="col-span-6 mt-2 md:mt-4">
         <label
           for="vacancy"
           class="block text-sm font-medium text-gray-700 mb-2"
         >Vacancy</label>
-        <SelectInput
+        <MultiSelect
+          searchable
           id="vacancy"
+          value="id"
+          label="name"
+          valueProp="id"
           placeholder="Select a vacancy"
-          :items="vacancyList"
+          :options="vacancyList"
           v-model="formData.job_id"
-        ></SelectInput>
+        ></MultiSelect>
       </div>
-      <div v-if="showVacancy" class="col-span-6 mt-2 md:mt-4">
+      <div v-if="showCandidate" class="col-span-6 mt-2 md:mt-4">
         <label
           for="candidate"
           class="block text-sm font-medium text-gray-700 mb-2"
         >Candidate</label>
-        <SelectInput
+        <MultiSelect
+          searchable
           id="candidate"
+          value="id"
+          label="name"
+          valueProp="id"
+          :loading="loadingCandidate"
           placeholder="Select a candidate"
-          :items="candidateList"
+          :options="candidateList"
           v-model="formData.job_applicant_id"
-        ></SelectInput>
+        ></MultiSelect>
       </div>
       <div class="col-span-6 mt-2 md:mt-4 mb-2">
         <div class="flex flex-row">
@@ -149,7 +165,10 @@ const emits = defineEmits(['toggleActivity', 'loadActivity']);
 const props = defineProps({
   toggle: Boolean,
 });
+
+const loadingCandidate = ref(false);
 const showVacancy = ref(false);
+const showCandidate = ref(false);
 const savingActivity = ref(false);
 const showAddActivity = ref(false);
 const options = ref([]);
@@ -166,10 +185,10 @@ const formData = ref({
   assignees: [],
   description: '',
   meeting_url: '',
-  related_to_id: 0,
-  importance_id: 0,
-  job_applicant_id: 0,
-  activity_type_id: 0,
+  related_to_id: '',
+  importance_id: '',
+  job_applicant_id: '',
+  activity_type_id: '',
 });
 
 const rules = {
@@ -232,6 +251,7 @@ function showErrorMessages(errors) {
 }
 
 function getCandidates(id) {
+  loadingCandidate.value = true;
   CandidateService.all(`vacancy=${id}`).then(result => {
     const { data } = result.data.data;
     if (data.length > 0) {
@@ -239,6 +259,9 @@ function getCandidates(id) {
         return { name: `${item.firstname} ${item.lastname}`, id: item.id }
       })
     }
+  }).catch(() => {})
+  .finally(() => {
+    loadingCandidate.value = false;
   })
 }
 
@@ -260,8 +283,6 @@ function closeCreateActivity() {
 
 async function saveActivity() {
   savingActivity.value = true;
-  console.clear();
-  console.log(formData.value);
   formData.value.job_id = Number(formData.value.job_id);
   formData.value.importance_id = Number(formData.value.importance_id);
   formData.value.related_to_id = Number(formData.value.related_to_id);
@@ -293,11 +314,14 @@ watch(() => props.toggle, (newValue) => {
 watch(() => formData.value.related_to_id, (value) => {
   const id = Number(value);
   showVacancy.value = false;
+  showCandidate.value = false;
+  formData.value.job_applicant_id = "";
   if (id !== -1) {
     const relatedTo = activityRelations.value.find(item => item.value === id);
     if (relatedTo.name.includes('Vacancy')) showVacancy.value = true;
     if (relatedTo.name.includes('Candidate')) {
       showVacancy.value = true;
+      showCandidate.value = true;
       formData.value.job_applicant_id = 0;
     }
   }
