@@ -45,7 +45,7 @@
                               active
                                 ? 'ring-2 ring-offset-2 ring-green-500'
                                 : '',
-                              (checked || setDefault(item))
+                              (checked || setDefault(item) || checkOption(option))
                                 ? 'bg-green-400 border-transparent text-white hover:bg-green-500'
                                 : 'bg-[#E1E6EB] border-gray-200 text-gray-900 hover:bg-gray-50',
                               'border rounded-full py-1 px-1 flex items-center justify-center text-sm font-medium sm:flex-1',
@@ -221,6 +221,7 @@ import VacancySettingService from "../../service/vacancy-settings.service";
 const props = defineProps({
   jobId: Number,
   settingsId: Number,
+  vacancySettings: Object,
   existingQuestions: Array,
 });
 
@@ -342,8 +343,15 @@ function saveApplicantInfo() {
   }
 }
 
+function checkOption (option) {
+  if ('checked' in option) {
+    return option.checked;
+  }
+
+  return false;
+}
 function setDefault(item) {
-  return item.options.length === 1
+  if (item.options.length === 1) return true;
 }
 
 function getQuestionType(question) {
@@ -386,6 +394,25 @@ watch(() => questionType.value, (value) => {
   const getType = questionTypes.value.find(item => item.id === Number(value));
   selectedType.value = getType;
   showOption.value = getType.has_options === 1;
+});
+
+watch(() => props.vacancySettings, (value) => {
+  if (value !== null) {
+    applicationData.forEach(item => {
+      item.fields.forEach(field => {
+        if ('options' in field) {
+          if (field.options.length > 1) {
+            // field.model = value; //{ optionName: value[field.key], checked: true };
+            const selectedOption = field.options.find(opt => opt.optionName === value[field.key]);
+            const index = field.options.indexOf(selectedOption);
+            field.options[index] = Object.assign(selectedOption, { checked: true });
+          }
+        }
+      })
+    });
+
+    applicantInfo.value = applicationData;
+  }
 });
 
 onMounted(() => {

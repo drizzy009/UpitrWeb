@@ -13,6 +13,7 @@ import UserDetailView from "../views/user/DetailView.vue";
 
 import ManageVacancyView from "../views/vacancy/ManageVacancies.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
+import EditVacancyView from "../views/vacancy/EditView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
 
 import ManageCandidates from "../views/candidate/ManageCandidates.vue";
@@ -123,12 +124,22 @@ const router = createRouter({
           component: CreateVacancyView,
         },
         {
+          name: "EditVacancy",
+          path: "vacancy/edit/:id",
+          meta: {
+            pageTitle: "Edit Vacancy",
+          },
+          component: EditVacancyView,
+          props: true,
+        },
+        {
           name: "VacancyDetail",
           path: "vacancy/detail/:id",
           meta: {
             pageTitle: "Vacancy Details",
           },
           component: VacancyDetailsView,
+          props: true,
         },
       ],
     },
@@ -160,6 +171,7 @@ const router = createRouter({
             pageTitle: "Candidate Details",
           },
           component: CandidateDetail,
+          props: true,
         },
       ],
     },

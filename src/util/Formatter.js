@@ -4,6 +4,11 @@ export const FormatLongDate = (dateValue) => {
     return moment(dateValue).format('MMM-DD-YYYY h:mm:ss a');
 }
 
+export const FormatDate = (dateValue, formatString) => {
+    return moment(dateValue).format(formatString);
+}
+
+
 export const FormatShortDate = (dateValue) => {
     return moment(dateValue).format('DD-MM-YYYY');
 }
