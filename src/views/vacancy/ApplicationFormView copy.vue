@@ -30,8 +30,7 @@
                     >{{ item.name }}</label
                   >
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <ApplicantField @selected-option="updateApplicantForm" :items="item.options" :itemKey="item.key"></ApplicantField>
-                    <!-- <RadioGroup v-model="item.model" class="mt-2">
+                    <RadioGroup v-model="item.model" class="mt-2">
                       <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
                         <RadioGroupOption
                           as="template"
@@ -46,7 +45,7 @@
                               active
                                 ? 'ring-2 ring-offset-2 ring-green-500'
                                 : '',
-                              checked
+                              (checked || setDefault(item))
                                 ? 'bg-green-400 border-transparent text-white hover:bg-green-500'
                                 : 'bg-[#E1E6EB] border-gray-200 text-gray-900 hover:bg-gray-50',
                               'border rounded-full py-1 px-1 flex items-center justify-center text-sm font-medium sm:flex-1',
@@ -58,7 +57,7 @@
                           </div>
                         </RadioGroupOption>
                       </div>
-                    </RadioGroup> -->
+                    </RadioGroup>
                   </div>
                 </div>
               </div>
@@ -213,11 +212,11 @@ import { ref, watch, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { PlusSmIcon, TrashIcon } from "@heroicons/vue/solid";
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 import applicationData from "../../data/applicationForm";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import VacancyService from '../../service/vacancies.service';
 import VacancySettingService from "../../service/vacancy-settings.service";
-import ApplicantField from "./ApplicantField.vue";
 
 const props = defineProps({
   jobId: Number,
@@ -230,13 +229,14 @@ const {
   questionTypes
 } = storeToRefs(useMiscellaneous());
 
-const emits = defineEmits(['nextPage']);
 const toast = useToast();
 const savingQuestion = ref(false);
 const deletingQuestion = ref(false);
 const questionPanel = ref(false);
 const settingsId = ref(0);
-const applicantInfo = ref([]);
+const applicantInfo = ref(applicationData);
+const emits = defineEmits(['nextPage']);
+
 const questions = ref([]);
 const processing = ref(false);
 const question = ref("");
@@ -244,30 +244,6 @@ const questionType = ref(0);
 const selectedType = ref(null);
 const showOption = ref(false);
 const options = ref("");
-
-const applicatantFields = ref({
-  job_id: 0,
-  firstname: "Mandatory",
-  lastname: "Mandatory",
-  email: "Mandatory",
-  gender: "Mandatory",
-  cv: "Off",
-  dob: "Mandatory",
-  phone: "Mandatory",
-  heading: "Off",
-  address: "Off",
-  photo: "Off",
-  education: "Mandatory",
-  experience: "Mandatory",
-  summary: "Optional",
-  resume: "Mandatory",
-  cover_letter: "Optional",
-})
-
-function updateApplicantForm(item) {
-  const selectedOption = item.options.find(opt => opt.checked === true);
-  applicatantFields.value[item.key] = selectedOption.optionName;
-}
 
 function addQuestion() {
   const currentQuestion = {
@@ -304,9 +280,46 @@ function onItemsChange(items) {
 
 function saveApplicantInfo() {
   processing.value = true;
-  applicatantFields.value.job_id = props.jobId;
+  const payload = {
+    phone: "",
+    heading: "",
+    address: "",
+    photo: "",
+    education: "",
+    experience: "",
+    summary: "",
+    resume: "",
+    cover_letter: "",
+  }
+
+  const appFields = [];
+  applicantInfo.value.forEach(element => {
+    element.fields.forEach(field => {
+      appFields.push(field)
+    })
+  });
+
+  Object.entries(payload).forEach((key) => {
+    const fieldValue = appFields.find(item => item.key === key[0]);
+    if (fieldValue !== undefined && fieldValue.model === key[0]) payload[key[0]] = "Off";
+    if (fieldValue !== undefined && fieldValue.model !== key[0]) payload[key[0]] = fieldValue.model.optionName;
+  })
+
+  Object.assign(
+    payload,
+    {
+      job_id: props.jobId,
+      firstname: "Mandatory",
+      lastname: "Mandatory",
+      email: "Mandatory",
+      gender: "Mandatory",
+      cv: "Off",
+      dob: "Mandatory",
+    }
+  )
+
   if (settingsId.value === 0) {
-    VacancySettingService.create(applicatantFields.value).then(() => {
+    VacancySettingService.create(payload).then(() => {
       toast.success('Application form successfully saved');
       emits('nextPage');
     }).catch((ex) => {
@@ -318,9 +331,9 @@ function saveApplicantInfo() {
   }
 
   if (settingsId.value > 0) {
-    VacancySettingService.update(settingsId.value, applicatantFields.value).then(() => {
+    VacancySettingService.update(settingsId.value, payload).then(() => {
       toast.success('Application form successfully saved');
-      // emits('nextPage');
+      emits('nextPage');
     }).catch((ex) => {
       console.log(ex);
       // toast.error('Unable to save application form, please try again later');
@@ -328,6 +341,19 @@ function saveApplicantInfo() {
       processing.value = false;
     })
   }
+}
+
+function checkOption (option) {
+  // console.log(option);
+  if ('checked' in option) {
+    return option.checked;
+  }
+
+  return false;
+}
+
+function setDefault(item) {
+  if (item.options.length === 1) return true;
 }
 
 function getQuestionType(question) {
@@ -372,36 +398,30 @@ watch(() => questionType.value, (value) => {
   showOption.value = getType.has_options === 1;
 });
 
-watch(() => props.vacancySettings, (fieldData) => {
-  if (fieldData !== null) {
-    applicationData.forEach(item => {
-      item.fields.forEach(field => {
-        const optionValue = fieldData[field.key];
-        field.options.forEach(item => {
-          item.checked = false;
-        })
+watch(() => props.vacancySettings, (value) => {
+  // if (value !== null) {
+  //   applicationData.forEach(item => {
+  //     item.fields.forEach(field => {
+  //       if ('options' in field) {
+  //         if (field.options.length > 1) {
+  //           // field.model = value; //{ optionName: value[field.key], checked: true };
+  //           // const selectedOption = field.options.find(opt => opt.optionName === value[field.key]);
+  //           // const index = field.options.indexOf(selectedOption);
+  //           // field.options[index] = Object.assign(selectedOption, { checked: true });
+  //         }
+  //       }
+  //     })
+  //   });
 
-        if (field.options.length === 1) {
-          field.options[0].checked = true;
-        } else {
-          const index = field.options.findIndex((item => item.optionName === optionValue));
-          field.options[index].checked = true;
-          applicatantFields.value[field.key] = optionValue;
-        }
-      })
-    });
-
-    applicantInfo.value = applicationData;
-  }
+  //   applicantInfo.value = applicationData;
+  // }
 });
 
 onMounted(() => {
   if (props.jobId > 0) {
-    applicatantFields.value.job_id = props.jobId;
-    settingsId.value = props.settingsId;
     getApplicationQuestions(props.jobId);
   }
-});
+})
 </script>
 
 <style></style>
