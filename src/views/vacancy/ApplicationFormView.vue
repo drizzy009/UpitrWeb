@@ -236,7 +236,7 @@ const savingQuestion = ref(false);
 const deletingQuestion = ref(false);
 const questionPanel = ref(false);
 const settingsId = ref(0);
-const applicantInfo = ref([]);
+const applicantInfo = ref(applicationData);
 const questions = ref([]);
 const processing = ref(false);
 const question = ref("");
@@ -270,6 +270,7 @@ function updateApplicantForm(item) {
 }
 
 function addQuestion() {
+  if (questions.value === undefined) questions.value = [];
   const currentQuestion = {
     job_id: props.jobId,
     question: question.value,
@@ -289,6 +290,7 @@ function addQuestion() {
     questionPanel.value = !questionPanel.value;
     question.value = "";
   }).catch(() => {
+    // console.log(error);
     toast.error('Unable to add question, please try again later');
   })
   .finally(() => {
@@ -309,9 +311,9 @@ function saveApplicantInfo() {
     VacancySettingService.create(applicatantFields.value).then(() => {
       toast.success('Application form successfully saved');
       emits('nextPage');
-    }).catch((ex) => {
-      console.log(ex);
-      // toast.error('Unable to save application form, please try again later');
+    }).catch(() => {
+      // console.log(ex);
+      toast.error('Unable to save application form, please try again later');
     }).finally(() => {
       processing.value = false;
     })
@@ -321,9 +323,9 @@ function saveApplicantInfo() {
     VacancySettingService.update(settingsId.value, applicatantFields.value).then(() => {
       toast.success('Application form successfully saved');
       // emits('nextPage');
-    }).catch((ex) => {
-      console.log(ex);
-      // toast.error('Unable to save application form, please try again later');
+    }).catch(() => {
+      // console.log(ex);
+      toast.error('Unable to save application form, please try again later');
     }).finally(() => {
       processing.value = false;
     })
@@ -373,6 +375,7 @@ watch(() => questionType.value, (value) => {
 });
 
 watch(() => props.vacancySettings, (fieldData) => {
+  applicantInfo.value = applicationData;
   if (fieldData !== null) {
     applicationData.forEach(item => {
       item.fields.forEach(field => {

@@ -395,15 +395,15 @@
                       </label>
                       <div class="mt-1">
                         <QuillEditor
-                          ref="benefits"
+                          ref="benefit"
                           contentType="html"
-                          v-model:content="jobDetail.benefits"
-                          id="benefits"
-                          name="benefits"
+                          v-model:content="jobDetail.benefit"
+                          id="benefit"
+                          name="benefit"
                           class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                          placeholder="List job benefits"
+                          placeholder="List job benefit"
                         />
-                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" /> -->
+                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefit" /> -->
                       </div>
                     </div>
                   </div>
@@ -769,7 +769,7 @@ const jobDetail = ref({
   description: "",
   responsibilities: "",
   requirements: "",
-  benefits: "",
+  benefit: "",
   job_function_id: "",
   employment_type_id: "",
   experience_level_id: "",
@@ -815,13 +815,13 @@ const {
   experienceLevels,
 } = storeToRefs(useMiscellaneous());
 
-const benefits = ref(null);
+const benefit = ref(null);
 const description = ref(null);
 const requirements = ref(null);
 const responsibilities = ref(null);
 const { departments } = storeToRefs(useDepartments());
 const swal = inject("$swal");
-const stepNo = ref(2);
+const stepNo = ref(1);
 const vacancyId = ref(0);
 const interviewId = ref(0);
 const cities = ref([]);
@@ -832,7 +832,7 @@ const processing = ref(false);
 const loadingCity = ref(false);
 const loadingRegion = ref(false);
 // const samplePayload = {
-//   benefits: "Competitive Salary",
+//   benefit: "Competitive Salary",
 //   city_id: "76932",
 //   code: "SAL-556632",
 //   country_id: 161,
@@ -951,6 +951,7 @@ onMounted(() => {
     const { data } = result.data;
     // jobDetail.value = data;
     vacancyDetail.value = data;
+    console.clear();
 
     jobDetail.value.department_id = data.department.id;
     jobDetail.value.country_id = data.city.region.country.id;
@@ -970,21 +971,20 @@ onMounted(() => {
     jobDetail.value.head_count = data.head_count;
     jobDetail.value.salary_min = data.salary_min;
     jobDetail.value.salary_max = data.salary_max;
-    
     jobKeywords.value = jobDetail.value.keywords;
-    if (data.job_settings.length > 0) {
+
+    vacancyId.value = data.id;
+    benefit.value.setHTML(data.benefit || '');
+    description.value.setHTML(data.description || '');
+    requirements.value.setHTML(data.requirements || '');
+    responsibilities.value.setHTML(data.responsibilities || '');
+    interviewId.value = data.interviews[0].id;
+    if ("job_settings" in data) {
+      vacancySettings.value = data.job_settings[0];
       settingsId.value = data.job_settings[0].id;
     }
-
-    vacancySettings.value = data.job_settings[0]
-    vacancyId.value = data.id;
-    interviewId.value = data.id;
-    benefits.value.setHTML(data.benefits);
-    description.value.setHTML(data.description);
-    requirements.value.setHTML(data.requirements);
-    responsibilities.value.setHTML(data.responsibilities);
-
   }).catch((error) => {
+    console.error(error);
     let errorMessage = "Something went wrong, please try again later";
     if (error.status === 404) {
       errorMessage = "Vacancy information does not exist";

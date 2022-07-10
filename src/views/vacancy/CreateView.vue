@@ -393,13 +393,13 @@
                       <div class="mt-1">
                         <QuillEditor
                           contentType="html"
-                          v-model:content="jobDetail.benefits"
-                          id="benefits"
-                          name="benefits"
+                          v-model:content="jobDetail.benefit"
+                          id="benefit"
+                          name="benefit"
                           class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                          placeholder="List job benefits"
+                          placeholder="List job benefit"
                         />
-                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefits" /> -->
+                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefit" /> -->
                       </div>
                     </div>
                   </div>
@@ -755,7 +755,7 @@ const jobDetail = ref({
   description: "",
   responsibilities: "",
   requirements: "",
-  benefits: "",
+  benefit: "",
   job_function_id: "",
   employment_type_id: "",
   experience_level_id: "",
@@ -816,7 +816,7 @@ const processing = ref(false);
 const loadingCity = ref(false);
 const loadingRegion = ref(false);
 // const samplePayload = {
-//   benefits: "Competitive Salary",
+//   benefit: "Competitive Salary",
 //   city_id: "76932",
 //   code: "SAL-556632",
 //   country_id: 161,
@@ -930,7 +930,6 @@ async function submitVacancyDetail() {
   }
 
   if (!valid) {
-    console.clear();
     let errorMessage = 'The following fields are required ';
     const errors = [];
     v$.value.$errors.forEach(error => {
