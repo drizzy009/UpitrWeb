@@ -1,4 +1,9 @@
 import moment from 'moment';
+import numeral from 'numeral';
+
+export const FormatMoney = (numberValue) => {
+    return numeral(numberValue).format('0,0.00');
+}
 
 export const FormatLongDate = (dateValue) => {
     return moment(dateValue).format('MMM-DD-YYYY h:mm:ss a');
