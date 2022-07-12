@@ -15,6 +15,7 @@ import ManageVacancyView from "../views/vacancy/ManageVacancies.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
 import EditVacancyView from "../views/vacancy/EditView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
+import ManageApplicants from "../views/vacancy/ManageApplicants.vue";
 
 import ManageCandidates from "../views/candidate/ManageCandidates.vue";
 import ManageActivities from "../views/activities/ManageActivities.vue";
@@ -141,6 +142,15 @@ const router = createRouter({
           component: VacancyDetailsView,
           props: true,
         },
+        {
+          name: "ManageApplicants",
+          path: "vacancy/applicants/:id",
+          meta: {
+            pageTitle: "Manage Applicants"
+          },
+          component: ManageApplicants,
+          props: true
+        }
       ],
     },
     {

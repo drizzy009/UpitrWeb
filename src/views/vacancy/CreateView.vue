@@ -881,7 +881,7 @@ function showErrorMessages(errors) {
 
 async function submitVacancyDetail() {
   const valid = await v$.value.$validate();
-
+  
   if (valid) {
     processing.value = true;
     if (vacancyId.value === 0) {

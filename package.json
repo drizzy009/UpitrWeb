@@ -31,6 +31,7 @@
     "pinia-plugin-persistedstate": "^1.6.1",
     "read-excel-file": "^5.3.4",
     "vue": "^3.2.33",
+    "vue-debounce": "^4.0.0",
     "vue-input-tag": "^2.0.7",
     "vue-loading-overlay": "5.0",
     "vue-router": "^4.0.14",

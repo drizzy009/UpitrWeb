@@ -311,9 +311,9 @@ function saveApplicantInfo() {
     VacancySettingService.create(applicatantFields.value).then(() => {
       toast.success('Application form successfully saved');
       emits('nextPage');
-    }).catch(() => {
-      // console.log(ex);
-      toast.error('Unable to save application form, please try again later');
+    }).catch((ex) => {
+      console.log(ex);
+      // toast.error('Unable to save application form, please try again later');
     }).finally(() => {
       processing.value = false;
     })
@@ -325,7 +325,7 @@ function saveApplicantInfo() {
       // emits('nextPage');
     }).catch(() => {
       // console.log(ex);
-      toast.error('Unable to save application form, please try again later');
+      // toast.error('Unable to save application form, please try again later');
     }).finally(() => {
       processing.value = false;
     })
@@ -358,7 +358,7 @@ function deleteQuestion(id) {
 function getApplicationQuestions(id) {
   VacancyService.single(id).then(result => {
     const { data } = result.data;
-    questions.value = data.job_questions
+    questions.value = data.job_questions;
   })
 }
 
