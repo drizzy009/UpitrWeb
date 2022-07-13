@@ -5,6 +5,11 @@ export const FormatMoney = (numberValue) => {
     return numeral(numberValue).format('0,0.00');
 }
 
+export const FormatAge = (dateValue) => {
+    const ageFraction = moment().diff(moment(dateValue), 'years', true);
+    return Math.floor(ageFraction);
+}
+
 export const FormatLongDate = (dateValue) => {
     return moment(dateValue).format('MMM-DD-YYYY h:mm:ss a');
 }

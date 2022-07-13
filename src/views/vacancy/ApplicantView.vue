@@ -22,7 +22,7 @@
                 alt=""
               />
             </div>
-            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-2 md:gap-4">
+            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-3 md:gap-3">
               <div>
                 <p class="text-sm font-medium text-indigo-600 truncate">
                   {{ applicant.candidate.firstname }} {{ applicant.candidate.lastname }}
@@ -38,16 +38,22 @@
               <div class="hidden md:block">
                 <div>
                   <p class="text-sm text-gray-900">
+                    {{applicant.candidate.gender_id === 0 ? 'Female': 'Male'}}
+                  </p>
+                  <p class="mt-2 text-sm text-gray-900">
+                    {{FormatAge(applicant.candidate.dob)}} years old
+                  </p>
+                </div>
+              </div>
+              <div class="hidden md:block">
+                <div>
+                  <p class="text-sm text-gray-900">
                     Applied on
                     {{ " " }}
                     {{formatAppDate(applicant.candidate.created_at)}}
                   </p>
                   <p class="flex items-center mt-2 text-sm text-gray-500">
-                    <CheckCircleIcon
-                      class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                      aria-hidden="true"
-                    />
-                    {{ applicant.candidate.status }}
+                    {{applicant.candidate.city.name}}, {{applicant.candidate.city.region.name}}
                   </p>
                 </div>
               </div>
@@ -71,10 +77,9 @@
 import {
   MailIcon,
   UserCircleIcon,
-  CheckCircleIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/solid";
-import { FormatLongDate2 } from '../../util/Formatter';
+import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
 const props = defineProps({
   applicants: Array,
 });

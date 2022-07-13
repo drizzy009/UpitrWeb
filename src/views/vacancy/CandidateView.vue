@@ -4,22 +4,27 @@
     class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
   >
     <li v-for="candidate in candidates" :key="candidate.email">
-      <a href="#" class="group block">
-        <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
-          <div class="min-w-0 flex-1 flex items-center">
+      <a href="#" class="block group">
+        <div class="flex items-center px-4 py-5 sm:py-6 sm:px-0">
+          <div class="flex items-center flex-1 min-w-0">
             <div class="flex-shrink-0">
+              <UserCircleIcon
+                v-if="candidate.photo === null"
+                class="w-12 h-12 text-gray-400 rounded-full cursor-auto group-hover:opacity-75"
+              ></UserCircleIcon>
               <img
-                class="h-12 w-12 rounded-full group-hover:opacity-75"
+                v-if="candidate.photo !== null"
+                class="w-12 h-12 rounded-full group-hover:opacity-75"
                 :src="candidate.photo"
                 alt=""
               />
             </div>
-            <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-3 md:gap-3">
               <div>
                 <p class="text-sm font-medium text-indigo-600 truncate">
                   {{ candidate.firstname }} {{ candidate.lastname }}
                 </p>
-                <p class="mt-2 flex items-center text-sm text-gray-500">
+                <p class="flex items-center mt-2 text-sm text-gray-500">
                   <MailIcon
                     class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                     aria-hidden="true"
@@ -30,16 +35,22 @@
               <div class="hidden md:block">
                 <div>
                   <p class="text-sm text-gray-900">
+                    {{candidate.gender_id === 0 ? 'Female': 'Male'}}
+                  </p>
+                  <p class="mt-2 text-sm text-gray-900">
+                    {{FormatAge(candidate.dob)}} years old
+                  </p>
+                </div>
+              </div>
+              <div class="hidden md:block">
+                <div>
+                  <p class="text-sm text-gray-900">
                     Applied on
                     {{ " " }}
                     {{formatAppDate(candidate.created_at)}}
                   </p>
-                  <p class="mt-2 flex items-center text-sm text-gray-500">
-                    <CheckCircleIcon
-                      class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                      aria-hidden="true"
-                    />
-                    {{ candidate.status }}
+                  <p class="flex items-center mt-2 text-sm text-gray-500">
+                    {{candidate.city.name}}, {{candidate.city.region.name}}
                   </p>
                 </div>
               </div>
@@ -48,7 +59,7 @@
           <div>
             <a :href="`/candidate/detail/${candidate.id}`">
               <ChevronRightIcon
-                class="h-5 w-5 text-gray-400 group-hover:text-gray-700"
+                class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
               />
             </a>
@@ -62,10 +73,11 @@
 <script setup>
 import {
   MailIcon,
-  CheckCircleIcon,
+  UserCircleIcon,
+  // CheckCircleIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/solid";
-import { FormatLongDate2 } from '../../util/Formatter';
+import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
 defineProps({
   candidates: Array,
 });

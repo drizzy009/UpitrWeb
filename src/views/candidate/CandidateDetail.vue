@@ -357,13 +357,10 @@
 </template>
 <script setup>
 import {
-  PaperClipIcon,
-  ChevronDownIcon,
-  UserCircleIcon,
   CalendarIcon,
-  //ThumbUpIcon,
-  //ThumbDownIcon,
-  //StarIcon,
+  PaperClipIcon,
+  UserCircleIcon,
+  ChevronDownIcon,
 } from "@heroicons/vue/solid";
 
 import { ref, onMounted, inject } from "vue";
@@ -417,13 +414,13 @@ const publishingOptions = [
   {
     id: 1,
     name: "Sourced",
-    description: "Move candidate to assessment",
+    description: "Move candidate to sourced",
     current: true,
   },
   {
     id: 2,
     name: "Applied",
-    description: "Move candidate to assessment",
+    description: "Move candidate to applied",
     current: true,
   },
   {
