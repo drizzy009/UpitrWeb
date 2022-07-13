@@ -13,6 +13,7 @@ export const useVacancies = defineStore({
         processing: false,
         vacancyInterviews: null,
         vacancyAssessments: null,
+        workflowStages: [],
     }),
     getters:{},
     actions: {
@@ -49,6 +50,9 @@ export const useVacancies = defineStore({
         },
         updateVacancyInterview(payload) {
             this.vacancyInterviews = payload;
+        },
+        setWorkflowStages(payload) {
+            this.workflowStages = payload;
         }
     },
     persist: true

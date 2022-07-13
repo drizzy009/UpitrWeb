@@ -82,9 +82,9 @@
           >
             {{ vacancyDetail.title }}
           </h1>
-          <div class="flex justify-between">
+          <div class="flex flex-col justify-between lg:flex-row">
             <div
-              class="flex flex-col w-4/6 mt-1 sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-8"
+              class="flex flex-col mt-1 lg:w-4/6 sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-8"
             >
               <div class="flex items-center mt-2 text-sm text-gray-500">
                 <BriefcaseIcon
@@ -117,7 +117,7 @@
               </div>
             </div>
             <div
-              class="flex flex-col justify-end w-2/6 mt-1 sm:flex-row sm:mt-0 sm:space-x-2"
+              class="flex flex-col justify-end mt-1 lg:w-2/6 sm:flex-row sm:mt-2 sm:space-x-2"
             >
               <Menu as="div" class="relative inline-block text-left">
                 <div>
@@ -219,6 +219,8 @@
                 @selected="onSelectedItems"
                 v-if="serverResponse.data.length > 0"
                 :applicants="serverResponse.data"
+                :vacancyId="vacancyId"
+                :interviewId="interviewId"
               ></ApplicantView>
               <h4
                 v-if="serverResponse.data.length === 0 && !loadingApplicants"
@@ -564,6 +566,7 @@ import VacancyService from "../../service/vacancies.service";
 import ApplicantService from "../../service/applicant.service";
 import { FormatMoney, FormatShortDate } from "../../util/Formatter";
 import { useMiscellaneous } from "../../stores/miscellaneous";
+import { useVacancies } from "../../stores/vacancies";
 // import { PageSizes } from "../../util/Constants";
 
 const props = defineProps({
@@ -576,6 +579,7 @@ const { industries, jobFunctions, degreeClassifications } = storeToRefs(
 
 var tabIndex = ref(0);
 const vacancyId = ref(0);
+const interviewId = ref(0);
 const loading = ref(false);
 const openFilter = ref(false);
 const loadingApplicants = ref(false);
@@ -584,6 +588,8 @@ const published = ref(false);
 const processing = ref(false);
 const vacancyDetail = ref(null);
 const remoteOffice = ref("On-site");
+const { workflowStages } = useVacancies()
+const vacancyStore = useVacancies();
 const searchForm = ref({
   keyword: "",
   dob_start: "",
@@ -684,11 +690,20 @@ function getVacancyDetail(id) {
       const { data } = response.data;
       vacancyDetail.value = data;
       published.value = data.is_published;
+      if ('interviews' in data) {
+        try {
+          interviewId.value = data.interviews[0].id;
+        } catch (error) {
+          // log error
+        }
+      }
       if (vacancyDetail.value.is_remote !== null) {
         remoteOffice.value = vacancyDetail.value.is_remote
           ? "Remote"
           : "On-site";
       }
+
+      vacancyStore.setWorkflowStages(data.job_workflow.job_workflow_stages);
     })
     .catch(() => {})
     .finally(() => {

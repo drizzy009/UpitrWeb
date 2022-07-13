@@ -60,7 +60,7 @@
             </div>
           </div>
           <div>
-            <a :href="`/applicant/detail/${applicant.candidate.id}`">
+            <a @click="gotoDetailPage(applicant.id)">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
@@ -79,11 +79,15 @@ import {
   UserCircleIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/solid";
+import { useRouter } from "vue-router";
 import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
 const props = defineProps({
   applicants: Array,
+  vacancyId: String,
+  interviewId: String,
 });
 
+const router = useRouter();
 const emits = defineEmits(['selected']);
 
 function formatAppDate(dateValue) {
@@ -93,6 +97,10 @@ function formatAppDate(dateValue) {
 function onChanged() {
   const checkedApplicants = props.applicants.filter(applicant => applicant.checked === true);
   emits('selected', checkedApplicants);
+}
+
+function gotoDetailPage(applicantid) {
+  router.push({ name: 'ApplicantDetail', params: {id: applicantid, interviewId: props.interviewId}});
 }
 </script>
 
