@@ -13,7 +13,10 @@ import UserDetailView from "../views/user/DetailView.vue";
 
 import ManageVacancyView from "../views/vacancy/ManageVacancies.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
+import EditVacancyView from "../views/vacancy/EditView.vue";
 import VacancyDetailsView from "../views/vacancy/DetailView.vue";
+import ManageApplicants from "../views/vacancy/ManageApplicants.vue";
+import ApplicantDetail from "../views/applicant/ApplicantDetail.vue";
 
 import ManageCandidates from "../views/candidate/ManageCandidates.vue";
 import ManageActivities from "../views/activities/ManageActivities.vue";
@@ -103,6 +106,22 @@ const router = createRouter({
     },
     {
       path: "/",
+      redirect: "applicant",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "ApplicantDetail",
+          path: "applicant/detail/:id/:interviewId",
+          meta: {
+            pageTitle: "Applicant Detail"
+          },
+          component: ApplicantDetail,
+          props: true,
+        }
+      ]
+    },
+    {
+      path: "/",
       redirect: "vacancy",
       component: () => import("../views/layouts/JupiterLayout.vue"),
       children: [
@@ -123,13 +142,32 @@ const router = createRouter({
           component: CreateVacancyView,
         },
         {
+          name: "EditVacancy",
+          path: "vacancy/edit/:id",
+          meta: {
+            pageTitle: "Edit Vacancy",
+          },
+          component: EditVacancyView,
+          props: true,
+        },
+        {
           name: "VacancyDetail",
           path: "vacancy/detail/:id",
           meta: {
             pageTitle: "Vacancy Details",
           },
           component: VacancyDetailsView,
+          props: true,
         },
+        {
+          name: "ManageApplicants",
+          path: "vacancy/applicants/:id",
+          meta: {
+            pageTitle: "Manage Applicants"
+          },
+          component: ManageApplicants,
+          props: true
+        }
       ],
     },
     {
@@ -160,6 +198,7 @@ const router = createRouter({
             pageTitle: "Candidate Details",
           },
           component: CandidateDetail,
+          props: true,
         },
       ],
     },

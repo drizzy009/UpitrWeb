@@ -1,5 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import { vue3Debounce } from 'vue-debounce';
+import vue3StarRatings from "vue3-star-ratings";
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
 import VueSweetalert2 from 'vue-sweetalert2';
@@ -72,9 +74,10 @@ app.component('SkeletonLoading', SkeletonLoading);
 app.component('MultiSelect', Multiselect);
 app.component("TagInput", TagInput);
 app.component('HtmlEditor', Editor);
-app.component('QuillEditor', QuillEditor)
+app.component('QuillEditor', QuillEditor);
+app.component('star-rating', vue3StarRatings);
 app.use(Toast, options);
-
+app.directive('debounce', vue3Debounce({ lock: true}));
 const appStore = useAppStore();
 
 router.beforeEach((to) =>

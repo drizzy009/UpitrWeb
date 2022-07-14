@@ -1,47 +1,28 @@
 <template>
-   <div class="mt-1 relative rounded-md shadow-sm">
-    <select
-      v-bind="$attr"
-      :v-model="modelValue"
-      @change="$emit('update:modelValue', $event.target.value)"
-      class="select-input"
-      :class="[!error ? 'select-input' : 'select-input-error']"
-    >
-      <option value="0">
-        {{ selectedLabel !== "" ? selectedLabel : placeholder }}
-      </option> 
+  <div class="mt-1 relative rounded-md shadow-sm">
+    <select v-bind="$attr" :v-model="modelValue" @change="$emit('update:modelValue', $event.target.value)"
+      class="select-input" :class="[!error ? 'select-input' : 'select-input-error']">
+      <option value="-1">
+        {{ placeholder }}
+      </option>
       <option v-for="item in items" :key="item.id" :value="item.id">
-          {{ item.name }}
+        {{ item.name }}
       </option>
     </select>
-    <div
-      v-if="error"
-      class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
-    >
+    <div v-if="error" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
       <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-const props = defineProps({
+defineProps({
   items: Array,
   modelValue: [String, Number],
   error: Boolean,
   placeholder: String
 })
-
-const selectedLabel = ref("");
-
-
-watch(() => props.modelValue, (value) => {
-  console.log(value);
-  const selected = props.items.find(item => item.id === Number(value));
-  if (selected) {
-    selectedLabel.value = selected.name;
-  }
-})
 </script>
 
-<style></style>
+<style>
+</style>

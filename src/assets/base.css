@@ -49,6 +49,15 @@
     }
 }
 
+.vue3-star-ratings button {
+  display: none !important;
+}
+
+.vue3-star-ratings__wrapper {
+  margin: 5px auto !important;
+  padding: 10px !important;
+}
+
 .number-input {
     border: none;
 }

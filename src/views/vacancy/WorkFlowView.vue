@@ -426,7 +426,7 @@ function uploadAssessment(data) {
 }
 
 function onSubmit() {
-  router.push(`detail/${props.jobId}`);
+  router.push({ name: 'VacancyDetail', params: { id: props.jobId} });
 }
 
 onMounted(() => {

@@ -86,7 +86,9 @@
 
     <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
-        <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+        <div
+          class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
+        >
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
               <tr>
@@ -120,10 +122,7 @@
                 >
                   Level
                 </th>
-                <th
-                  scope="col"
-                  class="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                >
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
@@ -131,21 +130,20 @@
             <tbody class="divide-y divide-gray-200 bg-white">
               <tr v-if="loading">
                 <td colspan="6">
-                  <SkeletonLoading
-                    v-for="n in 5"
-                    :key="n"
-                  ></SkeletonLoading>
+                  <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
                 </td>
               </tr>
-              <tr
-                v-for="vacancy in serverResponse.data"
-                :key="vacancy.id"
-              >
+              <tr v-for="vacancy in serverResponse.data" :key="vacancy.id">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
-                      <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200">
-                        <span class="text-xl font-medium leading-none text-indigo-700">{{ vacancy.title[0] }}</span>
+                      <span
+                        class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200"
+                      >
+                        <span
+                          class="text-xl font-medium leading-none text-indigo-700"
+                          >{{ vacancy.title[0] }}</span
+                        >
                       </span>
                     </div>
                     <div class="ml-4">
@@ -164,20 +162,24 @@
                   </div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                  <div
+                    class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
+                  >
                     <LocationMarkerIcon
                       class="flex-shrink-0 mr-1 w-4 text-gray-400"
                       aria-hidden="true"
                     />
                     <span v-if="vacancy.is_remote !== null">{{
-                        vacancy.is_remote ? "Remote" : "On-site"
-                      }}</span>
+                      vacancy.is_remote ? "Remote" : "On-site"
+                    }}</span>
                     <span v-if="vacancy.is_remote === null">On-site</span>
                   </div>
                   <!-- <div class="text-gray-500">{{ vacancy.department }}</div> -->
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                  <div
+                    class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
+                  >
                     <CalendarIcon
                       class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                       aria-hidden="true"
@@ -195,18 +197,16 @@
                     <!-- <span class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800"></span> -->
                   </div>
                 </td>
-                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <Menu
-                    as="div"
-                    class="relative inline-block text-left"
-                  >
+                <td
+                  class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                >
+                  <Menu as="div" class="relative inline-block text-left">
                     <div>
-                      <MenuButton class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600">
+                      <MenuButton
+                        class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                      >
                         <span class="sr-only">Open options</span>
-                        <DotsVerticalIcon
-                          class="h-5 w-5"
-                          aria-hidden="true"
-                        />
+                        <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
                       </MenuButton>
                     </div>
 
@@ -218,75 +218,77 @@
                       leave-from-class="transform opacity-100 scale-100"
                       leave-to-class="transform opacity-0 scale-95"
                     >
-                      <MenuItems class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                      <MenuItems
+                        class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                      >
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'group flex items-center px-4 py-2 text-sm',
-                                ]"
-                          >
-                            <PencilAltIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Edit
-                          </a>
+                            <a
+                              :href="`edit/${vacancy.id}`"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <PencilAltIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Edit
+                            </a>
                           </MenuItem>
                           <MenuItem v-slot="{ active }">
-                          <a
-                            :href="`detail/${vacancy.id}`"
-                            :class="[
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'group flex items-center px-4 py-2 text-sm',
-                                ]"
-                          >
-                            <ClipboardListIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Details
-                          </a>
+                            <a
+                              :href="`detail/${vacancy.id}`"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <ClipboardListIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Details
+                            </a>
                           </MenuItem>
                           <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                                  active
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-700',
-                                  'group flex items-center px-4 py-2 text-sm',
-                                ]"
-                          >
-                            <DuplicateIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Duplicate
-                          </a>
+                            <a
+                              href="#"
+                              :class="[
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <DuplicateIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Duplicate
+                            </a>
                           </MenuItem>
                         </div>
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                                  active ? 'bg-red-100 text-red-900' : 'text-red-700',
-                                  'group flex items-center px-4 py-2 text-sm',
-                                ]"
-                          >
-                            <TrashIcon
-                              class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
-                              aria-hidden="true"
-                            />
-                            Delete
-                          </a>
+                            <a
+                              href="#"
+                              :class="[
+                                active ? 'bg-red-100 text-red-900' : 'text-red-700',
+                                'group flex items-center px-4 py-2 text-sm',
+                              ]"
+                            >
+                              <TrashIcon
+                                class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                                aria-hidden="true"
+                              />
+                              Delete
+                            </a>
                           </MenuItem>
                         </div>
                       </MenuItems>
@@ -319,18 +321,15 @@
               </p>
             </div>
             <div class="flex-1 flex justify-between sm:justify-end">
-              <div
-                v-for="link in serverResponse.links"
-                :key="link"
-              >
+              <div v-for="link in serverResponse.links" :key="link">
                 <AppButton
                   @click="navigateTo(link.url)"
                   :disabled="link.url === null || processing"
                   :class="
-                      link.active
-                        ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
-                        : 'text-gray-700 bg-white'
-                    "
+                    link.active
+                      ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
+                      : 'text-gray-700 bg-white'
+                  "
                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
                 >
                   {{ formatLabel(link.label) }}
@@ -466,6 +465,7 @@ import {
   PencilAltIcon,
   TrashIcon,
   SearchIcon,
+  UserGroupIcon,
 } from "@heroicons/vue/solid";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";

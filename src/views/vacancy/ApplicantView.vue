@@ -3,42 +3,45 @@
     role="list"
     class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
   >
-    <li v-for="candidate in candidates" :key="candidate.email">
+    <li v-for="applicant in applicants" :key="applicant.email">
       <a href="#" class="block group">
         <div class="flex items-center px-4 py-5 sm:py-6 sm:px-0">
           <div class="flex items-center flex-1 min-w-0">
+            <div class="flex items-center h-5">
+              <input type="checkbox" @change="onChanged" v-model="applicant.checked" class="w-4 h-4 mr-3 text-indigo-600 border-gray-300 rounded hover:cursor-pointer focus:ring-indigo-500" />
+            </div>
             <div class="flex-shrink-0">
               <UserCircleIcon
-                v-if="candidate.photo === null"
+                v-if="applicant.candidate.photo === null"
                 class="w-12 h-12 text-gray-400 rounded-full cursor-auto group-hover:opacity-75"
               ></UserCircleIcon>
               <img
-                v-if="candidate.photo !== null"
+                v-if="applicant.candidate.photo !== null"
                 class="w-12 h-12 rounded-full group-hover:opacity-75"
-                :src="candidate.photo"
+                :src="applicant.candidate.photo"
                 alt=""
               />
             </div>
             <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-3 md:gap-3">
               <div>
                 <p class="text-sm font-medium text-indigo-600 truncate">
-                  {{ candidate.firstname }} {{ candidate.lastname }}
+                  {{ applicant.candidate.firstname }} {{ applicant.candidate.lastname }}
                 </p>
                 <p class="flex items-center mt-2 text-sm text-gray-500">
                   <MailIcon
                     class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                     aria-hidden="true"
                   />
-                  <span class="truncate">{{ candidate.email }}</span>
+                  <span class="truncate">{{ applicant.candidate.email }}</span>
                 </p>
               </div>
               <div class="hidden md:block">
                 <div>
                   <p class="text-sm text-gray-900">
-                    {{candidate.gender_id === 0 ? 'Female': 'Male'}}
+                    {{applicant.candidate.gender_id === 0 ? 'Female': 'Male'}}
                   </p>
                   <p class="mt-2 text-sm text-gray-900">
-                    {{FormatAge(candidate.dob)}} years old
+                    {{FormatAge(applicant.candidate.dob)}} years old
                   </p>
                 </div>
               </div>
@@ -47,17 +50,17 @@
                   <p class="text-sm text-gray-900">
                     Applied on
                     {{ " " }}
-                    {{formatAppDate(candidate.created_at)}}
+                    {{formatAppDate(applicant.candidate.created_at)}}
                   </p>
                   <p class="flex items-center mt-2 text-sm text-gray-500">
-                    {{candidate.city.name}}, {{candidate.city.region.name}}
+                    {{applicant.candidate.city.name}}, {{applicant.candidate.city.region.name}}
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div>
-            <a :href="`/candidate/detail/${candidate.id}`">
+            <a @click="gotoDetailPage(applicant.id)">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
@@ -74,16 +77,30 @@
 import {
   MailIcon,
   UserCircleIcon,
-  // CheckCircleIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/solid";
+import { useRouter } from "vue-router";
 import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
-defineProps({
-  candidates: Array,
+const props = defineProps({
+  applicants: Array,
+  vacancyId: String,
+  interviewId: String,
 });
+
+const router = useRouter();
+const emits = defineEmits(['selected']);
 
 function formatAppDate(dateValue) {
   return FormatLongDate2(dateValue);
+}
+
+function onChanged() {
+  const checkedApplicants = props.applicants.filter(applicant => applicant.checked === true);
+  emits('selected', checkedApplicants);
+}
+
+function gotoDetailPage(applicantid) {
+  router.push({ name: 'ApplicantDetail', params: {id: applicantid, interviewId: props.interviewId}});
 }
 </script>
 

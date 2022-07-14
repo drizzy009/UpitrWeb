@@ -269,6 +269,12 @@
                               </ul>
                             </dd>
                           </div>
+                          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Skills</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                              <p>{{candidateDetail.skills}}</p>
+                            </dd>
+                          </div>
                         </dl>
                       </div>
                     </div>
@@ -351,13 +357,10 @@
 </template>
 <script setup>
 import {
-  PaperClipIcon,
-  ChevronDownIcon,
-  UserCircleIcon,
   CalendarIcon,
-  //ThumbUpIcon,
-  //ThumbDownIcon,
-  //StarIcon,
+  PaperClipIcon,
+  UserCircleIcon,
+  ChevronDownIcon,
 } from "@heroicons/vue/solid";
 
 import { ref, onMounted, inject } from "vue";
@@ -396,11 +399,11 @@ const tabs = ref([
     name: "Summary",
     current: true,
   },
-  // {
-  //   id: "interview",
-  //   name: "Interview Scorecard",
-  //   current: false,
-  // },
+  {
+    id: "interview",
+    name: "Interview Scorecard",
+    current: false,
+  },
 ]);
 
 function setActiveTab(index) {
@@ -411,13 +414,13 @@ const publishingOptions = [
   {
     id: 1,
     name: "Sourced",
-    description: "Move candidate to assessment",
+    description: "Move candidate to sourced",
     current: true,
   },
   {
     id: 2,
     name: "Applied",
-    description: "Move candidate to assessment",
+    description: "Move candidate to applied",
     current: true,
   },
   {

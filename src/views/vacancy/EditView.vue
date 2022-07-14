@@ -336,6 +336,7 @@
                       <div class="mt-1">
                         <QuillEditor 
                           theme="snow"
+                          ref="description"
                           id="description"
                           name="description"
                           contentType="html"
@@ -354,6 +355,7 @@
                       </label>
                       <div class="mt-1">
                         <QuillEditor
+                          ref="responsibilities"
                           contentType="html"
                           v-model:content="jobDetail.responsibilities"
                           id="responsibilities"
@@ -373,6 +375,7 @@
                       </label>
                       <div class="mt-1">
                         <QuillEditor
+                          ref="requirements"
                           contentType="html"
                           v-model:content="jobDetail.requirements"
                           id="requirements"
@@ -392,6 +395,7 @@
                       </label>
                       <div class="mt-1">
                         <QuillEditor
+                          ref="benefit"
                           contentType="html"
                           v-model:content="jobDetail.benefit"
                           id="benefit"
@@ -714,6 +718,9 @@
 
       <ApplicationFormView
         :jobId="vacancyId"
+        :existingQuestions="vacancyDetail.job_questions"
+        :settingsId="settingsId"
+        :vacancySettings="vacancySettings"
         @prevPage="gotoPage(1)"
         @nextPage="gotoPage(3)"
         v-if="stepNo === 2"
@@ -733,7 +740,6 @@
 <script setup>
 import { ref, onMounted, watch, inject } from "vue";
 import { storeToRefs } from "pinia";
-import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 import { CheckIcon } from "@heroicons/vue/solid";
@@ -743,7 +749,15 @@ import { useDepartments } from "../../stores/department";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import MiscService from "../../service/miscellaneous.service";
 import VacancyService from "../../service/vacancies.service";
+import { FormatDate } from "../../util/Formatter";
 
+const props = defineProps({
+  id: Number
+});
+
+const vacancySettings = ref(null);
+const settingsId = ref(0);
+const vacancyDetail = ref({});
 const jobDetail = ref({
   title: "",
   department_id: 0,
@@ -801,10 +815,12 @@ const {
   experienceLevels,
 } = storeToRefs(useMiscellaneous());
 
+const benefit = ref(null);
+const description = ref(null);
+const requirements = ref(null);
+const responsibilities = ref(null);
 const { departments } = storeToRefs(useDepartments());
-const toast = useToast();
 const swal = inject("$swal");
-// const router = useRouter();
 const stepNo = ref(1);
 const vacancyId = ref(0);
 const interviewId = ref(0);
@@ -881,34 +897,13 @@ function showErrorMessages(errors) {
 
 async function submitVacancyDetail() {
   const valid = await v$.value.$validate();
-  
+
   if (valid) {
-    processing.value = true;
-    if (vacancyId.value === 0) {
+    if (vacancyId.value > 0) {
+      processing.value = true;
       if (jobKeywords.value.length > 0) {
         jobDetail.value.keywords = jobKeywords.value.join();
       }
-      VacancyService.create(jobDetail.value)
-        .then((result) => {
-          const { data } = result.data;
-          interviewId.value = data.interviews[0].id;
-          vacancyId.value = data.id;
-          gotoPage(2);
-        })
-        .catch((error) => {
-          const { data } = error;
-          if (data.code === "062") {
-            showErrorMessages(data.data);
-          } else {
-            showErrorMessage(data.message);
-          }
-        })
-        .finally(() => {
-          processing.value = false;
-        });
-    }
-
-    if (vacancyId.value > 0) {
       VacancyService.update(vacancyId.value, jobDetail.value)
         .then(() => {
           // const { data } = result.data;
@@ -930,6 +925,7 @@ async function submitVacancyDetail() {
   }
 
   if (!valid) {
+    console.clear();
     let errorMessage = 'The following fields are required ';
     const errors = [];
     v$.value.$errors.forEach(error => {
@@ -950,6 +946,56 @@ onMounted(() => {
   departmentList.value = departments.value.data.map((item) => {
     return { label: item.name, value: item.id };
   });
+
+  VacancyService.single(Number(props.id)).then(result => {
+    const { data } = result.data;
+    // jobDetail.value = data;
+    vacancyDetail.value = data;
+    console.clear();
+
+    jobDetail.value.department_id = data.department.id;
+    jobDetail.value.country_id = data.city.region.country.id;
+    jobDetail.value.region_id = data.city.region.id;
+    jobDetail.value.city_id = data.city.id;
+    jobDetail.value.job_function_id = data.job_function.id;
+    jobDetail.value.employment_type_id = data.employment_type.id;
+    jobDetail.value.experience_level_id = data.experience_level.id;
+    jobDetail.value.education_level_id = data.education_level.id;
+    jobDetail.value.industry_id = data.industry.id;
+    jobDetail.value.salary_currency_id = data.currency.id;
+    jobDetail.value.deadline = FormatDate(data.deadline, "YYYY-MM-DD");
+    jobDetail.value.code = data.code;
+    jobDetail.value.title = data.title;
+    jobDetail.value.location = data.location;
+    jobDetail.value.keywords = data.keywords.split(',');
+    jobDetail.value.head_count = data.head_count;
+    jobDetail.value.salary_min = data.salary_min;
+    jobDetail.value.salary_max = data.salary_max;
+    jobKeywords.value = jobDetail.value.keywords;
+
+    vacancyId.value = data.id;
+    benefit.value.setHTML(data.benefit || '');
+    description.value.setHTML(data.description || '');
+    requirements.value.setHTML(data.requirements || '');
+    responsibilities.value.setHTML(data.responsibilities || '');
+    interviewId.value = data.interviews[0].id;
+    if ("job_settings" in data) {
+      vacancySettings.value = data.job_settings[0];
+      settingsId.value = data.job_settings[0].id;
+    }
+  }).catch((error) => {
+    console.error(error);
+    let errorMessage = "Something went wrong, please try again later";
+    if (error.status === 404) {
+      errorMessage = "Vacancy information does not exist";
+    }
+
+    swal({
+        title: "Not found",
+        text: errorMessage,
+        icon: "error",
+      });
+  })
 });
 
 watch(
