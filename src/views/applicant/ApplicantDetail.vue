@@ -393,6 +393,8 @@
                         </div>
                         <div class="text-right sm:col-span-2">
                           <h2>Score/Overall</h2>
+                          {{ ' ' }}
+                          <a @click="viewInterviewResults" href="#" class="text-blue-700 text-lg">{{totalScore}}</a>
                         </div>
                       </div>
                       <div class="border-t border-gray-200">
@@ -497,6 +499,7 @@ const loading = ref(false);
 const processing = ref(false);
 const swal = inject("$swal");
 const selectedTab = ref(0);
+const totalScore = ref(0);
 const { workflowStages } = useVacancies();
 const props = defineProps({
   id: String,
@@ -618,8 +621,13 @@ function getApplicantInfo(id) {
 
 function getInterviewResults(id) {
   InterviewService.all(id)
-    .then(() => {
-      // console.log(response);
+    .then((response) => {
+      const { data } = response.data.data;
+      const total = data.reduce(function(sum, item) {
+        return sum + item.score
+      }, 0);
+      
+      totalScore.value = total;
     })
     .catch(() => {});
 }
@@ -636,6 +644,10 @@ function getApplicantData() {
   getApplicantInfo(Number(props.id));
   getInterviewResults(Number(props.id));
   getInterviews();
+}
+
+function viewInterviewResults() {
+  // alert('View results')
 }
 
 onMounted(() => {
