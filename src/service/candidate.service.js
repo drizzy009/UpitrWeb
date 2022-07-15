@@ -98,6 +98,38 @@ const CandidateService = {
         });
     });
   },
+  getEducations(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/candidate-education/${id}`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
+  getExperiences(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/candidate-experiences/${id}`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  }
 };
 
 export default CandidateService;

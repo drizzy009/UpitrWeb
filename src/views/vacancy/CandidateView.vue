@@ -38,7 +38,7 @@
                     {{candidate.job_function.name}} in
                   </p>
                   <p class="mt-2 text-sm text-gray-900">
-                    {{candidate.industry.name}} with {{candidate.years_of_experience}} experience
+                    {{candidate.industry.name}} with {{candidate.years_of_experience}} years of experience
                   </p>
                 </div>
               </div>

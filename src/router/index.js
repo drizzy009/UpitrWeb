@@ -14,7 +14,7 @@ import UserDetailView from "../views/user/DetailView.vue";
 import ManageVacancyView from "../views/vacancy/ManageVacancies.vue";
 import CreateVacancyView from "../views/vacancy/CreateView.vue";
 import EditVacancyView from "../views/vacancy/EditView.vue";
-import VacancyDetailsView from "../views/vacancy/DetailView.vue";
+import VacancyDetailsView from "../views/vacancy/VacancyDetailView.vue";
 import ManageApplicants from "../views/vacancy/ManageApplicants.vue";
 import ApplicantDetail from "../views/applicant/ApplicantDetail.vue";
 

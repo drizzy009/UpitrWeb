@@ -3,26 +3,20 @@
     <!-- Page header -->
     <div class="bg-white shadow">
       <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
-        <div class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+        <div
+          class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
+        >
           <div class="flex-1 min-w-0">
-            <form
-              class="w-full flex md:ml-0"
-              action="#"
-              method="GET"
-            >
-              <label
-                for="search-field"
-                class="sr-only"
-              >Search</label>
-              <div class="relative w-full text-gray-400 focus-within:text-gray-600">
+            <form class="w-full flex md:ml-0" action="#" method="GET">
+              <label for="search-field" class="sr-only">Search</label>
+              <div
+                class="relative w-full text-gray-400 focus-within:text-gray-600"
+              >
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
                   aria-hidden="true"
                 >
-                  <SearchIcon
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                  />
+                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
                 </div>
                 <input
                   id="search-field"
@@ -83,7 +77,9 @@
     </div>
     <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
       <div class="flex flex-col mt-2">
-        <div class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+        <div
+          class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
+        >
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
               <tr>
@@ -93,12 +89,18 @@
                 >
                   Name
                 </th>
-                <!-- <th
+                <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Title
-                </th> -->
+                  Job Description
+                </th>
+                <th
+                  scope="col"
+                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Gender &amp; Age
+                </th>
                 <th
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -109,10 +111,7 @@
                   scope="col"
                   class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 ></th>
-                <th
-                  scope="col"
-                  class="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                >
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
@@ -120,16 +119,10 @@
             <tbody class="divide-y divide-gray-200 bg-white">
               <tr v-if="loading">
                 <td colspan="6">
-                  <SkeletonLoading
-                    v-for="n in 5"
-                    :key="n"
-                  ></SkeletonLoading>
+                  <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
                 </td>
               </tr>
-              <tr
-                v-for="candidate in serverResponse.data"
-                :key="candidate.id"
-              >
+              <tr v-for="candidate in serverResponse.data" :key="candidate.id">
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                   <div class="flex items-center">
                     <div class="h-10 w-10 flex-shrink-0">
@@ -153,8 +146,19 @@
                   </div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  <!-- <div class="text-gray-900">{{ candidate.job.title }}</div> -->
-                  <!-- <div class="text-gray-500">{{ candidate.department }}</div> -->
+                  <div class="text-gray-900">{{ candidate.job_function.name }}</div>
+                  <div class="text-gray-500">in {{candidate.industry.name}}</div>
+                  <div class="text-gray-500">with {{candidate.years_of_experience}} years of experience</div>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <div>
+                    <p class="text-sm text-gray-900">
+                      {{candidate.gender_id === 0 ? 'Female': 'Male'}}
+                    </p>
+                    <p class="mt-2 text-sm text-gray-900">
+                      {{FormatAge(candidate.dob)}} years old
+                    </p>
+                  </div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <p class="text-sm text-gray-900">
@@ -164,18 +168,16 @@
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   {{ candidate.role }}
                 </td>
-                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <Menu
-                    as="div"
-                    class="relative inline-block text-left"
-                  >
+                <td
+                  class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                >
+                  <Menu as="div" class="relative inline-block text-left">
                     <div>
-                      <MenuButton class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600">
+                      <MenuButton
+                        class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                      >
                         <span class="sr-only">Open options</span>
-                        <DotsVerticalIcon
-                          class="h-5 w-5"
-                          aria-hidden="true"
-                        />
+                        <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
                       </MenuButton>
                     </div>
 
@@ -187,77 +189,26 @@
                       leave-from-class="transform opacity-100 scale-100"
                       leave-to-class="transform opacity-0 scale-95"
                     >
-                      <MenuItems class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                      <MenuItems
+                        class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                      >
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
+                            <a
+                              :href="`/candidate/detail/${candidate.id}`"
+                              :class="[
                                 active
                                   ? 'bg-gray-100 text-gray-900'
                                   : 'text-gray-700',
                                 'group flex items-center px-4 py-2 text-sm',
                               ]"
-                          >
-                            <PencilAltIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Edit
-                          </a>
-                          </MenuItem>
-                          <MenuItem v-slot="{ active }">
-                          <a
-                            :href="`/candidate/detail/${candidate.id}`"
-                            :class="[
-                                active
-                                  ? 'bg-gray-100 text-gray-900'
-                                  : 'text-gray-700',
-                                'group flex items-center px-4 py-2 text-sm',
-                              ]"
-                          >
-                            <ClipboardListIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Details
-                          </a>
-                          </MenuItem>
-                          <!-- <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                              active
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700',
-                              'group flex items-center px-4 py-2 text-sm',
-                            ]"
-                          >
-                            <DuplicateIcon
-                              class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                              aria-hidden="true"
-                            />
-                            Duplicate
-                          </a>
-                        </MenuItem> -->
-                        </div>
-                        <div class="py-1">
-                          <MenuItem v-slot="{ active }">
-                          <a
-                            href="#"
-                            :class="[
-                                active
-                                  ? 'bg-red-100 text-red-900'
-                                  : 'text-red-700',
-                                'group flex items-center px-4 py-2 text-sm',
-                              ]"
-                          >
-                            <TrashIcon
-                              class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
-                              aria-hidden="true"
-                            />
-                            Delete
-                          </a>
+                            >
+                              <ClipboardListIcon
+                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                aria-hidden="true"
+                              />
+                              Details
+                            </a>
                           </MenuItem>
                         </div>
                       </MenuItems>
@@ -290,17 +241,18 @@
               </p>
             </div>
             <div class="flex-1 flex justify-between sm:justify-end">
-              <div
-                v-for="link in serverResponse.links"
-                :key="link"
-              >
+              <div v-for="link in serverResponse.links" :key="link">
                 <AppButton
                   @click="navigateTo(link.url)"
                   :disabled="link.url === null || processing"
-                  :class="link.active ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700' : 'text-gray-700 bg-white'"
+                  :class="
+                    link.active
+                      ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
+                      : 'text-gray-700 bg-white'
+                  "
                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
                 >
-                  {{formatLabel(link.label)}}
+                  {{ formatLabel(link.label) }}
                 </AppButton>
               </div>
               <!-- <AppButton
@@ -323,20 +275,15 @@
       </div>
     </div>
 
-    <TransitionRoot
-      as="template"
-      :show="open"
-    >
-      <Dialog
-        as="div"
-        class="relative z-10"
-        @close="open = false"
-      >
+    <TransitionRoot as="template" :show="open">
+      <Dialog as="div" class="relative z-10" @close="open = false">
         <div class="fixed inset-0" />
 
         <div class="fixed inset-0 overflow-hidden">
           <div class="absolute inset-0 overflow-hidden">
-            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div
+              class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10"
+            >
               <TransitionChild
                 as="template"
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -347,11 +294,17 @@
                 leave-to="translate-x-full"
               >
                 <DialogPanel class="pointer-events-auto w-screen max-w-md">
-                  <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
-                    <div class="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
+                  <div
+                    class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+                  >
+                    <div
+                      class="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6"
+                    >
                       <div class="px-4 sm:px-6">
                         <div class="flex items-start justify-between">
-                          <DialogTitle class="text-lg font-medium text-gray-900">
+                          <DialogTitle
+                            class="text-lg font-medium text-gray-900"
+                          >
                             Filter Candidates
                           </DialogTitle>
                           <div class="ml-3 flex h-7 items-center">
@@ -361,10 +314,7 @@
                               @click="open = false"
                             >
                               <span class="sr-only">Close panel</span>
-                              <XIcon
-                                class="h-6 w-6"
-                                aria-hidden="true"
-                              />
+                              <XIcon class="h-6 w-6" aria-hidden="true" />
                             </button>
                           </div>
                         </div>
@@ -377,7 +327,9 @@
                           ></FormInput>
 
                           <div>
-                            <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
                               Filter by Vacancy
                             </h3>
                             <SelectInput
@@ -389,7 +341,9 @@
                           </div>
 
                           <div>
-                            <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
                               Filter by Degree
                             </h3>
                             <SelectInput
@@ -401,7 +355,9 @@
                           </div>
 
                           <div>
-                            <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
                               Start Date
                             </h3>
                             <DateInput
@@ -411,7 +367,9 @@
                             />
                           </div>
                           <div>
-                            <h3 class="text-xs mt-4 leading-6 font-medium text-gray-900">
+                            <h3
+                              class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            >
                               End Date
                             </h3>
                             <DateInput
@@ -478,7 +436,7 @@ import { storeToRefs } from "pinia";
 import { XIcon, UserCircleIcon } from "@heroicons/vue/outline";
 import { useVacancies } from "../../stores/vacancies";
 import { useMiscellaneous } from "../../stores/miscellaneous";
-import { FormatLongDate2 } from "../../util/Formatter";
+import { FormatAge, FormatLongDate2 } from "../../util/Formatter";
 import CandidateService from "../../service/candidate.service";
 
 const vacancyStore = useVacancies();
