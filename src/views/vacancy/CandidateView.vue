@@ -19,7 +19,7 @@
                 alt=""
               />
             </div>
-            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-3 md:gap-3">
+            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-4 md:gap-1">
               <div>
                 <p class="text-sm font-medium text-indigo-600 truncate">
                   {{ candidate.firstname }} {{ candidate.lastname }}
@@ -31,6 +31,16 @@
                   />
                   <span class="truncate">{{ candidate.email }}</span>
                 </p>
+              </div>
+              <div class="hidden md:block">
+                <div>
+                  <p class="text-sm text-gray-900">
+                    {{candidate.job_function.name}} in
+                  </p>
+                  <p class="mt-2 text-sm text-gray-900">
+                    {{candidate.industry.name}} with {{candidate.years_of_experience}} experience
+                  </p>
+                </div>
               </div>
               <div class="hidden md:block">
                 <div>

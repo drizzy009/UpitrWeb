@@ -50,7 +50,7 @@ const VacancyService = {
         });
     });
   },
-  vacancyInterview(id) {
+  getVacancyInterview(id) {
     return new Promise((resolve, reject) => {
       axios
         .get(`/vacancy-interviews/${id}`)

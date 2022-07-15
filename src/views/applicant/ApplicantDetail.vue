@@ -372,7 +372,7 @@
               </div>
             </TabPanel>
             <TabPanel :class="['rounded-xl', 'ring-white ring-opacity-60']">
-              <div class="mx-auto mt-6 max-w-7xl">
+              <div class="mx-auto mt-6 max-w-9xl">
                 <div class="flex flex-col mt-2">
                   <div
                     class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg"
@@ -394,7 +394,7 @@
                         <div class="text-right sm:col-span-2">
                           <h2>Score/Overall</h2>
                           {{ ' ' }}
-                          <a @click="viewInterviewResults" href="#" class="text-blue-700 text-lg">{{totalScore}}</a>
+                          <a @click="showResultDetail = true" href="#" class="text-lg text-blue-700">{{totalScore}}</a>
                         </div>
                       </div>
                       <div class="border-t border-gray-200">
@@ -458,6 +458,7 @@
       </div>
     </div>
   </main>
+  <InterviewResult :results="interviewResults" :toggle="showResultDetail" @toggleResultModal="showResultDetail = false"></InterviewResult>
 </template>
 <script setup>
 import { ref, onMounted, inject } from "vue";
@@ -478,34 +479,32 @@ import {
   ListboxOptions,
 } from "@headlessui/vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-//import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
-// import CandidateService from "../../service/candidate.service";
 import { FormatMonthYear } from "../../util/Formatter";
 import { useVacancies } from "../../stores/vacancies";
 import CandidateLoading from "../../components/layout/CandidateDetailSkeleton.vue";
 import ApplicantService from "../../service/applicant.service";
 import InterviewService from "../../service/interview.service";
-// const memoryOptions = [
-//   { name: "Definitely", inStock: true, icon: StarIcon },
-//   { name: "Yes", inStock: true, icon: ThumbUpIcon },
-//   { name: "No", inStock: true, icon: ThumbDownIcon },
-// ];
+import InterviewResult from "./InterviewResult.vue";
 
-const router = useRouter();
-const toast = useToast();
-const candidateDetail = ref(null);
-const interviewSection = ref(null);
-const loading = ref(false);
-const processing = ref(false);
-const swal = inject("$swal");
-const selectedTab = ref(0);
-const totalScore = ref(0);
-const { workflowStages } = useVacancies();
 const props = defineProps({
   id: String,
   vacancyId: String,
   interviewId: String,
 });
+
+const router = useRouter();
+const toast = useToast();
+const swal = inject("$swal");
+const { workflowStages } = useVacancies();
+
+const totalScore = ref(0);
+const selectedTab = ref(0);
+const loading = ref(false);
+const processing = ref(false);
+const interviewResults = ref([]);
+const candidateDetail = ref(null);
+const interviewSection = ref(null);
+const showResultDetail = ref(false);
 
 const tabs = ref([
   {
@@ -628,12 +627,13 @@ function getInterviewResults(id) {
       }, 0);
       
       totalScore.value = total;
+      interviewResults.value = data;
     })
     .catch(() => {});
 }
 
 function getInterviews() {
-  InterviewService.vacancyInterview(Number(props.interviewId)).then(
+  InterviewService.getVacancyInterview(Number(props.interviewId)).then(
     (response) => {
       interviewSection.value = response.data.data;
     }

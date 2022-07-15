@@ -7,7 +7,7 @@
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
           <div class="flex-1 min-w-0">
-            <form class="w-full flex md:ml-0" action="#" method="GET">
+            <form class="flex w-full md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
               <div
                 class="relative w-full text-gray-400 focus-within:text-gray-600"
@@ -16,12 +16,12 @@
                   class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
                   aria-hidden="true"
                 >
-                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                  <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
                 <input
                   id="search-field"
                   name="search-field"
-                  class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
+                  class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
                   placeholder="Search Vacancies"
                   type="search"
                 />
@@ -30,14 +30,14 @@
 
             <!-- Profile -->
           </div>
-          <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
+          <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <button
               type="button"
               @click="goto('CreateVacancy')"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button>
@@ -48,7 +48,7 @@
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <FilterIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button>
@@ -58,7 +58,7 @@
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button>
@@ -69,7 +69,7 @@
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon
-                class="flex-shrink-0 h-5 w-5 text-green"
+                class="flex-shrink-0 w-5 h-5 text-green"
                 aria-hidden="true"
               />
             </button>
@@ -78,10 +78,10 @@
       </div>
     </div>
 
-    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
-          class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
+          class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg"
         >
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
@@ -121,18 +121,18 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
+            <tbody class="bg-white divide-y divide-gray-200">
               <tr v-if="loading">
                 <td colspan="6">
                   <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
                 </td>
               </tr>
               <tr v-for="vacancy in serverResponse.data" :key="vacancy.id">
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
                   <div class="flex items-center">
-                    <div class="h-10 w-10 flex-shrink-0">
+                    <div class="flex-shrink-0 w-10 h-10">
                       <span
-                        class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-indigo-200 rounded-full"
                       >
                         <span
                           class="text-xl font-medium leading-none text-indigo-700"
@@ -150,17 +150,17 @@
                     </div>
                   </div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
-                    <span class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800">{{ vacancy.employment_type.name }}</span>
+                    <span class="inline-flex px-2 text-xs font-semibold leading-5 text-indigo-800 bg-indigo-100 rounded-full">{{ vacancy.employment_type.name }}</span>
                   </div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div
-                    class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
+                    class="flex items-center mt-2 text-sm text-gray-500 sm:mt-0"
                   >
                     <LocationMarkerIcon
-                      class="flex-shrink-0 mr-1 w-4 text-gray-400"
+                      class="flex-shrink-0 w-4 mr-1 text-gray-400"
                       aria-hidden="true"
                     />
                     <span v-if="vacancy.is_remote !== null">{{
@@ -170,9 +170,9 @@
                   </div>
                   <!-- <div class="text-gray-500">{{ vacancy.department }}</div> -->
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div
-                    class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
+                    class="flex items-center mt-2 text-sm text-gray-500 sm:mt-0"
                   >
                     <CalendarIcon
                       class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
@@ -185,35 +185,35 @@
                     </p>
                   </div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
                     {{ vacancy.experience_level.name }}
-                    <!-- <span class="inline-flex rounded-full bg-indigo-100 px-2 text-xs font-semibold leading-5 text-indigo-800"></span> -->
+                    <!-- <span class="inline-flex px-2 text-xs font-semibold leading-5 text-indigo-800 bg-indigo-100 rounded-full"></span> -->
                   </div>
                 </td>
                 <td
-                  class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                  class="relative py-4 pl-3 pr-4 text-sm font-medium text-right whitespace-nowrap sm:pr-6"
                 >
                   <Menu as="div" class="relative inline-block text-left">
                     <div>
                       <MenuButton
-                        class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                        class="flex items-center p-1 text-indigo-400 bg-indigo-100 rounded-full hover:text-gray-600"
                       >
                         <span class="sr-only">Open options</span>
-                        <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                        <DotsVerticalIcon class="w-5 h-5" aria-hidden="true" />
                       </MenuButton>
                     </div>
 
                     <transition
-                      enter-active-class="transition ease-out duration-100"
-                      enter-from-class="transform opacity-0 scale-95"
-                      enter-to-class="transform opacity-100 scale-100"
-                      leave-active-class="transition ease-in duration-75"
-                      leave-from-class="transform opacity-100 scale-100"
-                      leave-to-class="transform opacity-0 scale-95"
+                      enter-active-class="transition duration-100 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-75 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
                     >
                       <MenuItems
-                        class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                        class="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                       >
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
@@ -227,7 +227,7 @@
                               ]"
                             >
                               <PencilAltIcon
-                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                                 aria-hidden="true"
                               />
                               Edit
@@ -244,7 +244,7 @@
                               ]"
                             >
                               <ClipboardListIcon
-                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                                 aria-hidden="true"
                               />
                               Details
@@ -261,7 +261,7 @@
                               ]"
                             >
                               <DuplicateIcon
-                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                                 aria-hidden="true"
                               />
                               Duplicate
@@ -278,7 +278,7 @@
                               ]"
                             >
                               <TrashIcon
-                                class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                                class="w-5 h-5 mr-3 text-red-400 group-hover:text-red-500"
                                 aria-hidden="true"
                               />
                               Delete
@@ -294,7 +294,7 @@
           </table>
           <!-- Pagination -->
           <nav
-            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+            class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
             aria-label="Pagination"
           >
             <div class="hidden sm:block">
@@ -314,7 +314,7 @@
                 results
               </p>
             </div>
-            <div class="flex-1 flex justify-between sm:justify-end">
+            <div class="flex justify-between flex-1 sm:justify-end">
               <div v-for="link in serverResponse.links" :key="link">
                 <AppButton
                   @click="navigateTo(link.url)"
@@ -324,7 +324,7 @@
                       ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
                       : 'text-gray-700 bg-white'
                   "
-                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
+                  class="relative inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50"
                 >
                   {{ formatLabel(link.label) }}
                 </AppButton>
@@ -342,7 +342,7 @@
       <div class="fixed inset-0 overflow-hidden">
         <div class="absolute inset-0 overflow-hidden">
           <div
-            class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10"
+            class="fixed inset-y-0 right-0 flex max-w-full pl-10 pointer-events-none"
           >
             <TransitionChild
               as="template"
@@ -353,31 +353,31 @@
               leave-from="translate-x-0"
               leave-to="translate-x-full"
             >
-              <DialogPanel class="pointer-events-auto w-screen max-w-md">
+              <DialogPanel class="w-screen max-w-md pointer-events-auto">
                 <div
-                  class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+                  class="flex flex-col h-full bg-white divide-y divide-gray-200 shadow-xl"
                 >
                   <div
-                    class="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6"
+                    class="flex flex-col flex-1 min-h-0 py-6 overflow-y-scroll"
                   >
                     <div class="px-4 sm:px-6">
                       <div class="flex items-start justify-between">
                         <DialogTitle class="text-lg font-medium text-gray-900">
                           Filter Vacancies
                         </DialogTitle>
-                        <div class="ml-3 flex h-7 items-center">
+                        <div class="flex items-center ml-3 h-7">
                           <button
                             type="button"
-                            class="rounded-md bg-white text-gray-400 hover:text-gray-500"
+                            class="text-gray-400 bg-white rounded-md hover:text-gray-500"
                             @click="open = false"
                           >
                             <span class="sr-only">Close panel</span>
-                            <XIcon class="h-6 w-6" aria-hidden="true" />
+                            <XIcon class="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
                       </div>
                     </div>
-                    <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                    <div class="relative flex-1 px-4 mt-6 sm:px-6">
                       <div class="flex flex-col">
                         <FormInput
                           v-model="searchForm.keyword"
@@ -385,7 +385,7 @@
                         ></FormInput>
                         <div>
                           <h3
-                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            class="mt-4 text-xs font-medium leading-6 text-gray-900"
                           >
                             Filter by department
                           </h3>
@@ -398,35 +398,35 @@
                         </div>
                         <div>
                           <h3
-                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            class="mt-4 text-xs font-medium leading-6 text-gray-900"
                           >
                             Start Date
                           </h3>
                           <DateInput
                             type="date"
                             v-model="searchForm.deadline_start"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           />
                         </div>
                         <div>
                           <h3
-                            class="text-xs mt-4 leading-6 font-medium text-gray-900"
+                            class="mt-4 text-xs font-medium leading-6 text-gray-900"
                           >
                             End Date
                           </h3>
                           <DateInput
                             type="date"
                             v-model="searchForm.deadline_end"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="flex flex-shrink-0 justify-end px-4 py-4">
+                  <div class="flex justify-end flex-shrink-0 px-4 py-4">
                     <button
                       type="button"
-                      class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                      class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                       @click="open = false"
                     >
                       Cancel
@@ -436,7 +436,7 @@
                       :processing="loading"
                       @click="searchVacancies"
                       label="Search"
-                      class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
+                      class="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700"
                     >
                     </AppButton>
                   </div>
@@ -461,7 +461,6 @@ import {
   PencilAltIcon,
   TrashIcon,
   SearchIcon,
-  UserGroupIcon,
 } from "@heroicons/vue/solid";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";

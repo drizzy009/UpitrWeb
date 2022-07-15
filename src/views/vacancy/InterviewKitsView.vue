@@ -1,13 +1,13 @@
 <template>
-  <div class="space-y-8 divide-y divide-gray-200 bg-white">
+  <div class="space-y-8 bg-white divide-y divide-gray-200">
     <div v-if="showEmptyKit" class="mt-6">
       <button
         type="button"
         @click="toggleEmptyKit()"
-        class="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400"
+        class="relative block w-full p-12 text-center border-2 border-gray-300 border-dashed rounded-lg hover:border-gray-400"
       >
         <svg
-          class="mx-auto h-12 w-12 text-gray-400"
+          class="w-12 h-12 mx-auto text-gray-400"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -31,24 +31,24 @@
     </div>
 
     <div v-if="showAddKit" id="newInterviewKit" class="mt-4">
-      <div class="md:grid md:grid-cols-12 md:gap-6 pt-8 mb-4">
+      <div class="pt-8 mb-4 md:grid md:grid-cols-12 md:gap-6">
         <div class="mt-5 md:mt-0 md:col-span-10">
-          <div class="px-6 bg-gray-50 shadow">
+          <div class="px-6 shadow bg-gray-50">
             <FormInput
               v-model="interviewKit.title"
               placeholder="Interview Name"
             />
           </div>
           <div v-for="(section, index) in sections" :key="section">
-            <div class="shadow overflow-hidden sm:rounded-md mb-4">
-              <div class="px-4 py-2 bg-gray-50 sm:p-6 shadow">
+            <div class="mb-4 overflow-hidden shadow sm:rounded-md">
+              <div class="px-4 py-2 shadow bg-gray-50 sm:p-6">
                 <div class="grid grid-cols-6 gap-6">
                   <div class="col-span-6 sm:col-span-6">
                     <input
                       v-model="section.title"
                       type="text"
                       placeholder="Title"
-                      class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
                   </div>
                   <div class="col-span-6 sm:col-span-6">
@@ -57,7 +57,7 @@
                       v-model="section.question"
                       name="question"
                       rows="5"
-                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                      class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       placeholder="Question"
                     />
                   </div>
@@ -69,13 +69,13 @@
                   :processing="savingQuestion"
                   @click="saveSection(section)"
                   :disabled="interviewSectionId === 0 || section.title === '' || section.question === ''"
-                  class="inline-flex justify-center mr-2 w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 rounded-md sm:text-sm sm:leading-5"
+                  class="inline-flex justify-center w-auto px-4 py-2 mr-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 rounded-md sm:text-sm sm:leading-5"
                 >
                   Save Section
                 </AppButton>
                 <span
                   @click="deleteSection(index)"
-                  class="inline-flex cursor-pointer justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-red-700 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                  class="inline-flex justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-red-700 transition duration-150 ease-in-out cursor-pointer sm:text-sm sm:leading-5"
                 >
                   Delete Section
                 </span>
@@ -87,21 +87,21 @@
           <ul>
             <li
               @click="saveInterview"
-              class="text-green-700 text-sm cursor-pointer font-medium mb-2"
+              class="mb-2 text-sm font-medium text-green-700 cursor-pointer"
             >
               Save Interview Kit
             </li>
-            <!-- <li @click="openModal()" class="text-indigo-700 text-sm cursor-pointer font-medium mb-2">Preview Interview</li> -->
+            <!-- <li @click="openModal()" class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer">Preview Interview</li> -->
             <li
               @click="addNewSection"
-              class="text-indigo-700 text-sm cursor-pointer font-medium mb-2"
+              class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer"
             >
               Add New Section
             </li>
             <li
               @click="deleteInterview"
               :disabled="deletingInterview"
-              class="text-red-700 text-sm cursor-pointer font-medium mb-2"
+              class="mb-2 text-sm font-medium text-red-700 cursor-pointer"
             >
               Delete Interview
             </li>
@@ -123,13 +123,13 @@
         leave-to="opacity-0"
       >
         <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
         />
       </TransitionChild>
 
-      <div class="fixed z-10 inset-0 overflow-y-auto">
+      <div class="fixed inset-0 z-10 overflow-y-auto">
         <div
-          class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0"
+          class="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0"
         >
           <TransitionChild
             as="template"
@@ -141,21 +141,21 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-7xl sm:w-full sm:p-6"
+              class="relative px-4 pt-5 pb-4 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-7xl sm:w-full sm:p-6"
             >
               <div>
                 <div
-                  class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
+                  class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full"
                 >
                   <CheckIcon
-                    class="h-6 w-6 text-green-600"
+                    class="w-6 h-6 text-green-600"
                     aria-hidden="true"
                   />
                 </div>
                 <div class="mt-3 text-center sm:mt-5">
                   <DialogTitle
                     as="h3"
-                    class="text-lg leading-6 font-medium text-gray-900"
+                    class="text-lg font-medium leading-6 text-gray-900"
                   >
                     Interview Preview
                   </DialogTitle>
@@ -174,7 +174,7 @@
               >
                 <button
                   type="button"
-                  class="mt-3 w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-12 sm:text-sm"
+                  class="inline-flex justify-center w-auto px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-12 sm:text-sm"
                   @click="open = false"
                   ref="cancelButtonRef"
                 >
@@ -200,6 +200,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { CheckIcon } from "@heroicons/vue/outline";
+import InterviewService from "../../service/interview.service";
 import VacancyInterviewSectionService from "../../service/vacancy-interview-section.service";
 import VacancySectionQuestionService from "../../service/vacancy-interview-section-question.service";
 
@@ -252,9 +253,9 @@ function saveInterview() {
           questions: sections.value,
         };
         VacancyInterviewSectionService.create(payload)
-          .then((result) => {
-            console.log(result);
-            const { data } = result.data;
+          .then((response) => {
+            console.log(response);
+            const { data } = response.data;
             interviewSectionId.value = data.id;
             toast.success("Interview kit successfully saved");
           })
@@ -355,15 +356,23 @@ function deleteInterview() {
   showAddKit.value = false;
 }
 
+// function getVacancyInterviewSections(id) {
+//   InterviewService.getVacancyInterview(id).then(response => {
+//     const { data } = response.data;
+//     interviewKit.value.title = data.title
+//     sections.value = data.interview_sections
+//     if (sections.value.length > 0) {
+//       showAddKit.value = true;
+//       showEmptyKit.value = false;
+//     }
+//   })
+// }
+
 onMounted(() => {
   if (sections.value.length > 0) {
     showAddKit.value = true;
   }
 
-  // VacancyInterviewSectionService.single(interviewSectionId.value).then(result => {
-  //   const { data } = result.data;
-  //   interviewKit.value.title = data.title;
-  //   sections.value = data.inteview_questions;
-  // })
+  // getVacancyInterviewSections(Number(props.interviewId));
 });
 </script>

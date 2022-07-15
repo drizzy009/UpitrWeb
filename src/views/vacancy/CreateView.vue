@@ -1,10 +1,10 @@
 <template>
   <main class="flex-1 pb-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="px-4 mx-auto mt-6 max-w-7xl sm:px-6 lg:px-6">
       <nav aria-label="Progress" class="bg-white">
         <ol
           role="list"
-          class="border border-gray-300 rounded-md divide-y divide-gray-300 md:flex md:divide-y-0"
+          class="border border-gray-300 divide-y divide-gray-300 rounded-md md:flex md:divide-y-0"
         >
           <li
             v-for="(step, stepIdx) in steps"
@@ -15,11 +15,11 @@
             <a
               v-if="step.status === 'complete'"
               :href="step.href"
-              class="group flex items-center w-full"
+              class="flex items-center w-full group"
             >
-              <span class="px-6 py-4 flex items-center text-sm font-medium">
+              <span class="flex items-center px-6 py-4 text-sm font-medium">
                 <span
-                  class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800"
+                  class="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-indigo-600 rounded-full group-hover:bg-indigo-800"
                 >
                   <CheckIcon class="w-6 h-6 text-white" aria-hidden="true" />
                 </span>
@@ -31,11 +31,11 @@
             <a
               v-else-if="step.status === 'current'"
               :href="step.href"
-              class="px-6 py-4 flex items-center text-sm font-medium"
+              class="flex items-center px-6 py-4 text-sm font-medium"
               aria-current="step"
             >
               <span
-                class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-indigo-600 rounded-full"
+                class="flex items-center justify-center flex-shrink-0 w-10 h-10 border-2 border-indigo-600 rounded-full"
               >
                 <span class="text-indigo-600">{{ step.id }}</span>
               </span>
@@ -43,10 +43,10 @@
                 step.name
               }}</span>
             </a>
-            <a v-else :href="step.href" class="group flex items-center">
-              <span class="px-6 py-4 flex items-center text-sm font-medium">
+            <a v-else :href="step.href" class="flex items-center group">
+              <span class="flex items-center px-6 py-4 text-sm font-medium">
                 <span
-                  class="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full group-hover:border-gray-400"
+                  class="flex items-center justify-center flex-shrink-0 w-10 h-10 border-2 border-gray-300 rounded-full group-hover:border-gray-400"
                 >
                   <span class="text-gray-500 group-hover:text-gray-900">{{
                     step.id
@@ -61,11 +61,11 @@
             <template v-if="stepIdx !== steps.length - 1">
               <!-- Arrow separator for lg screens and up -->
               <div
-                class="hidden md:block absolute top-0 right-0 h-full w-5"
+                class="absolute top-0 right-0 hidden w-5 h-full md:block"
                 aria-hidden="true"
               >
                 <svg
-                  class="h-full w-full text-gray-300"
+                  class="w-full h-full text-gray-300"
                   viewBox="0 0 22 80"
                   fill="none"
                   preserveAspectRatio="none"
@@ -85,7 +85,7 @@
 
       <div
         v-if="stepNo === 1"
-        class="space-y-8 divide-y divide-gray-200 pt-6 pl-4 rounded-md border-0"
+        class="pt-6 pl-4 space-y-8 border-0 divide-y divide-gray-200 rounded-md"
       >
         <div class="mt-10 sm:mt-0">
           <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -112,7 +112,7 @@
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
                 <div class="shadow sm:rounded-md sm:overflow-hidden">
-                  <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                  <div class="px-4 py-5 space-y-6 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                       <div class="col-span-6 sm:col-span-6">
                         <label
@@ -130,7 +130,7 @@
                           name="job-title"
                           id="first-name"
                           autocomplete="job-title"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         /> -->
                       </div>
 
@@ -164,7 +164,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                  <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -172,7 +172,7 @@
         </div>
 
         <div class="mt-10 sm:mt-0">
-          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+          <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
             <SideBar>
               <h3 class="text-lg font-bold leading-6 text-gray-900">
                 Location Information
@@ -184,7 +184,7 @@
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
-                <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="overflow-hidden shadow sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                       <div class="col-span-6 sm:col-span-6">
@@ -287,7 +287,7 @@
                           id="comments"
                           name="comments"
                           type="checkbox"
-                          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                          class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                         />
                       </div>
                       <div class="ml-3 text-sm">
@@ -297,7 +297,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                  <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -305,7 +305,7 @@
         </div>
 
         <div class="mt-10 sm:mt-0">
-          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+          <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
             <SideBar>
               <h3 class="text-lg font-bold leading-6 text-gray-900">
                 Job Description
@@ -324,7 +324,7 @@
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
-                <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="overflow-hidden shadow sm:rounded-md">
                   <div class="px-4 py-0 bg-white sm:p-6">
                     <div>
                       <label
@@ -334,14 +334,15 @@
                         Description
                       </label>
                       <div class="mt-1">
-                        <QuillEditor 
+                        <QuillEditor
                           theme="snow"
                           id="description"
                           name="description"
                           contentType="html"
                           placeholder="Describe job in detail here"
                           v-model:content="jobDetail.description"
-                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" />
+                          class="block w-full h-32 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
                       </div>
                     </div>
 
@@ -358,7 +359,7 @@
                           v-model:content="jobDetail.responsibilities"
                           id="responsibilities"
                           name="responsibilities"
-                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          class="block w-full h-32 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           placeholder="List job responsibilities"
                         />
                       </div>
@@ -377,7 +378,7 @@
                           v-model:content="jobDetail.requirements"
                           id="requirements"
                           name="requirements"
-                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          class="block w-full h-32 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           placeholder="List job requirements"
                         />
                       </div>
@@ -396,14 +397,14 @@
                           v-model:content="jobDetail.benefit"
                           id="benefit"
                           name="benefit"
-                          class="h-32 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                          class="block w-full h-32 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           placeholder="List job benefit"
                         />
-                        <!-- <textarea id="about" name="about" rows="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="List job benefit" /> -->
+                        <!-- <textarea id="about" name="about" rows="5" class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="List job benefit" /> -->
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                  <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -411,7 +412,7 @@
         </div>
 
         <div class="mt-10 sm:mt-0">
-          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+          <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
             <SideBar>
               <h3 class="text-lg font-bold leading-6 text-gray-900">
                 Employment Information
@@ -427,7 +428,7 @@
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
-                <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="overflow-hidden shadow sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                       <div class="col-span-6 sm:col-span-3">
@@ -502,7 +503,7 @@
                           for="educationLevel"
                           class="block text-sm font-medium text-gray-700"
                           >Education
-                        </label>                        
+                        </label>
                         <MultiSelect
                           searchable
                           value="id"
@@ -545,7 +546,10 @@
                           class="block text-sm font-medium text-gray-700"
                           >Keywords</label
                         >
-                        <TagInput @on-tags-changed="keywordsChange" v-model="jobDetail.keywords"></TagInput>
+                        <TagInput
+                          @on-tags-changed="keywordsChange"
+                          v-model="jobDetail.keywords"
+                        ></TagInput>
                         <!-- <FormInput
                           name="keywords"
                           id="keywords"
@@ -569,7 +573,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                  <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -577,7 +581,7 @@
         </div>
 
         <div class="mt-10 sm:mt-0">
-          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+          <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
             <SideBar>
               <h3 class="text-lg font-bold leading-6 text-gray-900">
                 Salary Information
@@ -590,7 +594,7 @@
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
-                <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="overflow-hidden shadow sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                       <div class="col-span-6 sm:col-span-3">
@@ -648,7 +652,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                  <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -656,7 +660,7 @@
         </div>
 
         <div class="mt-10 sm:mt-0">
-          <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+          <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
             <SideBar>
               <h3 class="text-lg font-bold leading-6 text-gray-900">
                 Application Deadline
@@ -669,7 +673,7 @@
             </SideBar>
             <div class="mt-5 md:mt-0 md:col-span-2">
               <form>
-                <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="overflow-hidden shadow sm:rounded-md">
                   <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
                       <div class="col-span-6 sm:col-span-6">
@@ -683,12 +687,12 @@
                           name="deadline"
                           id="deadline"
                           v-model="jobDetail.deadline"
-                          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+                  <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
                 </div>
               </form>
             </div>
@@ -699,14 +703,14 @@
           <div class="flex justify-end">
             <CancelButton
               label="Cancel"
-              class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></CancelButton>
             <AppButton
               type="submit"
               label="Continue"
               @click="submitVacancyDetail"
               :processing="processing"
-              class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             ></AppButton>
           </div>
         </div>
@@ -721,10 +725,14 @@
 
       <div
         v-if="stepNo === 3"
-        class="space-y-8 divide-y divide-gray-200 bg-white p-6 mt-4 rounded-md border border-gray-300"
+        class="p-6 mt-4 space-y-8 bg-white border border-gray-300 divide-y divide-gray-200 rounded-md"
       >
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-          <WorkFlowView :interviewId="interviewId" :jobId="vacancyId" @prevPage="gotoPage(2)"></WorkFlowView>
+          <WorkFlowView
+            :interviewId="interviewId"
+            :jobId="vacancyId"
+            @prevPage="gotoPage(2)"
+          ></WorkFlowView>
         </div>
       </div>
     </div>
@@ -733,6 +741,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from "vue";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
@@ -804,7 +813,7 @@ const {
 const { departments } = storeToRefs(useDepartments());
 const toast = useToast();
 const swal = inject("$swal");
-// const router = useRouter();
+const router = useRouter();
 const stepNo = ref(1);
 const vacancyId = ref(0);
 const interviewId = ref(0);
@@ -815,32 +824,12 @@ const departmentList = ref([]);
 const processing = ref(false);
 const loadingCity = ref(false);
 const loadingRegion = ref(false);
-// const samplePayload = {
-//   benefit: "Competitive Salary",
-//   city_id: "76932",
-//   code: "SAL-556632",
-//   country_id: 161,
-//   deadline: "2022-07-04",
-//   department_id: "11",
-//   description: "Sales Representative",
-//   education_level_id: "2",
-//   employment_type_id: "2",
-//   experience_level_id: "4",
-//   head_count: "2",
-//   industry_id: "29",
-//   isRemote: false,
-//   job_function_id: "37",
-//   keywords: "sales, buy, sell",
-//   location: "Alausa Ikeja",
-//   region_id: "306",
-//   requirements: "Sales Representative",
-//   responsibilities: "Sales Representative",
-//   salary_currency_id: "102",
-//   salary_max: "125000",
-//   salary_min: "75000",
-//   title: "Sale Rep",
-//   zip_code: "",
-// }
+
+function navigate(step) {
+  if (vacancyId.value > 0) {
+    gotoPage(step.id);
+  }
+}
 
 function keywordsChange(items) {
   jobKeywords.value = items;
@@ -881,7 +870,7 @@ function showErrorMessages(errors) {
 
 async function submitVacancyDetail() {
   const valid = await v$.value.$validate();
-  
+
   if (valid) {
     processing.value = true;
     if (vacancyId.value === 0) {
@@ -891,9 +880,9 @@ async function submitVacancyDetail() {
       VacancyService.create(jobDetail.value)
         .then((result) => {
           const { data } = result.data;
-          interviewId.value = data.interviews[0].id;
           vacancyId.value = data.id;
-          gotoPage(2);
+          toast.success("Vacancy succcesfully saved");
+          router.push({ name: "EditVacancy", params: { id: data.id } });
         })
         .catch((error) => {
           const { data } = error;
@@ -913,6 +902,7 @@ async function submitVacancyDetail() {
         .then(() => {
           // const { data } = result.data;
           // vacancyId.value = data.id;
+          toast.success("Vacancy succcesfully updated");
           gotoPage(2);
         })
         .catch((error) => {
@@ -930,13 +920,13 @@ async function submitVacancyDetail() {
   }
 
   if (!valid) {
-    let errorMessage = 'The following fields are required ';
+    let errorMessage = "The following fields are required ";
     const errors = [];
-    v$.value.$errors.forEach(error => {
+    v$.value.$errors.forEach((error) => {
       errors.push(error.$message);
     });
 
-    errorMessage = `${errorMessage}${errors.join(", ")}`
+    errorMessage = `${errorMessage}${errors.join(", ")}`;
 
     swal({
       title: "Invalid Data",
@@ -958,14 +948,16 @@ watch(
     cities.value = [];
     const id = Number(newValue);
     loadingCity.value = true;
-    MiscService.getCities(id).then((result) => {
-      cities.value = result.data.data;
-      // cityList.value = cities.value.map((item) => {
-      //   return { label: item.name, value: item.id };
-      // });
-    }).finally(() => {
-      loadingCity.value = false;
-    });
+    MiscService.getCities(id)
+      .then((result) => {
+        cities.value = result.data.data;
+        // cityList.value = cities.value.map((item) => {
+        //   return { label: item.name, value: item.id };
+        // });
+      })
+      .finally(() => {
+        loadingCity.value = false;
+      });
   }
 );
 
@@ -975,14 +967,16 @@ watch(
     countryStates.value = [];
     const id = Number(newValue);
     loadingRegion.value = true;
-    MiscService.getRegions(id).then((result) => {
-      countryStates.value = result.data.data;
-      // countryStateList.value = countryStates.value.map((item) => {
-      //   return { label: item.name, value: item.id };
-      // });
-    }).finally(() => {
-      loadingRegion.value = false;
-    });
+    MiscService.getRegions(id)
+      .then((result) => {
+        countryStates.value = result.data.data;
+        // countryStateList.value = countryStates.value.map((item) => {
+        //   return { label: item.name, value: item.id };
+        // });
+      })
+      .finally(() => {
+        loadingRegion.value = false;
+      });
   }
 );
 </script>

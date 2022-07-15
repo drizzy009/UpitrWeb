@@ -49,6 +49,11 @@
     }
 }
 
+.multiselect {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 .vue3-star-ratings button {
   display: none !important;
 }

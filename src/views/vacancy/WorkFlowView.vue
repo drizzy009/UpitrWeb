@@ -1,7 +1,7 @@
 <template>
   <div class="w-full px-2 pb-8 sm:px-0">
     <TabGroup>
-      <TabList class="flex rounded-xl p-1">
+      <TabList class="flex p-1 rounded-xl">
         <Tab
           as="template"
           v-for="item in tabList"
@@ -27,7 +27,7 @@
         <TabPanel>Sourced</TabPanel>
         <TabPanel>Applied</TabPanel>
         <TabPanel>
-          <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+          <div class="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
             <div
               v-if="assessments.length > 0"
               class="flex rounded-md"
@@ -42,7 +42,7 @@
             >
               <div class="space-y-1 text-center">
                 <svg
-                  class="mx-auto h-12 w-12 text-gray-400"
+                  class="w-12 h-12 mx-auto text-gray-400"
                   stroke="currentColor"
                   fill="none"
                   viewBox="0 0 48 48"
@@ -58,7 +58,7 @@
                 <div class="flex text-sm text-gray-600">
                   <label
                     for="file-upload"
-                    class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                    class="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                   >
                     <span>Upload an assessment</span>
                     <input
@@ -80,21 +80,21 @@
               <CancelButton
                 label="Cancel"
                 @click="cancelAssessments"
-                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               ></CancelButton>
               <AppButton
-                @click="saveAssessments"
                 type="button"
                 label="Save Assessments"
+                @click="toggleConfirmation = !toggleConfirmation"
                 :processing="savingAssessment"
-                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               ></AppButton>
             </div>
           </div>
         </TabPanel>
         <TabPanel>
           <div v-if="showMainPanel">
-            <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+            <div class="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
               <div
                 class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
               >
@@ -106,7 +106,7 @@
                   <AppButton
                     @click="toggleInterview"
                     label="Add interview kit"
-                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   ></AppButton>
                 </div>
               </div>
@@ -120,18 +120,18 @@
             ></InterviewKitsView>
           </div>
           <div v-if="showAssessment" id="interviewAssessments">
-            <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+            <div class="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
               <div
                 class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
               >
                 <!-- <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Cover photo </label> -->
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                   <div
-                    class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                    class="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
                   >
                     <div class="space-y-1 text-center">
                       <svg
-                        class="mx-auto h-12 w-12 text-gray-400"
+                        class="w-12 h-12 mx-auto text-gray-400"
                         stroke="currentColor"
                         fill="none"
                         viewBox="0 0 48 48"
@@ -147,7 +147,7 @@
                       <div class="flex text-sm text-gray-600">
                         <label
                           for="file-upload"
-                          class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                          class="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                         >
                           <span>Upload an assessment</span>
                           <input
@@ -170,7 +170,7 @@
                 <CancelButton
                   @click="toggleMainPanel"
                   label="Cancel"
-                  class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 ></CancelButton>
               </div>
             </div>
@@ -185,29 +185,31 @@
         <CancelButton
           label="Previous"
           @click="$emit('prevPage')"
-          class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         ></CancelButton>
         <AppButton
           @click="onSubmit"
           type="submit"
           label="Submit"
-          class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         ></AppButton>
       </div>
     </div>
   </div>
+  <AssessmentConfirmationVue :toggle="toggleConfirmation" :processing="savingAssessment" @save="saveAssessments"></AssessmentConfirmationVue>
 </template>
 
 <script setup>
 import readXlsxFile from 'read-excel-file'
-import { ref, onMounted } from "vue";
+import { ref, inject, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import {
 } from "@heroicons/vue/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import InterviewKitsView from "./InterviewKitsView.vue";
 import AssessmentView from "./AssessmentView.vue";
+import InterviewKitsView from "./InterviewKitsView.vue";
+import AssessmentConfirmationVue from './AssessmentConfirmation.vue';
 import questions from "../../data/interviewKits";
 import VacancyAssessmentService from "../../service/vacancy-assessments.service";
 import VacancyAssessmentQuestionService from "../../service/vacancy-assessments-question.service";
@@ -259,10 +261,12 @@ const tabList = [
 const toast = useToast();
 const router = useRouter();
 const assessmentId = ref(0);
-const savingAssessment = ref(false);
+const swal = inject("$swal");
+const showMainPanel = ref(true);
 const showInterview = ref(false);
 const showAssessment = ref(false);
-const showMainPanel = ref(true);
+const savingAssessment = ref(false);
+const toggleConfirmation = ref(false);
 
 const assessments = ref([]);
 
@@ -324,34 +328,66 @@ function getAssessment(id) {
   })
 }
 
-function saveAssessments() {
-  savingAssessment.value = true;
-  const payload = {
-    job_id: props.jobId,
-    is_timed: true,
-    duration: 60,
-    pass_score: 70,
-    questions_per_candidate: 100
-  }
+function showErrorMessage(errorMessage) {
+  swal({
+    title: "Invalid Data",
+    text: errorMessage,
+    icon: "error",
+  });
+}
 
+function showErrorMessages(errors) {
+  var errorMessage = "";
+  Object.keys(errors).forEach((key) => {
+    errorMessage += `${errors[key][0]}\n`;
+  });
+
+  swal({
+    title: "Invalid Data",
+    text: errorMessage,
+    icon: "error",
+  });
+}
+
+function saveAssessments(assessmentPayload) {
+  savingAssessment.value = true;
+
+  Object.assign(assessmentPayload, {job_id: props.jobId});
+  
   if (assessmentId.value === 0) {
-    VacancyAssessmentService.create(payload).then(result => {
+    VacancyAssessmentService.create(assessmentPayload).then(result => {
       assessmentId.value = result.data.data.id;
       const assessmentData = assessmentsPayload(assessmentId.value);
       VacancyAssessmentQuestionService.createBulk(assessmentData);
       toast.success('Assessment successfully saved');
-    }).catch(() => {})
+      toggleConfirmation.value = false;
+    }).catch((error) => {
+      const { data } = error;
+      if (data.code === "062") {
+        showErrorMessages(data.data);
+      } else {
+        showErrorMessage(data.message);
+      }
+    })
     .finally(() => {
       savingAssessment.value = false;
     })
   }
 
   if (assessmentId.value > 0) {
-    VacancyAssessmentService.update(assessmentId.value, payload).then(() => {
+    VacancyAssessmentService.update(assessmentId.value, assessmentPayload).then(() => {
       toast.info('Assessment successfully updated');
       const assessmentData = assessmentsPayload(assessmentId.value);
       VacancyAssessmentQuestionService.createBulk(assessmentData);
-    }).catch(() => {})
+      toggleConfirmation.value = false;
+    }).catch((error) => {
+      const { data } = error;
+      if (data.code === "062") {
+        showErrorMessages(data.data);
+      } else {
+        showErrorMessage(data.message);
+      }
+    })
     .finally(() => {
       savingAssessment.value = false;
     })
@@ -435,7 +471,9 @@ onMounted(() => {
     showMainPanel.value = false;
   }
 
-  getAssessment(assessmentId.value);
+  if (assessmentId.value > 0) {
+    getAssessment(assessmentId.value);
+  }
 });
 </script>
 

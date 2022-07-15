@@ -7,7 +7,7 @@
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
           <div class="flex-1 min-w-0">
-            <form class="w-full flex md:ml-0" action="#" method="GET">
+            <form class="flex w-full md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
               <div
                 class="relative w-full text-gray-400 focus-within:text-gray-600"
@@ -16,12 +16,12 @@
                   class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
                   aria-hidden="true"
                 >
-                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                  <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
                 <input
                   id="search-field"
                   name="search-field"
-                  class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
+                  class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
                   placeholder="Search Department"
                   type="search"
                 />
@@ -30,14 +30,14 @@
 
             <!-- Profile -->
           </div>
-          <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
+          <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <button
               type="button"
               @click="toggleAddDepartment"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button>
@@ -48,7 +48,7 @@
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <FilterIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button> -->
@@ -58,7 +58,7 @@
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button>
@@ -69,7 +69,7 @@
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon
-                class="flex-shrink-0 h-5 w-5 text-green"
+                class="flex-shrink-0 w-5 h-5 text-green"
                 aria-hidden="true"
               />
             </button>
@@ -78,13 +78,12 @@
       </div>
     </div>
     <template v-if="processing">
-      <SkeletonLoading></SkeletonLoading>
-      <SkeletonLoading></SkeletonLoading>
+      <SkeletonLoading v-for="n in 2" :key="n"></SkeletonLoading>
     </template>
-    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
-          class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg"
+          class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg"
         >
           <table class="min-w-full divide-y divide-gray-300">
             <thead class="bg-gray-50">
@@ -130,9 +129,9 @@
                 </th>
               </tr>
             </thead>
-            <tbody v-if="departmentList.length > 0 && !processing" class="divide-y divide-gray-200 bg-white">
+            <tbody v-if="departmentList.length > 0 && !processing" class="bg-white divide-y divide-gray-200">
               <tr v-for="department in departmentList" :key="department.id">
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
                   <div class="flex items-center">
                     <div class="">
                       <div class="font-medium text-gray-900">
@@ -141,7 +140,7 @@
                     </div>
                   </div>
                 </td>
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
                   <div class="flex items-center">
                     <div class="">
                       <div class="font-medium text-gray-900">
@@ -151,28 +150,28 @@
                   </div>
                 </td>
                 <td
-                  class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                  class="relative py-4 pl-3 pr-4 text-sm font-medium text-right whitespace-nowrap sm:pr-6"
                 >
                   <Menu as="div" class="relative inline-block text-left">
                     <div>
                       <MenuButton
-                        class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                        class="flex items-center p-1 text-indigo-400 bg-indigo-100 rounded-full hover:text-gray-600"
                       >
                         <span class="sr-only">Open options</span>
-                        <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                        <DotsVerticalIcon class="w-5 h-5" aria-hidden="true" />
                       </MenuButton>
                     </div>
 
                     <transition
-                      enter-active-class="transition ease-out duration-100"
-                      enter-from-class="transform opacity-0 scale-95"
-                      enter-to-class="transform opacity-100 scale-100"
-                      leave-active-class="transition ease-in duration-75"
-                      leave-from-class="transform opacity-100 scale-100"
-                      leave-to-class="transform opacity-0 scale-95"
+                      enter-active-class="transition duration-100 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-75 ease-in"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
                     >
                       <MenuItems
-                        class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                        class="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                       >
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
@@ -186,7 +185,7 @@
                               ]"
                             >
                               <PencilAltIcon
-                                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                                 aria-hidden="true"
                               />
                               Edit
@@ -205,7 +204,7 @@
                               ]"
                             >
                               <TrashIcon
-                                class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                                class="w-5 h-5 mr-3 text-red-400 group-hover:text-red-500"
                                 aria-hidden="true"
                               />
                               Delete
@@ -221,7 +220,7 @@
           </table>
           <!-- Pagination -->
           <!-- <nav
-            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+            class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
             aria-label="Pagination"
           >
             <div class="hidden sm:block">
@@ -241,16 +240,16 @@
                 results
               </p>
             </div>
-            <div class="flex-1 flex justify-between sm:justify-end">
+            <div class="flex justify-between flex-1 sm:justify-end">
               <a
                 href="#"
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Previous
               </a>
               <a
                 href="#"
-                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Next
               </a>

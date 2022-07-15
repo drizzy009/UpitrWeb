@@ -1,40 +1,40 @@
 <template>
   <template v-if="loading">
     <div>
-      <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+      <div class="px-4 pt-12 mx-auto max-w-9xl sm:px-6 lg:px-8">
         <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
       </div>
     </div>
   </template>
-  <template v-if="vacancyDetail !== null">
-    <header class="bg-gray-100 pt-3">
+  <template v-if="vacancyDetail !== null && !loading">
+    <header class="pt-3 bg-gray-100">
       <div
-        class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between"
+        class="px-4 mx-auto max-w-9xl sm:px-6 lg:px-8 xl:flex xl:items-center xl:justify-between"
       >
         <div class="flex-1 min-w-0">
           <h1
-            class="mt-2 text-xl font-medium leading-7 uppercase text-gray-700 sm:text-xl sm:truncate"
+            class="mt-2 text-xl font-medium leading-7 text-gray-700 uppercase sm:text-xl sm:truncate"
           >
             {{ vacancyDetail.title }}
           </h1>
           <div
-            class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-8"
+            class="flex flex-col mt-1 sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-8"
           >
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div class="flex items-center mt-2 text-sm text-gray-500">
               <BriefcaseIcon
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
               {{ vacancyDetail.employment_type.name }}
             </div>
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div class="flex items-center mt-2 text-sm text-gray-500">
               <LocationMarkerIcon
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
               {{ remoteOffice }}
             </div>
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div class="flex items-center mt-2 text-sm text-gray-500">
               <CurrencyDollarIcon
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
@@ -42,7 +42,7 @@
                {{ convertToMoney(vacancyDetail.salary_min) }} &ndash;
               {{ convertToMoney(vacancyDetail.salary_max) }}
             </div>
-            <div class="mt-2 flex items-center text-sm text-gray-500">
+            <div class="flex items-center mt-2 text-sm text-gray-500">
               <CalendarIcon
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
@@ -51,78 +51,65 @@
             </div>
           </div>
         </div>
-        <div class="mt-5 flex xl:mt-0 xl:ml-4">
-          <!-- <span class="hidden sm:block">
-            <button
-              type="button"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
-            >
-              <PencilIcon
-                class="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-              Edit
-            </button>
-          </span> -->
-
-          <span class="hidden sm:block ml-3">
+        <div class="flex mt-5 xl:mt-0 xl:ml-4">
+          <span class="hidden ml-3 sm:block">
             <button
               type="button"
               @click="viewApplicants"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
             >
               <UserGroupIcon
-                class="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                class="w-5 h-5 mr-2 -ml-1 text-gray-400"
                 aria-hidden="true"
               />
               All Applicants
             </button>
           </span>
 
-          <div class="sm:ml-3 relative z-0">
+          <div class="relative z-0 sm:ml-3">
             <IconButton
               type="submit"
               @click="publishVacancy"
               :processing="processing"
               :label="published ? 'Unpublish' : 'Publish'"
               :class="published ? 'bg-red-600' : 'bg-green-600'"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <BanIcon
                 v-if="published"
-                class="h-5 w-5 mr-1"
+                class="w-5 h-5 mr-1"
                 aria-hidden="true"
               />
               <CheckIcon
                 v-if="!published"
-                class="h-5 w-5 mr-1"
+                class="w-5 h-5 mr-1"
                 aria-hidden="true"
               />
             </IconButton>
           </div>
 
           <!-- Dropdown -->
-          <Menu as="div" class="ml-3 relative sm:hidden">
+          <Menu as="div" class="relative ml-3 sm:hidden">
             <MenuButton
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               More
               <ChevronDownIcon
-                class="-mr-1 ml-2 h-5 w-5 text-gray-500"
+                class="w-5 h-5 ml-2 -mr-1 text-gray-500"
                 aria-hidden="true"
               />
             </MenuButton>
 
             <transition
-              enter-active-class="transition ease-out duration-200"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
+              enter-active-class="transition duration-200 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-75 ease-in"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                class="absolute right-0 w-48 py-1 mt-2 -mr-1 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <MenuItem v-slot="{ active }">
                   <a
@@ -152,10 +139,10 @@
     </header>
 
     <main class="flex-1 pb-8">
-      <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+      <div class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
         <div class="flex flex-col mt-2">
           <div
-            class="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg p-6 bg-white"
+            class="min-w-full p-6 overflow-hidden overflow-x-auto align-middle bg-white shadow sm:rounded-lg"
           >
             <div class="px-4 sm:px-0">
               <div>
@@ -164,7 +151,7 @@
                   <select
                     id="tabs"
                     name="tabs"
-                    class="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                    class="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option
                       v-for="tab in tabs"
@@ -177,7 +164,7 @@
                 </div>
                 <div class="hidden sm:block">
                   <nav
-                    class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200"
+                    class="relative z-0 flex divide-x divide-gray-200 rounded-lg shadow"
                     aria-label="Tabs"
                   >
                     <a
@@ -191,7 +178,7 @@
                           : 'text-gray-500 hover:text-gray-700',
                         tabIdx === 0 ? 'rounded-l-lg' : '',
                         tabIdx === tabs.length - 1 ? 'rounded-r-lg' : '',
-                        'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
+                        'group cursor-pointer relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
                       ]"
                       :aria-current="tab.current ? 'page' : undefined"
                     >
@@ -211,20 +198,20 @@
               </div>
 
               <CandidateView v-if="serverResponse.data.length > 0" :candidates="serverResponse.data"></CandidateView>
-              <div v-if="loadingCandidates" class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+              <div v-if="loadingCandidates" class="px-4 py-2 mx-auto max-w-9xl sm:px-6 lg:px-8">
                 <SkeletonLoading></SkeletonLoading>
               </div>
               <h4
                 v-if="serverResponse.data.length === 0 && !loadingCandidates"
-                class="text-center p-6"
+                class="p-6 text-center"
               >
                 No candidate(s)
               </h4>
               <nav
-                class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0"
+                class="flex items-center justify-between px-4 border-t border-gray-200 sm:px-0"
                 aria-label="Pagination"
               >
-                <div class="-mt-px w-0 flex-1 flex">
+                <div class="flex flex-1 w-0 -mt-px">
                   <a
                     @click="navigateTo(serverResponse.prev_page_url)"
                     :disabled="serverResponse.prev_page_url === null"
@@ -233,10 +220,10 @@
                         ? 'cursor-pointer'
                         : 'cursor-not-allowed'
                     "
-                    class="border-t-2 border-transparent pt-3 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
+                    class="inline-flex items-center pt-3 pr-1 text-sm font-medium text-gray-500 border-t-2 border-transparent hover:text-gray-700 hover:border-gray-200"
                   >
                     <ArrowNarrowLeftIcon
-                      class="mr-3 h-5 w-5 text-gray-400"
+                      class="w-5 h-5 mr-3 text-gray-400"
                       aria-hidden="true"
                     />
                     Previous
@@ -251,12 +238,12 @@
                         ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
                         : 'text-gray-700 bg-white'
                     "
-                    class="cursor-pointer relative inline-flex items-center px-4 py-2 mt-4 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
+                    class="relative inline-flex items-center px-4 py-2 mt-4 text-sm font-medium border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50"
                   >
                     {{link.label}}
                   </a>
                 </div>
-                <div class="-mt-px w-0 flex-1 flex justify-end">
+                <div class="flex justify-end flex-1 w-0 -mt-px">
                   <a
                     @click="navigateTo(serverResponse.next_page_url)"
                     :disabled="serverResponse.next_page_url === null"
@@ -265,11 +252,11 @@
                         ? 'cursor-pointer'
                         : 'cursor-not-allowed'
                     "
-                    class="border-t-2 border-transparent pt-3 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-200"
+                    class="inline-flex items-center pt-3 pr-1 text-sm font-medium text-gray-500 border-t-2 border-transparent hover:text-gray-700 hover:border-gray-200"
                   >
                     Next
                     <ArrowNarrowRightIcon
-                      class="ml-3 h-5 w-5 text-gray-400"
+                      class="w-5 h-5 ml-3 text-gray-400"
                       aria-hidden="true"
                     />
                   </a>
@@ -282,7 +269,7 @@
     </main>
 
     <main class="pt-8 pb-16">
-      <div class="max-w-9xl mx-auto sm:px-6 lg:px-8"></div>
+      <div class="mx-auto max-w-9xl sm:px-6 lg:px-8"></div>
     </main>
   </template>
 </template>
@@ -337,14 +324,7 @@ const serverResponse = ref({
   first_page_url: null,
 });
 
-const tabs = [
-  { name: "Sourced", href: "#", count: "2", current: true },
-  { name: "Applied", href: "#", count: "4", current: false },
-  { name: "Assessment", href: "#", count: "6", current: false },
-  { name: "Offered", href: "#", current: false },
-  { name: "Hired", href: "#", current: false },
-  { name: "Disqualified", href: "#", current: false },
-];
+const tabs = ref([]);
 
 function viewApplicants() {
   router.push({ name: 'ManageApplicants', params: { id: vacancyId.value }});
@@ -422,6 +402,11 @@ function getVacancyDetail(id) {
     const { data } = response.data;
     vacancyDetail.value = data;
     published.value = data.is_published;
+    const workflowStages = data.job_workflow.job_workflow_stages;
+    console.log(workflowStages);
+    tabs.value = workflowStages.map(item => {
+      return item;
+    })
     if (vacancyDetail.value.is_remote !== null) {
       remoteOffice.value = vacancyDetail.value.is_remote ? "Remote" : "On-site";
     }

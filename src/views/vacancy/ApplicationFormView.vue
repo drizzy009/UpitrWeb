@@ -3,9 +3,9 @@
     <div
       v-for="section in applicantInfo"
       :key="section.sectionName"
-      class="mt-10 sm:mt-0 space-y-8 divide-y divide-gray-200 pb-8 border-b-2 border-b-gray-200"
+      class="pb-8 mt-10 space-y-8 border-b-2 divide-y divide-gray-200 sm:mt-0 border-b-gray-200"
     >
-      <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+      <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
         <SideBar>
           <h3 class="text-lg font-bold leading-6 text-gray-900">
             {{ section.sectionName }}
@@ -16,7 +16,7 @@
           </p>
         </SideBar>
         <div class="mt-5 md:mt-0 md:col-span-2">
-          <div class="shadow overflow-hidden sm:rounded-md">
+          <div class="overflow-hidden shadow sm:rounded-md">
             <div class="px-4 py-5 bg-white sm:p-6">
               <div class="grid grid-cols-6 gap-6">
                 <div
@@ -63,13 +63,13 @@
                 </div>
               </div>
             </div>
-            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6"></div>
+            <div class="px-4 py-3 text-right bg-gray-50 sm:px-6"></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="mt-10 sm:mt-0 divide-y divide-gray-200 pb-8 border-b-2 border-b-gray-200">
-      <div class="md:grid md:grid-cols-3 md:gap-6 pt-8">
+    <div class="pb-8 mt-10 border-b-2 divide-y divide-gray-200 sm:mt-0 border-b-gray-200">
+      <div class="pt-8 md:grid md:grid-cols-3 md:gap-6">
         <SideBar>
           <h3 class="text-lg font-bold leading-6 text-gray-900">
             Other Questions
@@ -80,14 +80,14 @@
           </p>
         </SideBar>
         <div class="mt-5 md:mt-0 md:col-span-2">
-          <div class="shadow overflow-hidden sm:rounded-md">
+          <div class="overflow-hidden shadow sm:rounded-md">
             <div class="px-4 py-3 bg-white sm:p-6">
               <div class="">
                 <div
                   v-for="q in questions"
                   :key="q.question"
                   :value="q.question"
-                  class="grid grid-cols-2 shadow rounded-lg mb-2 py-3 px-4 border border-gray-300"
+                  class="grid grid-cols-2 px-4 py-3 mb-2 border border-gray-300 rounded-lg shadow"
                 >
                   <div class="col-start">
                     <h3 class="font-bold">{{ q.question }}</h3>
@@ -99,17 +99,17 @@
                         @click="deleteQuestion(q.id)"
                         :disabled="deletingQuestion"
                         :class="deletingQuestion ? 'cursor-not-allowed' : 'cursor-pointer'"
-                        class="h-6 w-6 text-red-500 cursor-pointer"></TrashIcon>
+                        class="w-6 h-6 text-red-500 cursor-pointer"></TrashIcon>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="mt-10 sm:mt-0" v-if="questionPanel == true">
-                <div class="md:grid md:grid-cols-3 md:gap-6 pt-8 mb-4">
+                <div class="pt-8 mb-4 md:grid md:grid-cols-3 md:gap-6">
                   <div class="mt-5 md:mt-0 md:col-span-3">
                     <form>
-                      <div class="shadow overflow-hidden sm:rounded-md">
-                        <div class="px-4 py-5 bg-gray-100 sm:p-6 shadow">
+                      <div class="overflow-hidden shadow sm:rounded-md">
+                        <div class="px-4 py-5 bg-gray-100 shadow sm:p-6">
                           <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-6">
                               <label
@@ -138,7 +138,7 @@
                                   v-model="question"
                                   name="question"
                                   rows="4"
-                                  class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                  class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                   placeholder="enter question here...."
                                 />
                               </div>
@@ -155,13 +155,13 @@
                             </div>
                           </div>
                         </div>
-                        <div class="px-4 py-3 bg-gray-100 text-right sm:px-6">
+                        <div class="px-4 py-3 text-right bg-gray-100 sm:px-6">
                           <AppButton
                             @click="addQuestion"
                             label="Add Question"
                             type="button"
                             :processing="savingQuestion"
-                            class="inline-flex cursor-pointer justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-500 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 sm:text-sm sm:leading-5"
+                            class="inline-flex justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-500 border border-transparent rounded-md cursor-pointer hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 sm:text-sm sm:leading-5"
                           >
                           </AppButton>
                         </div>
@@ -171,11 +171,11 @@
                 </div>
               </div>
             </div>
-            <div class="px-4 py-3 bg-gray-50  sm:px-6">
+            <div class="px-4 py-3 bg-gray-50 sm:px-6">
               <button
                   v-if="questionPanel == false"
                   type="button"
-                  class="inline-flex text-sm leading-4 font-medium rounded text-indigo-700 px-4 py-3 focus:outline-none"
+                  class="inline-flex px-4 py-3 text-sm font-medium leading-4 text-indigo-700 rounded focus:outline-none"
                   @click="
                     questionPanel == true
                       ? (questionPanel = false)
@@ -195,13 +195,18 @@
           <CancelButton
             label="Previous"
             @click="$emit('prevPage')"
-            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></CancelButton>
           <AppButton
-            label="Continue"
+            label="Save"
             @click="saveApplicantInfo"
             :processing="processing"
-            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          ></AppButton>
+          <AppButton
+            label="Next"
+            @click="emits('nextPage')"
+            class="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           ></AppButton>
         </div>
       </div>
@@ -236,7 +241,7 @@ const savingQuestion = ref(false);
 const deletingQuestion = ref(false);
 const questionPanel = ref(false);
 const settingsId = ref(0);
-const applicantInfo = ref(applicationData);
+const applicantInfo = ref([]);
 const questions = ref([]);
 const processing = ref(false);
 const question = ref("");
@@ -310,7 +315,7 @@ function saveApplicantInfo() {
   if (settingsId.value === 0) {
     VacancySettingService.create(applicatantFields.value).then(() => {
       toast.success('Application form successfully saved');
-      emits('nextPage');
+      // emits('nextPage');
     }).catch((ex) => {
       console.log(ex);
       // toast.error('Unable to save application form, please try again later');
@@ -398,10 +403,37 @@ watch(() => props.vacancySettings, (fieldData) => {
   }
 });
 
+function updateVacancySettings() {
+  const { vacancySettings } = props;
+  if (vacancySettings !== null) {
+    applicationData.forEach(item => {
+      item.fields.forEach(field => {
+        const optionValue = vacancySettings[field.key];
+        field.options.forEach(item => {
+          item.checked = false;
+        })
+
+        if (field.options.length === 1) {
+          field.options[0].checked = true;
+        } else {
+          const index = field.options.findIndex((item => item.optionName === optionValue));
+          field.options[index].checked = true;
+          applicatantFields.value[field.key] = optionValue;
+        }
+      })
+    });
+
+    applicantInfo.value = applicationData;
+  } else {
+    applicantInfo.value = applicationData;
+  }
+}
+
 onMounted(() => {
   if (props.jobId > 0) {
     applicatantFields.value.job_id = props.jobId;
     settingsId.value = props.settingsId;
+    updateVacancySettings();
     getApplicationQuestions(props.jobId);
   }
 });
