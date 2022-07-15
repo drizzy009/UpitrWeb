@@ -3,9 +3,7 @@
     <!-- Page header -->
     <div class="bg-white shadow">
       <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto">
-        <div
-          class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
-        >
+        <div class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
           <div class="flex-1 min-w-0">
             <form class="flex w-full md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
@@ -335,8 +333,15 @@
       </div>
     </div>
   </main>
-  <TransitionRoot as="template" :show="open">
-    <Dialog as="div" class="relative z-10" @close="open = false">
+  <TransitionRoot
+    as="template"
+    :show="open"
+  >
+    <Dialog
+      as="div"
+      class="relative z-10"
+      @close="open = false"
+    >
       <div class="fixed inset-0" />
 
       <div class="fixed inset-0 overflow-hidden">
@@ -532,12 +537,12 @@ function navigateTo(link) {
 }
 
 function formatLabel(label) {
-  if (label.includes('Prev')) {
+  if (label.includes("Prev")) {
     return `<< Previous`;
   }
 
-  if (label.includes('Next')) {
-    return 'Next >>';
+  if (label.includes("Next")) {
+    return "Next >>";
   }
 
   return label;
