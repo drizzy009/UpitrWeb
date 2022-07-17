@@ -78,7 +78,7 @@
           </div>
           <calendar-component
             @delete="deleteActivity"
-            :activities="serverResponse.data"
+            :serverData="serverResponse"
           ></calendar-component>
           <!-- Pagination -->
           <nav

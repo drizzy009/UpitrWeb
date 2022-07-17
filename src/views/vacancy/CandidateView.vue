@@ -3,10 +3,13 @@
     role="list"
     class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
   >
-    <li v-for="candidate in candidates" :key="candidate.email">
-      <a href="#" class="block group">
+    <li v-for="(candidate, index) in serverData.data" :key="candidate.email">
+      <div class="block group">
         <div class="flex items-center px-4 py-5 sm:py-6 sm:px-0">
           <div class="flex items-center flex-1 min-w-0">
+            <div>
+              <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) + (serverData.current_page - 1) * serverData.per_page }}</span>
+            </div>
             <div class="flex-shrink-0">
               <UserCircleIcon
                 v-if="candidate.photo === null"
@@ -75,7 +78,7 @@
             </a>
           </div>
         </div>
-      </a>
+      </div>
     </li>
   </ul>
 </template>
@@ -89,7 +92,7 @@ import {
 } from "@heroicons/vue/solid";
 import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
 defineProps({
-  candidates: Array,
+  serverData: Object,
 });
 
 function formatAppDate(dateValue) {

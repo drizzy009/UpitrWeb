@@ -2,28 +2,24 @@
   <div>
     <div class="lg:grid lg:grid-cols-12 lg:gap-x-16">
       <ol
-        class="mt-4 divide-y divide-gray-300 text-sm leading-6 lg:col-span-12 xl:col-span-12"
+        class="mt-4 text-sm leading-6 divide-y divide-gray-300 lg:col-span-12 xl:col-span-12"
       >
         <li
-          v-for="activity in activities"
+          v-for="(activity, index) in serverData.data"
           :key="activity.id"
-          class="relative flex space-x-6 py-6 xl:static"
+          class="relative flex py-6 space-x-6 xl:static"
         >
-          <!-- <img
-            :src="activity.meeting_url"
-            alt=""
-            class="h-14 w-14 flex-none rounded-full"
-          /> -->
           <div class="flex-auto">
             <h3 class="pr-10 font-semibold text-gray-900 xl:pr-0">
+              {{ (index + 1) + (serverData.current_page - 1) * serverData.per_page }}.
               {{ activity.title }}
             </h3>
-            <dl class="mt-2 flex flex-col text-gray-500 xl:flex-row">
+            <dl class="flex flex-col mt-2 text-gray-500 xl:flex-row">
               <div class="flex items-start space-x-3">
                 <dt class="mt-0.5">
                   <span class="sr-only">Date</span>
                   <CalendarIcon
-                    class="h-5 w-5 text-gray-400"
+                    class="w-5 h-5 text-gray-400"
                     aria-hidden="true"
                   />
                 </dt>
@@ -38,7 +34,7 @@
                 <dt class="mt-0.5">
                   <span class="sr-only">Location</span>
                   <LocationMarkerIcon
-                    class="h-5 w-5 text-gray-400"
+                    class="w-5 h-5 text-gray-400"
                     aria-hidden="true"
                   />
                 </dt>
@@ -49,23 +45,23 @@
           <Menu as="div" class="relative inline-block text-left">
             <div>
               <MenuButton
-                class="bg-indigo-100 rounded-full flex items-center text-indigo-400 p-1 hover:text-gray-600"
+                class="flex items-center p-1 text-indigo-400 bg-indigo-100 rounded-full hover:text-gray-600"
               >
                 <span class="sr-only">Open options</span>
-                <DotsVerticalIcon class="h-5 w-5" aria-hidden="true" />
+                <DotsVerticalIcon class="w-5 h-5" aria-hidden="true" />
               </MenuButton>
             </div>
 
             <transition
-              enter-active-class="transition ease-out duration-100"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
+              enter-active-class="transition duration-100 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-75 ease-in"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
             >
               <MenuItems
-                class="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                class="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <!-- <div class="py-1">
                   <MenuItem v-slot="{ active }">
@@ -77,7 +73,7 @@
                       ]"
                     >
                       <PencilAltIcon
-                        class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                        class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                         aria-hidden="true"
                       />
                       Edit
@@ -94,7 +90,7 @@
                       ]"
                     >
                       <TrashIcon
-                        class="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                        class="w-5 h-5 mr-3 text-red-400 group-hover:text-red-500"
                         aria-hidden="true"
                       />
                       Delete
@@ -121,7 +117,7 @@ import {
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { FormatLongDate2, FormatTime } from "../../../util/Formatter";
 defineProps({
-  activities: Array,
+  serverData: Array,
 });
 
 const emit = defineEmits(['delete']);

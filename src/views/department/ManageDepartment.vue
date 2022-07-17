@@ -90,6 +90,12 @@
               <tr>
                 <th
                   scope="col"
+                  class="py-3.5 pl-4 pr-0 text-left text-sm font-semibold text-gray-900 sm:pl-4"
+                >
+                  Sno
+                </th>
+                <th
+                  scope="col"
                   class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
                   Name
@@ -100,37 +106,18 @@
                 >
                   Description
                 </th>
-                <!-- <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Job Count
-                </th> -->
-                <!-- <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Location
-                </th> -->
-                <!-- <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Status
-                </th> -->
-                <!-- <th
-                  scope="col"
-                  class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Date Created
-                </th> -->
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
             <tbody v-if="departmentList.length > 0 && !processing" class="bg-white divide-y divide-gray-200">
-              <tr v-for="department in departmentList" :key="department.id">
+              <tr v-for="(department, index) in departmentList" :key="department.id">
+                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+                  <div class="text-gray-900">
+                    <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) }}</span>
+                  </div>
+                </td>
                 <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
                   <div class="flex items-center">
                     <div class="">

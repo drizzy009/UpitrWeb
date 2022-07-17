@@ -86,7 +86,7 @@
               <tr>
                 <th
                   scope="col"
-                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                  class="py-3.5 pl-4 pr-0 text-left text-sm font-semibold text-gray-900 sm:pl-4"
                 >
                   Sno
                 </th>
@@ -132,7 +132,7 @@
                 </td>
               </tr>
               <tr v-for="(vacancy, index) in serverResponse.data" :key="vacancy.id">
-              <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
                     <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) + (serverResponse.current_page - 1) * serverResponse.per_page }}</span>
                   </div>

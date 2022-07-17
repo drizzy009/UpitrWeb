@@ -39,7 +39,7 @@
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
-               {{ convertToMoney(vacancyDetail.salary_min) }} &ndash;
+              {{ convertToMoney(vacancyDetail.salary_min) }} &ndash;
               {{ convertToMoney(vacancyDetail.salary_max) }}
             </div>
             <div class="flex items-center mt-2 text-sm text-gray-500">
@@ -197,7 +197,7 @@
                 </div>
               </div>
 
-              <CandidateView v-if="serverResponse.data.length > 0" :candidates="serverResponse.data"></CandidateView>
+              <CandidateView v-if="serverResponse.data.length > 0" :serverData="serverResponse"></CandidateView>
               <div v-if="loadingCandidates" class="px-4 py-2 mx-auto max-w-9xl sm:px-6 lg:px-8">
                 <SkeletonLoading></SkeletonLoading>
               </div>

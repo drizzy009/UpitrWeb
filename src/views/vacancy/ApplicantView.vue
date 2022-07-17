@@ -4,7 +4,7 @@
     class="mt-5 border-t border-gray-200 divide-y divide-gray-200 sm:mt-0 sm:border-t-0"
   >
     <li v-for="applicant in applicants" :key="applicant.email">
-      <a href="#" class="block group">
+      <div class="block group">
         <div class="flex items-center px-4 py-5 sm:py-6 sm:px-0">
           <div class="flex items-center flex-1 min-w-0">
             <div class="flex items-center h-5">
@@ -60,15 +60,15 @@
             </div>
           </div>
           <div>
-            <a @click="gotoDetailPage(applicant.id)">
+            <span class="cursor-pointer" @click="gotoDetailPage(applicant.id)">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
               />
-            </a>
+            </span>
           </div>
         </div>
-      </a>
+      </div>
     </li>
   </ul>
 </template>

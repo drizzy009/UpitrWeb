@@ -145,6 +145,22 @@ const CandidateService = {
           }
         });
     });
+  },
+  getAssessments(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/candidate-assessments/${id}`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
   }
 };
 

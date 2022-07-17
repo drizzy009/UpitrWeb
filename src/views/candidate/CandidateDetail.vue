@@ -182,12 +182,9 @@
                           <h3 class="text-lg font-medium leading-6 text-gray-900">Job Applications</h3>
                           <p class="max-w-2xl mt-1 text-sm text-gray-500">Job Application history</p>
                         </div>
-                        <!-- <div class="text-right sm:col-span-2">
-                          <h2>Score/Overall</h2>
-                        </div> -->
                       </div>
                       <div class="border-t border-gray-200">
-                        
+                        <JobApplicationsView :items="jobApplicationList"></JobApplicationsView>
                       </div>
                     </div>
                   </div>
@@ -206,14 +203,13 @@ import {
   UserCircleIcon,
 } from "@heroicons/vue/solid";
 
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useToast } from "vue-toastification";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-//import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 import CandidateService from '../../service/candidate.service';
 import EducationView from "./EducationView.vue";
 import ExperienceView from "./ExperienceView.vue";
+import JobApplicationsView from "./JobApplicationsView.vue";
 import CandidateLoading from '../../components/layout/CandidateDetailSkeleton.vue';
 
 // const memoryOptions = [
@@ -223,11 +219,8 @@ import CandidateLoading from '../../components/layout/CandidateDetailSkeleton.vu
 // ];
 
 const router = useRouter();
-const toast = useToast();
 const candidateDetail = ref(null);
 const loading = ref(false);
-// const mem = ref(memoryOptions[2]);
-const swal = inject('$swal');
 const selectedTab = ref(0);
 const educationList = ref([]);
 const experienceList = ref([]);
@@ -331,9 +324,8 @@ function getCandidateExperiences(id) {
 
 function getCandidateApplications(id) {
   CandidateService.getApplications(id).then(response => {
-    const { data } = response.data.data;
+    const { data } = response.data;
     jobApplicationList.value = data;
-    console.log(data);
   })
 }
 
