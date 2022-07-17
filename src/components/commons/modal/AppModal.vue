@@ -33,8 +33,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { ref, watch } from 'vue';
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 
 const open = ref(false);
 const props = defineProps({

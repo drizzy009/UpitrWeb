@@ -18,6 +18,22 @@ const VacancyService = {
         });
     });
   },
+  applicantInterview(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/${basePath}/${id}`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
   singleByInterviewId(id) {
     return new Promise((resolve, reject) => {
       axios

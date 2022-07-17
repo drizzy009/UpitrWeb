@@ -1,21 +1,21 @@
 <template>
   <CandidateLoading v-if="loading"></CandidateLoading>
   <main v-if="!loading && candidateDetail !== null" class="flex-1 pb-8">
-    <div class="max-w-9xl mt-4 mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5">
+    <div class="px-4 mx-auto mt-4 max-w-9xl sm:px-6 md:flex md:items-center md:justify-between md:space-x-5">
       <div class="flex items-center space-x-5">
         <div class="flex-shrink-0">
           <div class="relative">
             <img v-if="candidateDetail.photo"
-              class="h-16 w-16 rounded-full"
+              class="w-16 h-16 rounded-full"
               :src="candidateDetail.photo"
               alt=""
             />
             <UserCircleIcon
               v-else
-              class="h-16 w-16 text-indigo-400"
+              class="w-16 h-16 text-indigo-400"
             />
             <span
-              class="absolute inset-0 shadow-inner rounded-full"
+              class="absolute inset-0 rounded-full shadow-inner"
               aria-hidden="true"
             ></span>
           </div>
@@ -26,13 +26,13 @@
         </div>
       </div>
     </div>
-    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
+    <div class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
       <div class="w-full px-2 sm:px-0">
         <TabGroup
           :selectedIndex="selectedTab"
           @change="setActiveTab"
         >
-          <TabList class="flex space-x-1 bg-white p-1">
+          <TabList class="flex p-1 space-x-1 bg-white">
             <Tab
               v-for="tab in tabs"
               as="template"
@@ -53,55 +53,48 @@
 
           <TabPanels class="mt-6">
             <TabPanel :class="['rounded-xl', 'ring-white ring-opacity-60',]">
-              <div class="max-w-9xl mx-auto mt-6">
+              <div class="mx-auto mt-6 max-w-9xl">
                 <div class="flex flex-col mt-2">
-                  <div class="
-                    align-middle
-                    min-w-full
-                    overflow-x-auto
-                    shadow
-                    overflow-hidden
-                    sm:rounded-lg
-                  ">
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">                      
+                  <div class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
+                    <div class="overflow-hidden bg-white shadow sm:rounded-lg">                      
                       <div class="px-4 py-5 sm:px-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Candidate Information</h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Candidate Information</h3>
+                        <p class="max-w-2xl mt-1 text-sm text-gray-500">Personal details and application.</p>
                       </div>
                       <div class="border-t border-gray-200">
                         <dl>
-                          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <div class="px-4 py-5 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Full name</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{candidateDetail.firstname}} {{candidateDetail.lastname}}</dd>
                           </div>
-                          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <div class="px-4 py-5 bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Application for</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Backend Developer</dd>
                           </div>
-                          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <div class="px-4 py-5 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Email address</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{candidateDetail.email}}</dd>
                           </div>
-                          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <div class="px-4 py-5 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">About</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{candidateDetail.summary}}</dd>
                           </div>
-                          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <div class="px-4 py-5 bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Attachments</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                               <ul
                                 role="list"
-                                class="border border-gray-200 rounded-md divide-y divide-gray-200"
+                                class="border border-gray-200 divide-y divide-gray-200 rounded-md"
                               >
-                                <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                  <div class="w-0 flex-1 flex items-center">
+                                <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                                  <div class="flex items-center flex-1 w-0">
                                     <PaperClipIcon
-                                      class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                      class="flex-shrink-0 w-5 h-5 text-gray-400"
                                       aria-hidden="true"
                                     />
-                                    <span class="ml-2 flex-1 w-0 truncate"> Cover Letter </span>
+                                    <span class="flex-1 w-0 ml-2 truncate"> Cover Letter </span>
                                   </div>
-                                  <div class="ml-4 flex-shrink-0">
+                                  <div class="flex-shrink-0 ml-4">
                                     <a
                                       :href="candidateDetail.cover_letter"
                                       target="_blank"
@@ -109,15 +102,15 @@
                                     > Download </a>
                                   </div>
                                 </li>
-                                <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                  <div class="w-0 flex-1 flex items-center">
+                                <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                                  <div class="flex items-center flex-1 w-0">
                                     <PaperClipIcon
-                                      class="flex-shrink-0 h-5 w-5 text-gray-400"
+                                      class="flex-shrink-0 w-5 h-5 text-gray-400"
                                       aria-hidden="true"
                                     />
-                                    <span class="ml-2 flex-1 w-0 truncate"> Resume </span>
+                                    <span class="flex-1 w-0 ml-2 truncate"> Resume </span>
                                   </div>
-                                  <div class="ml-4 flex-shrink-0">
+                                  <div class="flex-shrink-0 ml-4">
                                     <a
                                       :href="candidateDetail.resume"
                                       target="_blank"
@@ -128,47 +121,7 @@
                               </ul>
                             </dd>
                           </div>
-                          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Work Experience(s)</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                              <ul
-                                role="list"
-                                v-for="experience in candidateDetail.applicant_experiences"
-                                :key="experience.id"
-                                class="border border-gray-200 rounded-md divide-y divide-gray-200"
-                              >
-                                <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                  <div class="w-0 flex-1 flex items-center">
-                                    <span class="ml-2 flex-1 w-0"> <b>{{experience.title}}</b> at  {{experience.company}}</span>
-                                  </div>
-                                  <div class="ml-4 flex-shrink-0">
-                                    From {{formatDate(experience.start_date)}} to {{formatDate(experience.end_date)}}
-                                  </div>
-                                </li>
-                              </ul>
-                            </dd>
-                          </div>
-                          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Education</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                              <ul
-                                role="list"
-                                v-for="education in candidateDetail.applicant_educations"
-                                :key="education.id"
-                                class="border border-gray-200 rounded-md divide-y divide-gray-200"
-                              >
-                                <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                  <div class="w-0 flex-1 flex items-center">
-                                    <span class="ml-2 flex-1 w-0"> Studied <b>{{education.field}}</b> at {{education.institution}}</span>
-                                  </div>
-                                  <div class="ml-4 flex-shrink-0">
-                                    From {{formatDate(education.start_date)}} to {{formatDate(education.end_date)}}
-                                  </div>
-                                </li>
-                              </ul>
-                            </dd>
-                          </div>
-                          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <div class="px-4 py-5 bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">Skills</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                               <p>{{candidateDetail.skills}}</p>
@@ -182,21 +135,14 @@
               </div>
             </TabPanel>
             <TabPanel :class="['rounded-xl', 'ring-white ring-opacity-60',]">
-              <div class="max-w-9xl mx-auto mt-6">
+              <div class="mx-auto mt-6 max-w-9xl">
                 <div class="flex flex-col mt-2">
-                  <div class="
-                    align-middle
-                    min-w-full
-                    overflow-x-auto
-                    shadow
-                    overflow-hidden
-                    sm:rounded-lg
-                  ">
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                  <div class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
+                    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
                       <div class="px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-6">
                         <div class="sm:col-span-10">
-                          <h3 class="text-lg leading-6 font-medium text-gray-900">Education Details</h3>
-                          <p class="mt-1 max-w-2xl text-sm text-gray-500">Candidate's education history</p>
+                          <h3 class="text-lg font-medium leading-6 text-gray-900">Education Details</h3>
+                          <p class="max-w-2xl mt-1 text-sm text-gray-500">Candidate's education history</p>
                         </div>
                       </div>
                       <div class="border-t border-gray-200">
@@ -208,21 +154,14 @@
               </div>
             </TabPanel>
             <TabPanel :class="['rounded-xl', 'ring-white ring-opacity-60',]">
-              <div class="max-w-9xl mx-auto mt-6">
+              <div class="mx-auto mt-6 max-w-9xl">
                 <div class="flex flex-col mt-2">
-                  <div class="
-                    align-middle
-                    min-w-full
-                    overflow-x-auto
-                    shadow
-                    overflow-hidden
-                    sm:rounded-lg
-                  ">
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                  <div class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
+                    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
                       <div class="px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-6">
                         <div class="sm:col-span-10">
-                          <h3 class="text-lg leading-6 font-medium text-gray-900">Past Work Experience</h3>
-                          <p class="mt-1 max-w-2xl text-sm text-gray-500">Candidate's work history</p>
+                          <h3 class="text-lg font-medium leading-6 text-gray-900">Past Work Experience</h3>
+                          <p class="max-w-2xl mt-1 text-sm text-gray-500">Candidate's work history</p>
                         </div>
                       </div>
                       <div class="border-t border-gray-200">
@@ -234,23 +173,16 @@
               </div>
             </TabPanel>
             <TabPanel :class="['rounded-xl', 'ring-white ring-opacity-60',]">
-              <div class="max-w-9xl mx-auto mt-6">
+              <div class="mx-auto mt-6 max-w-9xl">
                 <div class="flex flex-col mt-2">
-                  <div class="
-                    align-middle
-                    min-w-full
-                    overflow-x-auto
-                    shadow
-                    overflow-hidden
-                    sm:rounded-lg
-                  ">
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                  <div class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
+                    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
                       <div class="px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-6">
                         <div class="sm:col-span-10">
-                          <h3 class="text-lg leading-6 font-medium text-gray-900">Job Applications</h3>
-                          <p class="mt-1 max-w-2xl text-sm text-gray-500">Job Application history</p>
+                          <h3 class="text-lg font-medium leading-6 text-gray-900">Job Applications</h3>
+                          <p class="max-w-2xl mt-1 text-sm text-gray-500">Job Application history</p>
                         </div>
-                        <!-- <div class="sm:col-span-2 text-right">
+                        <!-- <div class="text-right sm:col-span-2">
                           <h2>Score/Overall</h2>
                         </div> -->
                       </div>
@@ -280,7 +212,6 @@ import { useToast } from "vue-toastification";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 //import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 import CandidateService from '../../service/candidate.service';
-import { FormatMonthYear } from "../../util/Formatter";
 import EducationView from "./EducationView.vue";
 import ExperienceView from "./ExperienceView.vue";
 import CandidateLoading from '../../components/layout/CandidateDetailSkeleton.vue';
@@ -300,6 +231,7 @@ const swal = inject('$swal');
 const selectedTab = ref(0);
 const educationList = ref([]);
 const experienceList = ref([]);
+const jobApplicationList = ref([]);
 
 const tabs = ref([
   {
@@ -397,8 +329,12 @@ function getCandidateExperiences(id) {
   })
 }
 
-function formatDate(dateValue) {
-  return FormatMonthYear(dateValue);
+function getCandidateApplications(id) {
+  CandidateService.getApplications(id).then(response => {
+    const { data } = response.data.data;
+    jobApplicationList.value = data;
+    console.log(data);
+  })
 }
 
 onMounted(() => {
@@ -408,6 +344,7 @@ onMounted(() => {
     getCandidateDetails(candidateId);
     getCandidateEducations(candidateId);
     getCandidateExperiences(candidateId);
+    getCandidateApplications(candidateId);
   }
 })
 </script>
