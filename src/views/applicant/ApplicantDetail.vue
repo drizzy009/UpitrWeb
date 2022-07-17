@@ -258,7 +258,7 @@
                   <div class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
                     <div class="overflow-hidden bg-white shadow sm:rounded-lg">
                       <div class="px-4 py-5 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-6">
-                        <div class="sm:col-span-10">
+                        <div class="sm:col-span-9">
                           <h3 class="text-lg font-medium leading-6 text-gray-900">
                              Interview
                           </h3>
@@ -266,7 +266,7 @@
                             {{ interviewSection.title }} responses
                           </p>
                         </div>
-                        <div class="text-right sm:col-span-2">
+                        <div class="text-right sm:col-span-3">
                           <AppButton
                             label="Start Interview"
                             class="bg-green-600 hover:bg-green-700 focus:bg-green-500"
@@ -280,13 +280,6 @@
                     </div>
                   </div>
                 </div>
-                <div class="pt-5">
-                  <div class="flex justify-end">
-                    <AppButton type="submit" label="Submit" @click="submitInterview" :processing="processing"
-                      class="inline-flex justify-center hidden px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    </AppButton>
-                  </div>
-                </div>
               </div>
             </TabPanel>
           </TabPanels>
@@ -296,12 +289,12 @@
   </main>
   <InterviewResult :results="[]" :toggle="showResultDetail" @toggleResultModal="showResultDetail = false">
   </InterviewResult>
+  <ApplicantInterview :interview-id="interviewId" :toggle="openInterview" @toggleInterview="openInterview = false"></ApplicantInterview>
 </template>
 <script setup>
 import { ref, onMounted, inject } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import moment from "moment";
 import {
   PaperClipIcon,
   UserCircleIcon,
@@ -324,6 +317,7 @@ import CandidateService from '../../service/candidate.service';
 import EducationView from "../candidate/EducationView.vue";
 import ExperienceView from "../candidate/ExperienceView.vue";
 import InterviewResultView from "./InterviewResultView.vue";
+import ApplicantInterview from "./ApplicantInterview.vue";
 
 import InterviewResult from "./InterviewResult.vue";
 
@@ -341,7 +335,6 @@ const { workflowStages } = useVacancies();
 const totalScore = ref(0);
 const selectedTab = ref(0);
 const loading = ref(false);
-const processing = ref(false);
 const openInterview = ref(false);
 const interviewResults = ref([]);
 const candidateDetail = ref(null);
@@ -388,48 +381,6 @@ function setActiveTab(index) {
 }
 
 const selected = ref(workflowStages[0]);
-
-function submitInterview() {
-  processing.value = true;
-  const sectionRating = [];
-  interviewSection.value.interview_sections.forEach((section) => {
-    sectionRating.push({
-      rating: section.rating || 0,
-      interview_section_id: Number(section.id),
-    });
-  });
-
-  const endTime = moment().utc(); //.format('MM-DD-YYYY h:mm:ss a');
-  const startTime = moment().add(-30, "minutes").utc(); //.format('MM-DD-YYYY h:mm:ss a');
-  const payload = {
-    applicant_id: Number(props.id),
-    interview_id: Number(props.interviewId),
-    feedback: "Good",
-    start_time: startTime,
-    end_time: endTime,
-    feedbacks: sectionRating,
-  };
-
-  InterviewService.saveInterviewFeedback(payload)
-    .then(() => {
-      swal({
-        title: "Success",
-        text: "Interview feedback successfully saved",
-        icon: "success",
-      });
-      getApplicantData();
-    })
-    .catch((err) => {
-      swal({
-        title: "Error",
-        text: err.data.data,
-        icon: "error",
-      });
-    })
-    .finally(() => {
-      processing.value = false;
-    });
-}
 
 function formatDate(dateValue) {
   return FormatMonthYear(dateValue);

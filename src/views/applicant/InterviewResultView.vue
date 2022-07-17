@@ -51,39 +51,47 @@
     :show-submit-button="false"
     title="Interview Result Detail"
   >
-    <div class="w-9xl">
-      <p>Feedback: <b>{{results.feedback}}</b></p>
-    <dl
-      class=""
-      v-for="feedback in results.applicant_interview_feedbacks"
-      :key="feedback.id"
-    >
-      <div class="px-2 py-1 pb-3 mb-1 bg-white border-b border-gray-200 sm:px-6">
+    <div class="">
+      <p>
+        Feedback: <b>{{ results.feedback }}</b>
+      </p>
+      <dl
+        class=""
+        v-for="feedback in results.applicant_interview_feedbacks"
+        :key="feedback.id"
+      >
         <div
-          class="flex flex-wrap items-center justify-between -ml-2 sm:flex-nowrap"
+          class="px-2 py-1 pb-3 mb-1 bg-white border-b border-gray-200 sm:px-6"
         >
-          <div class="">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">
-              {{ feedback.interview_section.title }}
-            </h3>
+          <div
+            class="flex flex-wrap items-center justify-between -ml-2 sm:flex-nowrap"
+          >
+            <div class="">
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                {{ feedback.interview_section.title }}
+              </h3>
+            </div>
+            <div class="flex-shrink-0 ml-4">
+              <star-rating
+                disabled="true"
+                starSize="20"
+                v-model="feedback.rating"
+              />
+            </div>
           </div>
-          <div class="flex-shrink-0 ml-4">
-            <star-rating disabled="true" starSize="20" v-model="feedback.rating" />
-          </div>
-        </div>
-        <div
-          v-for="(question, index) in feedback.interview_section.interview_questions"
-          :key="question.id"
-          class="flex flex-col w-full"
-        >
-          {{questions(feedback.interview_section)}}
+          <div
+            v-for="(question, index) in feedback.interview_section
+              .interview_questions"
+            :key="question.id"
+            class="flex flex-col w-full"
+          >
             <p class="mt-2 text-xs text-gray-700">
-              <b>{{++index}}.</b>
+              <b>{{ ++index }}.</b>
               {{ question.question }}
             </p>
+          </div>
         </div>
-      </div>
-    </dl>
+      </dl>
     </div>
   </AppModal>
 </template>
@@ -91,7 +99,6 @@
 <script setup>
 import { ref } from "vue";
 import { FormatLongDate } from "../../util/Formatter";
-import AppButton from "../../components/forms/AppButton.vue";
 import InterviewService from "../../service/interview.service";
 import AppModal from "../../components/commons/modal/AppModal.vue";
 
@@ -102,10 +109,6 @@ defineProps({
 const showResult = ref(false);
 const processing = ref(false);
 const results = ref(null);
-
-function questions(item) {
-  console.log(item);
-}
 
 function openResultDetail(id) {
   console.clear();
