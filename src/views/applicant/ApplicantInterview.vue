@@ -1,5 +1,5 @@
 <template>
-  <AppModal
+  <AppModalLarge
     :showModal="showInterview"
     @closeModal="closeInterview"
     @submit="submitInterview"
@@ -11,11 +11,11 @@
         v-for="section in interviewSection.interview_sections"
         :key="section.id"
       >
-        <div class="px-4 py-1 bg-white border-b border-gray-200 sm:px-6">
+        <div class="py-1 bg-white border-b border-gray-200 sm:px-6">
           <div
             class="flex flex-wrap items-center justify-between -ml-4 sm:flex-nowrap"
           >
-            <div class="ml-4">
+            <div class="">
               <h3 class="text-lg font-medium leading-6 text-gray-900">
                 {{ section.title }}
               </h3>
@@ -45,22 +45,35 @@
     </div>
     <div class="grid grid-cols-6">
       <div class="col-span-6">
-        <!-- <label
-          for="feedback"
-          class="block mb-2 text-sm font-medium text-gray-700"
-          >Feedback</label
-        > -->
         <TextArea placeholder="Feedback" id="description" v-model="feedback"></TextArea>
       </div>
+      <div class="col-span-6 mt-2 mb-2 md:mt-4">
+        <div class="flex flex-row">
+          <div class="w-1/2 mr-1">
+            <label
+              for="startDate"
+              class="block text-sm font-medium text-gray-700"
+            >Start Date & Time</label>
+            <DatePicker v-model="startTime"></DatePicker>
+          </div>
+          <div class="w-1/2">
+            <label
+              for="endDate"
+              class="block text-sm font-medium text-gray-700"
+            >End Date & Time</label>
+            <DatePicker v-model="endTime"></DatePicker>
+          </div>
+        </div>
+      </div>
     </div>
-  </AppModal>
+  </AppModalLarge>
 </template>
 <script setup>
 import { ref, watch, inject, onMounted } from "vue";
 import moment from "moment";
 // import { FormatLongDate } from "../../util/Formatter";
 import InterviewService from "../../service/interview.service";
-import AppModal from "../../components/commons/modal/AppModal.vue";
+import AppModalLarge from "../../components/commons/modal/AppModalLarge.vue";
 
 const emits = defineEmits(["toggleInterview"]);
 const props = defineProps({
@@ -69,6 +82,8 @@ const props = defineProps({
   applicantId: String,
 });
 
+const endTime = ref(null);
+const startTime = ref(null);
 const feedback = ref("");
 const swal = inject("$swal");
 const processing = ref(false);
@@ -92,15 +107,13 @@ function submitInterview() {
     });
   });
 
-  const endTime = moment().utc(); //.format('MM-DD-YYYY h:mm:ss a');
-  const startTime = moment().add(-30, "minutes").utc(); //.format('MM-DD-YYYY h:mm:ss a');
   const payload = {
+    feedbacks: sectionRating,
+    feedback: feedback.value,
+    end_time: endTime.value,
+    start_time: startTime.value,
     applicant_id: Number(props.applicantId),
     interview_id: Number(props.interviewId),
-    feedback: feedback.value,
-    start_time: startTime,
-    end_time: endTime,
-    feedbacks: sectionRating,
   };
 
   InterviewService.saveInterviewFeedback(payload)
@@ -110,6 +123,7 @@ function submitInterview() {
         text: "Interview feedback successfully saved",
         icon: "success",
       });
+      emits('toggleInterview', true);
     })
     .catch((err) => {
       swal({

@@ -45,16 +45,23 @@
       </li>
     </ul>
   </div>
-  <AppModal
+  <AppModalLarge
     :showModal="showResult"
     @closeModal="showResult = false"
     :show-submit-button="false"
     title="Interview Result Detail"
   >
     <div class="">
-      <p>
-        Feedback: <b>{{ results.feedback }}</b>
+      <p class="text-sm">
+        Feedback: <span class="font-semibold text-indigo-800">{{ results.feedback }}</span>
       </p>
+      <p class="text-sm">
+        Start Time: <span class="text-blue-800">{{ FormatLongDate(results.start_time) }}</span>
+      </p>
+      <p class="mb-2 text-sm">
+        End Time: <span class="text-blue-800">{{ FormatLongDate(results.end_time) }}</span>
+      </p>
+      <hr/>
       <dl
         class=""
         v-for="feedback in results.applicant_interview_feedbacks"
@@ -93,14 +100,14 @@
         </div>
       </dl>
     </div>
-  </AppModal>
+  </AppModalLarge>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { FormatLongDate } from "../../util/Formatter";
 import InterviewService from "../../service/interview.service";
-import AppModal from "../../components/commons/modal/AppModal.vue";
+import AppModalLarge from "../../components/commons/modal/AppModalLarge.vue";
 
 defineProps({
   items: Array,
@@ -111,7 +118,6 @@ const processing = ref(false);
 const results = ref(null);
 
 function openResultDetail(id) {
-  console.clear();
   processing.value = true;
   InterviewService.singleByInterviewId(id)
     .then((response) => {

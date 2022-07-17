@@ -29,7 +29,7 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative px-2 pt-2 pb-2 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-6 sm:max-w-lg sm:w-full sm:p-4"
+              class="relative px-2 pt-2 pb-2 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-6 sm:max-w-3xl sm:w-full sm:p-4"
             >
               <div>
                 <div class="mt-3 text-left sm:mt-5">

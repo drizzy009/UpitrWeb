@@ -88,6 +88,12 @@
                   scope="col"
                   class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
+                  Sno
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
                   Vacancy
                 </th>
                 <th
@@ -125,7 +131,12 @@
                   <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
                 </td>
               </tr>
-              <tr v-for="vacancy in serverResponse.data" :key="vacancy.id">
+              <tr v-for="(vacancy, index) in serverResponse.data" :key="vacancy.id">
+              <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+                  <div class="text-gray-900">
+                    <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) + (serverResponse.current_page - 1) * serverResponse.per_page }}</span>
+                  </div>
+                </td>
                 <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
                   <div class="flex items-center">
                     <div class="flex-shrink-0 w-10 h-10">
@@ -246,23 +257,6 @@
                                 aria-hidden="true"
                               />
                               Details
-                            </a>
-                          </MenuItem>
-                          <MenuItem v-slot="{ active }">
-                            <a
-                              href="#"
-                              :class="[
-                                active
-                                  ? 'bg-gray-100 text-gray-900'
-                                  : 'text-gray-700',
-                                'group flex items-center px-4 py-2 text-sm',
-                              ]"
-                            >
-                              <DuplicateIcon
-                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                                aria-hidden="true"
-                              />
-                              Duplicate
                             </a>
                           </MenuItem>
                         </div>

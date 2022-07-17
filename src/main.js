@@ -6,6 +6,7 @@ import rate from 'vue-rate'
 import VTooltip from 'v-tooltip'
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
+import Datepicker from '@vuepic/vue-datepicker';
 import VueSweetalert2 from 'vue-sweetalert2';
 import Multiselect from '@vueform/multiselect';
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -78,6 +79,7 @@ app.component('PasswordInput', PasswordInput);
 app.component('DataTable', Vue3EasyDataTable);
 app.component('TextInputGroup', TextInputGroup);
 app.component('SkeletonLoading', SkeletonLoading);
+app.component('DatePicker', Datepicker);
 app.component("TagInput", TagInput);
 app.component('HtmlEditor', Editor);
 app.component('QuillEditor', QuillEditor);

@@ -287,9 +287,9 @@
       </div>
     </div>
   </main>
-  <InterviewResult :results="[]" :toggle="showResultDetail" @toggleResultModal="showResultDetail = false">
+  <InterviewResult :results="[]" :toggle="showResultDetail" @toggleResultModal="showResultDetail = !showResultDetail">
   </InterviewResult>
-  <ApplicantInterview :interview-id="interviewId" :toggle="openInterview" @toggleInterview="openInterview = false"></ApplicantInterview>
+  <ApplicantInterview :applicant-id="id" :interview-id="interviewId" :toggle="openInterview" @toggleInterview="closeInteviewModal"></ApplicantInterview>
 </template>
 <script setup>
 import { ref, onMounted, inject } from "vue";
@@ -370,7 +370,7 @@ const tabs = ref([
   },
   {
     id: 5,
-    name: "Interview",
+    name: "Interview Outcomes",
     current: false,
     disabled: false,
   },
@@ -382,15 +382,16 @@ function setActiveTab(index) {
 
 const selected = ref(workflowStages[0]);
 
-function formatDate(dateValue) {
-  return FormatMonthYear(dateValue);
+function closeInteviewModal(loadResults) {
+  if (loadResults === true) getApplicantInterview(Number(props.id));
+  openInterview.value = !openInterview.value;
 }
 
 function onOptionChanged(item) {
   const prevOption = selected.value;
   swal({
     title: "Confirm",
-    text: "Are you sure you want to move the candidate",
+    text: "Are you sure you want to move the applicant",
     icon: "question",
     showCancelButton: true,
     cancelButtonText: "No",
@@ -403,7 +404,8 @@ function onOptionChanged(item) {
 
       ApplicantService.changeWorkflowStage(Number(props.id), payload).then(
         () => {
-          toast("Candidate successfully moved");
+          toast("Applicant successfully moved");
+          getApplicantData();
         }
       );
     }
@@ -423,7 +425,7 @@ function getApplicantInfo(id) {
       selected.value = stage;
       getCandidateEducations(candidateDetail.value.id);
       getCandidateExperiences(candidateDetail.value.id);
-      // if (!stage.name.includes("interview")) tabs.value[4].disabled = true;
+      if (!(stage.name === 'Interview')) tabs.value[4].disabled = true;
     })
     .catch((err) => {
       console.error(err);

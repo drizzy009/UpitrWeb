@@ -4,11 +4,11 @@
       <div class="col-span-6">
         <label
           for="activityTitle"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Activity Title</label>
         <FormInput :error="v$.title.$error" id="activityTitle" v-model="formData.title"></FormInput>
       </div>
-      <div class="col-span-6 mt-2 md:mt-4  mb-2">
+      <div class="col-span-6 mt-2 mb-2 md:mt-4">
         <div class="flex flex-row">
           <div class="w-1/2 mr-1">
             <label
@@ -44,7 +44,7 @@
       <div class="col-span-6 mt-2 md:mt-4">
         <label
           for="relatedTo"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Related To</label>
         <MultiSelect
           id="relatedTo"
@@ -59,7 +59,7 @@
       <div v-if="showVacancy" class="col-span-6 mt-2 md:mt-4">
         <label
           for="vacancy"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Vacancy</label>
         <MultiSelect
           searchable
@@ -75,7 +75,7 @@
       <div v-if="showCandidate" class="col-span-6 mt-2 md:mt-4">
         <label
           for="candidate"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Candidate</label>
         <MultiSelect
           searchable
@@ -89,49 +89,49 @@
           v-model="formData.job_applicant_id"
         ></MultiSelect>
       </div>
-      <div class="col-span-6 mt-2 md:mt-4 mb-2">
+      <div class="col-span-6 mt-2 mb-2 md:mt-4">
         <div class="flex flex-row">
           <div class="w-1/2 mr-1">
             <label
               for="startDate"
               class="block text-sm font-medium text-gray-700"
             >Start Date & Time</label>
-            <Datepicker v-model="formData.start"></Datepicker>
+            <DatePicker v-model="formData.start"></DatePicker>
           </div>
           <div class="w-1/2">
             <label
               for="endDate"
               class="block text-sm font-medium text-gray-700"
             >End Date & Time</label>
-            <Datepicker v-model="formData.end"></Datepicker>
+            <DatePicker v-model="formData.end"></DatePicker>
           </div>
         </div>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
           for="assignees"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Assignees</label>
         <MultiSelect closeOnSelect="false" valueProp="id" value="id" label="label" mode="tags" searchable :options="options" v-model="formData.assignees"></MultiSelect>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
           for="meetingUrl"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Meeting URL</label>
         <FormInput id="url" v-model="formData.meeting_url"></FormInput>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
           for="location"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Location</label>
         <FormInput id="location" v-model="formData.location"></FormInput>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
         <label
           for="description"
-          class="block text-sm font-medium text-gray-700 mb-2"
+          class="block mb-2 text-sm font-medium text-gray-700"
         >Description</label>
         <TextArea id="description" v-model="formData.description"></TextArea>
       </div>
@@ -145,7 +145,6 @@ import { useToast } from "vue-toastification";
 import { storeToRefs } from "pinia";
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import UserService from "../../service/user.service";
