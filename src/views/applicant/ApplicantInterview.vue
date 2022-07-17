@@ -2,6 +2,8 @@
   <AppModal
     :showModal="showInterview"
     @closeModal="closeInterview"
+    @submit="submitInterview"
+    :processing="processing"
     title="Applicant Interview"
   >
     <div class="border-t border-gray-200">
@@ -19,17 +21,21 @@
               </h3>
             </div>
             <div class="flex-shrink-0 ml-4">
-              <star-rating starSize="20" v-model="section.rating" />
+              <!-- <star-rating starSize="20" v-model="section.rating" /> -->
+              <rate
+                :length="5"
+                v-model="section.rating"
+              />
             </div>
           </div>
           <div
-            v-for="question in section.interview_questions"
+            v-for="(question, index) in section.interview_questions"
             :key="question.id"
             class="flex flex-col w-full"
           >
-            <div class="py-2">
-              <!-- <h5 class="text-sm">{{question.title}}</h5> -->
-              <p class="text-xs text-gray-700">
+            <div class="py-1">
+              <p class="mt-1 text-xs text-gray-700">
+                <b>{{ ++index }}.</b>
                 {{ question.question }}
               </p>
             </div>
@@ -39,12 +45,12 @@
     </div>
     <div class="grid grid-cols-6">
       <div class="col-span-6">
-        <label
+        <!-- <label
           for="feedback"
           class="block mb-2 text-sm font-medium text-gray-700"
           >Feedback</label
-        >
-        <TextArea id="description" v-model="feedback"></TextArea>
+        > -->
+        <TextArea placeholder="Feedback" id="description" v-model="feedback"></TextArea>
       </div>
     </div>
   </AppModal>
@@ -65,10 +71,9 @@ const props = defineProps({
 
 const feedback = ref("");
 const swal = inject("$swal");
-const results = ref(null);
 const processing = ref(false);
 const showInterview = ref(false);
-const interviewSection = ref([]);
+const interviewSection = ref(null);
 
 watch(
   () => props.toggle,

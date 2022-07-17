@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { vue3Debounce } from 'vue-debounce';
 import { QuillEditor } from '@vueup/vue-quill';
+import rate from 'vue-rate'
 import VTooltip from 'v-tooltip'
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
@@ -36,6 +37,8 @@ import "vue-toastification/dist/index.css";
 import 'vue3-easy-data-table/dist/style.css';
 import "@vueform/multiselect/themes/default.css";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import 'vue-rate/dist/vue-rate.css'
+
 
 const options = {
     transition: "Vue-Toastification__bounce",
@@ -52,6 +55,7 @@ const pinia = createPinia();
 
 pinia.use(piniaPluginPersistedstate);
 
+app.use(rate);
 app.use(pinia);
 app.use(router);
 app.use(CKEditor);

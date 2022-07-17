@@ -72,9 +72,9 @@
               </h3>
             </div>
             <div class="flex-shrink-0 ml-4">
-              <star-rating
-                disabled="true"
-                starSize="20"
+              <rate
+                :disabled="true"
+                :length="5"
                 v-model="feedback.rating"
               />
             </div>

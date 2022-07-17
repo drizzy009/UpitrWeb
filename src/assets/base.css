@@ -49,6 +49,10 @@
     }
 }
 
+.Rate__star {
+  padding: 1px !important;
+}
+
 .multiselect {
   font-size: 0.875rem;
   line-height: 1.25rem;
