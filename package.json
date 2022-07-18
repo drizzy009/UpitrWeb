@@ -35,7 +35,7 @@
     "vue": "^3.2.33",
     "vue-debounce": "^4.0.0",
     "vue-input-tag": "^2.0.7",
-    "vue-loading-overlay": "5.0",
+    "vue-loading-overlay": "^5.0.3",
     "vue-rate": "^3.1.1",
     "vue-router": "^4.0.14",
     "vue-star-rating": "^2.1.0",

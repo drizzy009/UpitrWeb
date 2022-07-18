@@ -8,6 +8,7 @@ import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
 import Datepicker from '@vuepic/vue-datepicker';
 import VueSweetalert2 from 'vue-sweetalert2';
+import VueLoading from 'vue-loading-overlay';
 import Multiselect from '@vueform/multiselect';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import vue3StarRatings from "vue3-star-ratings";
@@ -33,12 +34,13 @@ import CoreService from  './service/core.service';
 // import TokenService from './service/token.service';
 import { useAppStore } from './stores/app';
 
-import 'sweetalert2/dist/sweetalert2.min.css';
+import 'vue-rate/dist/vue-rate.css'
 import "vue-toastification/dist/index.css";
 import 'vue3-easy-data-table/dist/style.css';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import "@vueform/multiselect/themes/default.css";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import 'vue-rate/dist/vue-rate.css'
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 
 const options = {
@@ -61,6 +63,9 @@ app.use(pinia);
 app.use(router);
 app.use(CKEditor);
 app.use(VTooltip);
+app.use(VueLoading, {
+    color: 'blue'
+});
 app.use(VueSweetalert2);
 
 app.component('SideBar', SideBar);

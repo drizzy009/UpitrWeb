@@ -821,12 +821,14 @@ const {
   experienceLevels,
 } = storeToRefs(useMiscellaneous());
 
+const swal = inject("$swal");
+const $loading = inject("$loading");
+
 const benefit = ref(null);
 const description = ref(null);
 const requirements = ref(null);
 const responsibilities = ref(null);
 const { departments } = storeToRefs(useDepartments());
-const swal = inject("$swal");
 const stepNo = ref(1);
 const vacancyId = ref(0);
 const interviewId = ref(0);
@@ -926,6 +928,7 @@ onMounted(() => {
     return { label: item.name, value: item.id };
   });
 
+  const loader = $loading.show();
   VacancyService.single(Number(props.id)).then(result => {
     const { data } = result.data;
     // jobDetail.value = data;
@@ -964,17 +967,19 @@ onMounted(() => {
       }
     }
   }).catch((error) => {
-    console.error(error);
+    // console.error(error);
     let errorMessage = "Something went wrong, please try again later";
     if (error.status === 404) {
       errorMessage = "Vacancy information does not exist";
     }
 
     swal({
-        title: "Not found",
-        text: errorMessage,
-        icon: "error",
-      });
+      title: "Not found",
+      text: errorMessage,
+      icon: "error",
+    });
+  }).finally(() => {
+    loader.hide();
   })
 });
 
