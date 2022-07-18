@@ -181,7 +181,7 @@ const VacancyService = {
   candidatesByStageId(vacancyId, stageId) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/candidates?vacancy=${vacancyId}&stage=${stageId}`)
+        .get(`/applicants/${vacancyId}?stage=${stageId}`)
         .then((result) => {
           resolve(result);
         })

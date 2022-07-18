@@ -390,6 +390,7 @@ function getVacancyCandidates(stageId) {
   loadingCandidates.value = true;
   VacancyService.candidatesByStageId(vacancyId.value, stageId).then((response) => {
     serverResponse.value = response.data.data;
+    console.log(serverResponse.value)
   }).catch(() => {})
   .finally(() => {
     loadingCandidates.value = false;
