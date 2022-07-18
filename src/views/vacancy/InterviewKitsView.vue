@@ -31,21 +31,22 @@
     </div>
 
     <div v-if="showAddKit" id="newInterviewKit" class="mt-4">
-      <div class="pt-8 mb-4 md:grid md:grid-cols-12 md:gap-6">
+      <div
+        v-for="(section, index) in sections"
+        :key="index"
+        class="pt-8 mb-4 md:grid md:grid-cols-12 md:gap-6"
+      >
         <div class="mt-5 md:mt-0 md:col-span-10">
           <div class="px-6 shadow bg-gray-50">
-            <FormInput
-              v-model="interviewKit.title"
-              placeholder="Section Name"
-            />
+            <FormInput v-model="section.title" placeholder="Section Name" />
           </div>
-          <div v-for="(section, index) in sections" :key="section">
+          <div v-for="(questionItem, index) in section.questions" :key="index">
             <div class="mb-4 overflow-hidden shadow sm:rounded-md">
               <div class="px-4 py-2 shadow bg-gray-50 sm:p-6">
                 <div class="grid grid-cols-6 gap-6">
                   <div class="col-span-6 sm:col-span-6">
                     <input
-                      v-model="section.title"
+                      v-model="questionItem.title"
                       type="text"
                       placeholder="Title"
                       class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -54,9 +55,9 @@
                   <div class="col-span-6 sm:col-span-6">
                     <textarea
                       id="question"
-                      v-model="section.question"
+                      v-model="questionItem.question"
                       name="question"
-                      rows="5"
+                      rows="2"
                       class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       placeholder="Question"
                     />
@@ -67,17 +68,21 @@
                 <AppButton
                   type="button"
                   :processing="savingQuestion"
-                  @click="saveSection(section)"
-                  :disabled="interviewSectionId === 0 || section.title === '' || section.question === ''"
+                  @click="saveQuestion(section, questionItem, index)"
+                  :disabled="
+                    section.id === 0 ||
+                    section.title === '' ||
+                    section.question === ''
+                  "
                   class="inline-flex justify-center w-auto px-4 py-2 mr-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 rounded-md sm:text-sm sm:leading-5"
                 >
-                  Save Section
+                  Save Question
                 </AppButton>
                 <span
-                  @click="deleteSection(index)"
+                  @click="deleteQuestion(section, index)"
                   class="inline-flex justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-red-700 transition duration-150 ease-in-out cursor-pointer sm:text-sm sm:leading-5"
                 >
-                  Delete Section
+                  Delete Question
                 </span>
               </div>
             </div>
@@ -86,24 +91,30 @@
         <div class="mt-5 md:mt-0 md:col-span-2">
           <ul>
             <li
-              @click="saveInterview"
+              @click="saveSection(section, index)"
               class="mb-2 text-sm font-medium text-green-700 cursor-pointer"
             >
-              Save Interview Kit
+              Save Section
+            </li>
+            <li
+              @click="addNewQuestion(index)"
+              class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer"
+            >
+              Add New Question
             </li>
             <!-- <li @click="openModal()" class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer">Preview Interview</li> -->
             <li
-              @click="addNewSection"
-              class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer"
-            >
-              Add New Section
-            </li>
-            <li
-              @click="deleteInterview"
-              :disabled="deletingInterview"
+              @click="deleteSection(index)"
+              :disabled="deletingSection"
               class="mb-2 text-sm font-medium text-red-700 cursor-pointer"
             >
-              Delete Interview
+              Delete Section
+            </li>
+            <li
+              @click="addNewSection"
+              class="mt-4 mb-2 text-sm font-medium text-green-600 cursor-pointer"
+            >
+              Add New Section
             </li>
           </ul>
         </div>
@@ -200,7 +211,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { CheckIcon } from "@heroicons/vue/outline";
-import InterviewService from "../../service/interview.service";
+// import InterviewService from "../../service/interview.service";
 import VacancyInterviewSectionService from "../../service/vacancy-interview-section.service";
 import VacancySectionQuestionService from "../../service/vacancy-interview-section-question.service";
 
@@ -209,14 +220,11 @@ import VacancySectionQuestionService from "../../service/vacancy-interview-secti
 const toast = useToast();
 const open = ref(false);
 const savingQuestion = ref(false);
-const savingInterview = ref(false);
-const deletingInterview = ref(false);
+const savingSection = ref(false);
+const deletingSection = ref(false);
 const showAddKit = ref(false);
 const showEmptyKit = ref(true);
 const interviewSectionId = ref(0);
-const interviewKit = ref({
-  title: "",
-});
 
 const sections = ref([]);
 
@@ -229,57 +237,67 @@ function toggleEmptyKit() {
   showAddKit.value = true;
 
   let section = {
+    id: 0,
     title: "",
-    question: "",
+    questions: [
+      {
+        id: 0,
+        title: "",
+        question: "",
+      },
+    ],
   };
 
   sections.value.push(section);
 }
 
-function saveInterview() {
-  if (interviewKit.value.title !== "") {
-    savingInterview.value = true;
-    if (interviewSectionId.value === 0) {
-      if (sections.value[0].title === "" || sections.value[0].question === "") {
+function saveSection(section, index) {
+  if (section.title !== "") {
+    savingSection.value = true;
+    if (section.id === 0) {
+      if (
+        section.questions[0].title === "" ||
+        section.questions[0].question === ""
+      ) {
         toast.warning("Please add at least one question");
-        savingInterview.value = false;
+        savingSection.value = false;
         return;
       }
       /// save new
-      if (sections.value.length > 0) {
-        const payload = {
-          title: interviewKit.value.title,
-          interview_id: props.interviewId,
-          questions: sections.value,
-        };
-        VacancyInterviewSectionService.create(payload)
-          .then((response) => {
-            console.log(response);
-            const { data } = response.data;
-            interviewSectionId.value = data.id;
-            toast.success("Interview kit successfully saved");
-          })
-          .catch(() => {})
-          .finally(() => {
-            savingInterview.value = false;
-          });
-      }
-    }
-
-    if (interviewSectionId.value > 0) {
-      /// update
       const payload = {
-        title: interviewKit.value.title,
+        title: section.title,
         interview_id: props.interviewId,
+        questions: section.questions,
       };
 
-      VacancyInterviewSectionService.update(interviewSectionId.value, payload)
-        .then(() => {
-          toast.success("Interview kit successfully updated");
+      VacancyInterviewSectionService.create(payload)
+        .then((response) => {
+          const { data } = response.data;
+          sections.value[index].id = data.id;
+          sections.value[index].questions = [];
+          sections.value[index].questions = data.interview_questions;
+          toast.success("Interview section successfully saved");
         })
         .catch(() => {})
         .finally(() => {
-          savingInterview.value = false;
+          savingSection.value = false;
+        });
+    }
+
+    if (section.id > 0) {
+      /// update
+      const payload = {
+        title: section.title,
+        interview_id: props.interviewId,
+      };
+
+      VacancyInterviewSectionService.update(section.id, payload)
+        .then(() => {
+          toast.success("Interview section successfully updated");
+        })
+        .catch(() => {})
+        .finally(() => {
+          savingSection.value = false;
         });
     }
     return;
@@ -290,70 +308,101 @@ function saveInterview() {
 
 function addNewSection() {
   let section = {
+    id: 0,
+    title: "",
+    questions: [
+      {
+        id: 0,
+        title: "",
+        question: "",
+      },
+    ],
+  };
+  sections.value.push(section);
+}
+
+function addNewQuestion(sectionIndex) {
+  let question = {
+    id: 0,
     title: "",
     question: "",
   };
-  sections.value.push(section);
+  sections.value[sectionIndex].questions.push(question);
 }
 
 // function openModal() {
 //   open.value = true;
 // }
 
-function saveSection(section) {
+function saveQuestion(section, question, questionIndex) {
   savingQuestion.value = true;
   const payload = {
-    title: section.title,
-    question: section.question,
-    interview_section_id: interviewSectionId.value
-  }
+    title: question.title,
+    question: question.question,
+    interview_section_id: section.id,
+  };
 
-  if ('id' in section) {
-    VacancySectionQuestionService.update(Number(section.id), payload).then(() => {
-      toast.info("Question successfully updated");
-    }).catch(() => {})
-    .finally(() => {
-      savingQuestion.value = false;
-    })
+  if (question.id > 0) {
+    VacancySectionQuestionService.update(Number(question.id), payload)
+      .then(() => {
+        toast.info("Question successfully updated");
+      })
+      .catch(() => {})
+      .finally(() => {
+        savingQuestion.value = false;
+      });
     return;
   }
 
-  VacancySectionQuestionService.create(payload).then(() => {
-    toast.info("Question successfully saved");
-  }).catch(() => {})
-  .finally(() => {
-    savingQuestion.value = false;
-  })
+  VacancySectionQuestionService.create(payload)
+    .then((response) => {
+      const { data } = response.data;
+      const index = sections.value.indexOf(section);
+      sections.value[index].questions[questionIndex].id = data.id;
+      toast.info("Question successfully saved");
+    })
+    .catch(() => {})
+    .finally(() => {
+      savingQuestion.value = false;
+    });
+}
+
+function deleteQuestion(section, index) {
+  const getQuestion = section.questions[index];
+  if ("id" in getQuestion) {
+    VacancySectionQuestionService.delete(Number(getQuestion.id)).then(() => {
+      toast.info("Question successfully deleted");
+    });
+  }
+
+  section.questions.splice(index, 1);
+  
+  // if (section.questions.value.length == 0 && interviewSectionId.value === 0) {
+  //   showEmptyKit.value = true;
+  //   showAddKit.value = false;
+  // }
 }
 
 function deleteSection(index) {
   const section = sections.value[index];
-  if ('id' in section) {
-    VacancySectionQuestionService.delete(Number(section.id)).then(() => {
-      toast.info('Question successfully deleted')
-    })
+
+  if (section.id !== 0) {
+    deletingSection.value = true;
+    VacancyInterviewSectionService.delete(section.id)
+      .then(() => {
+        toast.success("Section successfully deleted");
+      })
+      .catch(() => {})
+      .finally(() => {
+        deletingSection.value = false;
+      });
   }
-  
+
   sections.value.splice(index, 1);
-  if (sections.value.length == 0 && interviewSectionId.value === 0) {
+  if (sections.value.length === 0) {
     showEmptyKit.value = true;
     showAddKit.value = false;
   }
-}
-
-function deleteInterview() {
-  if (interviewSectionId.value !== 0) {
-    deletingInterview.value = true;
-    VacancyInterviewSectionService.delete(interviewSectionId.value).then(() => {
-      toast.success("Interview kit successfully deleted");
-    }).catch(() => {})
-    .finally(() => {
-      deletingInterview.value = false;
-    })
-  }
-  sections.value = [];
-  showEmptyKit.value = true;
-  showAddKit.value = false;
 }
 
 // function getVacancyInterviewSections(id) {
