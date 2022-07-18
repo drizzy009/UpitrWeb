@@ -36,7 +36,7 @@
           <div class="px-6 shadow bg-gray-50">
             <FormInput
               v-model="interviewKit.title"
-              placeholder="Interview Name"
+              placeholder="Section Name"
             />
           </div>
           <div v-for="(section, index) in sections" :key="section">
@@ -285,7 +285,7 @@ function saveInterview() {
     return;
   }
 
-  toast.error("Enter Interview Name");
+  toast.error("Enter Section Name");
 }
 
 function addNewSection() {

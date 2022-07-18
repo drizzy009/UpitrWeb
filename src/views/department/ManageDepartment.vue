@@ -19,11 +19,13 @@
                   <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
                 <input
+                  v-debounce:500ms="onSearchChange"
                   id="search-field"
                   name="search-field"
                   class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
-                  placeholder="Search Department"
-                  type="search"
+                  placeholder="Search Departments"
+                  type="text"
+                  v-model="keyword"
                 />
               </div>
             </form>
@@ -31,7 +33,7 @@
             <!-- Profile -->
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
-            <button
+            <IconButton
               type="button"
               @click="toggleAddDepartment"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
@@ -40,7 +42,8 @@
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+              New Department
+            </IconButton>
 
             <!-- <button
               type="button"
@@ -273,6 +276,7 @@ import EditDepartment from './EditDepartment.vue';
 import { useDepartments } from "../../stores/department";
 import DepartmentService from "../../service/department.service";
 
+const keyword = ref("");
 const swal = inject('$swal');
 const toast = useToast();
 const departmentStore = useDepartments();
@@ -281,6 +285,12 @@ const openEditDepartment = ref(false);
 const selectedDepartment = ref(false);
 const departmentList = ref([]);
 const { departments, processing } = storeToRefs(useDepartments());
+
+function onSearchChange(value) {
+  if (value.length > 3) {
+    departmentStore.fetchAllDepartments(`keyword=${value}`);
+  }
+}
 
 function toggleAddDepartment() {
   openAddDepartment.value = !openAddDepartment.value;
@@ -314,6 +324,7 @@ function deleteDepartment(id) {
 }
 
 function refreshData() {
+  keyword.value = "";
   departmentStore.fetchAllDepartments();
 }
 

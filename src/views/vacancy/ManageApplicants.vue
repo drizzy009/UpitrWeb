@@ -588,7 +588,7 @@ const published = ref(false);
 const processing = ref(false);
 const vacancyDetail = ref(null);
 const remoteOffice = ref("On-site");
-const { workflowStages } = useVacancies()
+// const { workflowStages } = useVacancies()
 const vacancyStore = useVacancies();
 const searchForm = ref({
   keyword: "",
@@ -648,6 +648,18 @@ function onSearchChange(value) {
     searchForm.value.keyword = value;
     processing.value = true;
     ApplicantService.getByVacancyId(vacancyId.value, `keyword=${value}`)
+      .then((response) => {
+        serverResponse.value = response.data.data;
+      })
+      .catch(() => {})
+      .finally(() => {
+        processing.value = false;
+      });
+  }
+
+  if (value.length <= 3) {
+    processing.value = true;
+    ApplicantService.getByVacancyId(vacancyId.value)
       .then((response) => {
         serverResponse.value = response.data.data;
       })

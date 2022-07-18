@@ -13,9 +13,9 @@ export const useDepartments = defineStore({
     }),
     getters:{},
     actions: {
-        fetchAllDepartments() {
+        fetchAllDepartments(slug = "") {
             this.processing = true;
-            DepartmentService.all().then(response => {
+            DepartmentService.all(slug).then(response => {
                 this.departments = response.data.data
             }).catch((error) => {
                 this.errorMessage = error.data.message

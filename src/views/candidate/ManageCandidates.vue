@@ -19,37 +19,29 @@
                   <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
                 <input
+                  v-debounce:500ms="onSearchChange"
                   id="search-field"
                   name="search-field"
                   class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
                   placeholder="Search Candidates"
-                  type="search"
+                  type="text"
+                  v-model="searchForm.keyword"
                 />
               </div>
             </form>
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
-            <!-- <button
+            <IconButton
               type="button"
-              @click="goto('CreateCandidate')"
-              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
-            >
-              <PlusCircleIcon
-                class="flex-shrink-0 w-5 h-5 text-indigo"
-                aria-hidden="true"
-              />
-            </button> -->
-
-            <button
-              type="button"
-              @click="open = true"
+              @click="openFilter = true"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <FilterIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+              Advanced Filter
+            </IconButton>
 
             <button
               type="button"
@@ -124,14 +116,22 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-if="loading">
-                <td colspan="6">
+                <td colspan="7">
                   <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
                 </td>
               </tr>
-              <tr v-for="(candidate, index) in serverResponse.data" :key="candidate.id">
+              <tr
+                v-for="(candidate, index) in serverResponse.data"
+                :key="candidate.id"
+              >
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
-                    <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) + (serverResponse.current_page - 1) * serverResponse.per_page }}</span>
+                    <span class="inline-flex px-2 text-xs font-semibold">{{
+                      index +
+                      1 +
+                      (serverResponse.current_page - 1) *
+                        serverResponse.per_page
+                    }}</span>
                   </div>
                 </td>
                 <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
@@ -150,24 +150,30 @@
                     </div>
                     <div class="ml-4">
                       <div class="font-medium text-gray-900">
-                        {{ candidate.firstname }} {{ candidate.lastname }}
+                        {{ candidate.firstname }} {{ candidate.lastname }} {{ candidate.middlename }}
                       </div>
                       <div class="text-gray-500">{{ candidate.email }}</div>
                     </div>
                   </div>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  <div class="text-gray-900">{{ candidate.job_function.name }}</div>
-                  <div class="text-gray-500">in {{candidate.industry.name}}</div>
-                  <div class="text-gray-500">with {{candidate.years_of_experience}} years of experience</div>
+                  <div class="text-gray-900">
+                    {{ candidate.job_function.name }}
+                  </div>
+                  <div class="text-gray-500">
+                    in {{ candidate.industry.name }}
+                  </div>
+                  <div class="text-gray-500">
+                    with {{ candidate.years_of_experience }} years of experience
+                  </div>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div>
                     <p class="text-sm text-gray-900">
-                      {{candidate.gender_id === 0 ? 'Female': 'Male'}}
+                      {{ candidate.gender_id === 0 ? "Female" : "Male" }}
                     </p>
                     <p class="mt-2 text-sm text-gray-900">
-                      {{FormatAge(candidate.dob)}} years old
+                      {{ FormatAge(candidate.dob) }} years old
                     </p>
                   </div>
                 </td>
@@ -286,8 +292,8 @@
       </div>
     </div>
 
-    <TransitionRoot as="template" :show="open">
-      <Dialog as="div" class="relative z-10" @close="open = false">
+    <TransitionRoot as="template" :show="openFilter">
+      <Dialog as="div" class="relative z-10" @close="openFilter = false">
         <div class="fixed inset-0" />
 
         <div class="fixed inset-0 overflow-hidden">
@@ -316,13 +322,13 @@
                           <DialogTitle
                             class="text-lg font-medium text-gray-900"
                           >
-                            Filter Candidates
+                            Advanced Filter
                           </DialogTitle>
                           <div class="flex items-center ml-3 h-7">
                             <button
                               type="button"
                               class="text-gray-400 bg-white rounded-md hover:text-gray-500"
-                              @click="open = false"
+                              @click="openFilter = false"
                             >
                               <span class="sr-only">Close panel</span>
                               <XIcon class="w-6 h-6" aria-hidden="true" />
@@ -332,23 +338,22 @@
                       </div>
                       <div class="relative flex-1 px-4 mt-6 sm:px-6">
                         <div class="flex flex-col">
-                          <FormInput
-                            v-model="searchForm.keyword"
-                            placeholder="Search by keyword"
-                          ></FormInput>
-
                           <div>
                             <h3
                               class="mt-4 text-xs font-medium leading-6 text-gray-900"
                             >
-                              Filter by Vacancy
+                              Filter by Industry
                             </h3>
-                            <SelectInput
-                              v-model="searchForm.vacancy"
-                              placeholder="Select Vacancy"
-                              :items="vacancyList"
-                              class="mt-1"
-                            ></SelectInput>
+                            <MultiSelect
+                              searchable
+                              value="id"
+                              label="name"
+                              valueProp="id"
+                              placeholder="Select an industry"
+                              v-model="searchForm.industry"
+                              :options="industries"
+                            >
+                            </MultiSelect>
                           </div>
 
                           <div>
@@ -357,37 +362,131 @@
                             >
                               Filter by Degree
                             </h3>
-                            <SelectInput
-                              placeholder="Select Degree"
+                            <MultiSelect
+                              searchable
+                              value="value"
+                              label="name"
+                              valueProp="value"
+                              placeholder="Select degree"
                               v-model="searchForm.degree_class"
-                              :items="degreeClassifications"
-                              class="mt-1"
-                            ></SelectInput>
+                              :options="degreeClassifications"
+                            ></MultiSelect>
                           </div>
 
                           <div>
                             <h3
                               class="mt-4 text-xs font-medium leading-6 text-gray-900"
                             >
-                              Start Date
+                              Filter by Job Functions
                             </h3>
-                            <DateInput
-                              type="date"
-                              v-model="searchForm.dob_start"
-                              class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
+                            <MultiSelect
+                              searchable
+                              value="id"
+                              label="name"
+                              valueProp="id"
+                              placeholder="Select job function"
+                              v-model="searchForm.job_function"
+                              :options="jobFunctions"
+                            ></MultiSelect>
                           </div>
+
                           <div>
                             <h3
                               class="mt-4 text-xs font-medium leading-6 text-gray-900"
                             >
-                              End Date
+                              Filter by Gender
                             </h3>
-                            <DateInput
-                              type="date"
-                              v-model="searchForm.dob_end"
-                              class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
+                            <MultiSelect
+                              value="id"
+                              label="name"
+                              valueProp="id"
+                              placeholder="Select gender"
+                              v-model="searchForm.gender"
+                              :options="genderList"
+                            ></MultiSelect>
+                          </div>
+
+                          <div>
+                            <h3
+                              class="mt-4 text-xs font-medium leading-6 text-gray-900"
+                            >
+                              Filter by Stage
+                            </h3>
+                            <MultiSelect
+                              searchable
+                              value="id"
+                              label="name"
+                              valueProp="id"
+                              placeholder="Select a stage"
+                              v-model="searchForm.stage"
+                              :options="workflowStage"
+                            ></MultiSelect>
+                          </div>
+
+                          <div>
+                            <h3
+                              class="mt-4 text-xs font-medium leading-6 text-gray-900"
+                            >
+                              Filter by Years of experience
+                            </h3>
+                          </div>
+                          <div class="flex flex-row space-x-2">
+                            <div class="w-1/2">
+                              <h3
+                                class="mt-2 text-xs font-medium leading-6 text-gray-900"
+                              >
+                                Minimum
+                              </h3>
+                              <NumberInput
+                                v-model="searchForm.exp_min"
+                                class="mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              />
+                            </div>
+                            <div class="w-1/2">
+                              <h3
+                                class="mt-2 text-xs font-medium leading-6 text-gray-900"
+                              >
+                                Maximum
+                              </h3>
+                              <NumberInput
+                                v-model="searchForm.exp_max"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3
+                              class="mt-4 text-xs font-medium leading-6 text-gray-900"
+                            >
+                              Filter by Date of Birth
+                            </h3>
+                          </div>
+                          <div class="flex flex-row space-x-2">
+                            <div class="w-1/2">
+                              <h3
+                                class="mt-2 text-xs font-medium leading-6 text-gray-900"
+                              >
+                                From
+                              </h3>
+                              <DateInput
+                                type="date"
+                                v-model="searchForm.dob_start"
+                                class="mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              />
+                            </div>
+                            <div class="w-1/2">
+                              <h3
+                                class="mt-2 text-xs font-medium leading-6 text-gray-900"
+                              >
+                                To
+                              </h3>
+                              <DateInput
+                                type="date"
+                                v-model="searchForm.dob_end"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -403,7 +502,7 @@
                       <AppButton
                         type="submit"
                         label="Search"
-                        :processing="processing"
+                        :processing="loading"
                         @click="searchCandidates"
                         class="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700"
                       >
@@ -421,22 +520,20 @@
 </template>
 <script setup>
 import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
   Menu,
-  MenuButton,
+  Dialog,
   MenuItem,
   MenuItems,
+  MenuButton,
+  DialogTitle,
+  DialogPanel,
+  TransitionRoot,
+  TransitionChild,
 } from "@headlessui/vue";
 import {
   RefreshIcon,
   FilterIcon,
   DownloadIcon,
-  PencilAltIcon,
-  TrashIcon,
   SearchIcon,
   DotsVerticalIcon,
   ClipboardListIcon,
@@ -452,7 +549,32 @@ import CandidateService from "../../service/candidate.service";
 
 const vacancyStore = useVacancies();
 const { vacancies } = vacancyStore;
+const { industries, jobFunctions, degreeClassifications } = storeToRefs(
+  useMiscellaneous()
+);
+
+const workflowStage = [
+  { name: "Sourced", id: 1 },
+  { name: "Applied", id: 2 },
+  { name: "Assessment", id: 3 },
+  { name: "Offered", id: 4 },
+  { name: "Hired", id: 5 },
+  { name: "Disqualified", id: 6 },
+];
+
+const genderList = ref([
+  {
+    id: 0,
+    name: "Female",
+  },
+  {
+    id: 1,
+    name: "Male",
+  },
+]);
+
 // const candidateList = ref([]);
+const openFilter = ref(false);
 const vacancyList = ref([]);
 const loading = ref(false);
 const processing = ref(false);
@@ -471,18 +593,19 @@ const serverResponse = ref({
   first_page_url: null,
 });
 
-const { degreeClassifications } = storeToRefs(useMiscellaneous());
-
 const searchForm = ref({
   keyword: "",
   dob_start: "",
   dob_end: "",
-  vacancy: "",
+  gender: "",
   degree_class: "",
+  industry: "",
+  job_function: "",
+  exp_min: "",
+  exp_max: "",
+  stage: "",
+  page_size: "",
 });
-
-const open = ref(false);
-// const router = useRouter();
 
 function formatLabel(label) {
   if (label.includes("Prev")) {
@@ -508,6 +631,13 @@ function getCandidates(slug = "") {
     .finally(() => {
       loading.value = false;
     });
+}
+
+function onSearchChange(value) {
+  if (value.length > 2) {
+    searchForm.value.keyword = value;
+    getCandidates(`keyword=${value}&`);
+  }
 }
 
 function navigateTo(link) {
@@ -541,10 +671,7 @@ function navigateTo(link) {
 // }
 
 function closeSearch() {
-  open.value = false;
-  Object.keys(searchForm.value).forEach((key) => {
-    searchForm.value[key] = "";
-  });
+  openFilter.value = false;
 }
 
 function formatAppDate(dateValue) {
@@ -554,7 +681,7 @@ function formatAppDate(dateValue) {
 function searchCandidates() {
   var slug = "";
   Object.keys(searchForm.value).forEach((key) => {
-    if (searchForm.value[key] !== "") {
+    if (searchForm.value[key] !== "" && searchForm.value[key] !== null) {
       slug += `${key}=${searchForm.value[key]}&`;
     }
   });

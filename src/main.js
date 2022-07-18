@@ -2,8 +2,8 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { vue3Debounce } from 'vue-debounce';
 import { QuillEditor } from '@vueup/vue-quill';
-import rate from 'vue-rate'
-import VTooltip from 'v-tooltip'
+import rate from 'vue-rate';
+import VTooltip from 'v-tooltip';
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
 import Datepicker from '@vuepic/vue-datepicker';

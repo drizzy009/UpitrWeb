@@ -7,7 +7,7 @@
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
           <div class="flex-1 min-w-0">
-            <form class="w-full flex md:ml-0" action="#" method="GET">
+            <form class="flex w-full md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
               <div
                 class="relative w-full text-gray-400 focus-within:text-gray-600"
@@ -16,49 +16,52 @@
                   class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
                   aria-hidden="true"
                 >
-                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                  <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
                 <input
+                  v-debounce:500ms="onSearchChange"
                   id="search-field"
                   name="search-field"
-                  class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
+                  class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
                   placeholder="Search Activities"
-                  type="search"
+                  type="text"
+                  v-model="keyword"
                 />
               </div>
             </form>
 
             <!-- Profile -->
           </div>
-          <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-            <button
+          <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
+            <IconButton
               type="button"
               @click="toggleAddActivity"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+              New Activities
+            </IconButton>
 
             <button
               type="button"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
-                class="flex-shrink-0 h-5 w-5 text-indigo"
+                class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
             </button>
 
             <button
               type="button"
-              @click="getActivities"
+              @click="onRefreshClicked"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon
-                class="flex-shrink-0 h-5 w-5 text-green"
+                class="flex-shrink-0 w-5 h-5 text-green"
                 aria-hidden="true"
               />
             </button>
@@ -67,12 +70,12 @@
       </div>
     </div>
 
-    <div class="max-w-9xl mx-auto px-4 sm:px-6 mt-6 lg:px-6">
-      <div class="bg-white shadow sm:rounded-lg px-8">
+    <div class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
+      <div class="px-8 bg-white shadow sm:rounded-lg">
         <div v-if="loading">
           <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
         </div>
-        <div v-if="!loading" class="mt-0 w-full mx-auto">
+        <div v-if="!loading" class="w-full mx-auto mt-0">
           <div v-if="serverResponse.data.length === 0">
             <h4 class="text-center">No activities found</h4>
           </div>
@@ -82,7 +85,7 @@
           ></calendar-component>
           <!-- Pagination -->
           <nav
-            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+            class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
             aria-label="Pagination"
           >
             <div class="hidden sm:block">
@@ -102,7 +105,7 @@
                 results
               </p>
             </div>
-            <div class="flex-1 flex justify-between sm:justify-end">
+            <div class="flex justify-between flex-1 sm:justify-end">
               <div v-for="link in serverResponse.links" :key="link">
                 <AppButton
                   @click="navigateTo(link.url)"
@@ -112,7 +115,7 @@
                       ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
                       : 'text-gray-700 bg-white'
                   "
-                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md hover:bg-gray-50"
+                  class="relative inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50"
                 >
                   {{ formatLabel(link.label) }}
                 </AppButton>
@@ -132,10 +135,10 @@
 <script setup>
 import { ref, inject, onMounted } from "vue";
 import {
-  PlusCircleIcon,
+  SearchIcon,
   RefreshIcon,
   DownloadIcon,
-  SearchIcon,
+  PlusCircleIcon,
 } from "@heroicons/vue/solid";
 import { useToast } from "vue-toastification";
 import CreateActivity from "./CreateActivity.vue";
@@ -147,6 +150,7 @@ const toast = useToast();
 const swal = inject("$swal");
 const loading = ref(false);
 const processing = ref(false);
+const keyword = ref("");
 const serverResponse = ref({
   to: 0,
   from: 0,
@@ -161,6 +165,17 @@ const serverResponse = ref({
   last_page_url: null,
   first_page_url: null,
 });
+
+function onRefreshClicked () {
+  keyword.value = "";
+  getActivities();
+}
+
+function onSearchChange(value) {
+  if (value.length > 3) {
+    getActivities(`keyword=${value}`);
+  }
+}
 
 function toggleAddActivity() {
   openAddActivity.value = !openAddActivity.value;

@@ -17,19 +17,28 @@
                   <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
                 <input
+                  v-debounce:500ms="onSearchChange"
+                  id="search-field"
+                  name="search-field"
+                  class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
+                  placeholder="Search Vacancies"
+                  type="text"
+                  v-model="searchForm.keyword"
+                />
+                <!-- <input
                   id="search-field"
                   name="search-field"
                   class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
                   placeholder="Search Vacancies"
                   type="search"
-                />
+                /> -->
               </div>
             </form>
 
             <!-- Profile -->
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
-            <button
+            <IconButton
               type="button"
               @click="goto('CreateVacancy')"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
@@ -38,9 +47,10 @@
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+              New Vacancy
+            </IconButton>
 
-            <button
+            <IconButton
               type="button"
               @click="open = true"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
@@ -49,7 +59,8 @@
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+              Advanced Filter
+            </IconButton>
 
             <button
               type="button"
@@ -127,7 +138,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-if="loading">
-                <td colspan="6">
+                <td colspan="7">
                   <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
                 </td>
               </tr>
@@ -263,10 +274,10 @@
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
                             <a
-                              href="#"
+                              @click="deleteVacancy(vacancy.id)"
                               :class="[
                                 active ? 'bg-red-100 text-red-900' : 'text-red-700',
-                                'group flex items-center px-4 py-2 text-sm',
+                                'cursor-pointer group flex items-center px-4 py-2 text-sm',
                               ]"
                             >
                               <TrashIcon
@@ -378,22 +389,28 @@
                     </div>
                     <div class="relative flex-1 px-4 mt-6 sm:px-6">
                       <div class="flex flex-col">
-                        <FormInput
-                          v-model="searchForm.keyword"
-                          placeholder="Search by vacancy name/description"
-                        ></FormInput>
                         <div>
                           <h3
                             class="mt-4 text-xs font-medium leading-6 text-gray-900"
                           >
                             Filter by department
                           </h3>
-                          <SelectInput
+                          <MultiSelect
+                            searchable
+                            value="id"
+                            label="name"
+                            valueProp="id"
+                            placeholder="Select a department"
+                            v-model="searchForm.department"
+                            :options="departmentList"
+                            class="mt-1"
+                          ></MultiSelect>
+                          <!-- <SelectInput
                             :items="departmentList"
                             v-model="searchForm.department"
                             placeholder="Select department"
                             class="mt-1"
-                          ></SelectInput>
+                          ></SelectInput> -->
                         </div>
                         <div>
                           <h3
@@ -449,31 +466,31 @@
   </TransitionRoot>
 </template>
 <script setup>
-import {
-  CalendarIcon,
-  LocationMarkerIcon,
-  PlusCircleIcon,
-  RefreshIcon,
-  FilterIcon,
-  DownloadIcon,
-  DuplicateIcon,
-  PencilAltIcon,
-  TrashIcon,
-  SearchIcon,
-} from "@heroicons/vue/solid";
-import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { ref, onMounted, inject } from "vue";
+import { useToast } from "vue-toastification";
+import {
+  TrashIcon,
+  FilterIcon,
+  SearchIcon,
+  RefreshIcon,
+  DownloadIcon,
+  CalendarIcon,
+  PencilAltIcon,
+  PlusCircleIcon,
+  LocationMarkerIcon,
+} from "@heroicons/vue/solid";
 import { DotsVerticalIcon, ClipboardListIcon } from "@heroicons/vue/solid";
 import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
   Menu,
-  MenuButton,
+  Dialog,
   MenuItem,
   MenuItems,
+  MenuButton,
+  DialogPanel,
+  DialogTitle,
+  TransitionRoot,
+  TransitionChild,
 } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/outline";
 import { ConvertDateToDays } from "../../util/Formatter";
@@ -482,10 +499,14 @@ import VacancyService from "../../service/vacancies.service";
 
 const departmentStore = useDepartments();
 const { departments } = departmentStore;
-const departmentList = ref([]);
+
 const open = ref(false);
 const loading = ref(false);
 const processing = ref(false);
+const departmentList = ref([]);
+
+const toast = useToast();
+const swal = inject('$swal');
 
 const serverResponse = ref({
   to: 0,
@@ -510,6 +531,33 @@ const searchForm = ref({
 });
 
 const router = useRouter();
+
+function onSearchChange(value) {
+  if (value.length > 3) {
+    searchForm.value.keyword = value;
+    processing.value = true;
+    VacancyService.all(`keyword=${value}`)
+      .then((response) => {
+        serverResponse.value = response.data.data;
+      })
+      .catch(() => {})
+      .finally(() => {
+        processing.value = false;
+      });
+  }
+
+  if (value.length <= 3) {
+    processing.value = true;
+    VacancyService.all()
+      .then((response) => {
+        serverResponse.value = response.data.data;
+      })
+      .catch(() => {})
+      .finally(() => {
+        processing.value = false;
+      });
+  }
+}
 
 function navigateTo(link) {
   processing.value = true;
@@ -568,7 +616,7 @@ function fetchVacancies(slug = "") {
 function searchVacancies() {
   var slug = "";
   Object.keys(searchForm.value).forEach((key) => {
-    if (searchForm.value[key] !== "") {
+    if (searchForm.value[key] !== "" && searchForm.value[key] !== null) {
       slug += `${key}=${searchForm.value[key]}&`;
     }
   });
@@ -577,7 +625,28 @@ function searchVacancies() {
 }
 
 function refreshData() {
+  Object.keys(searchForm.value).forEach((key) => {
+    searchForm.value[key] = "";
+  });
   fetchVacancies("");
+}
+
+function deleteVacancy(id) {
+  swal({
+    title: "Confirm Delete",
+    text: "Are you sure you want to delete this vacancy",
+    icon: "question",
+    showCancelButton: true,
+    cancelButtonText: "No",
+    confirmButtonText: "Yes",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      VacancyService.delete(id).then(() => {
+        toast("Vacancy successfully deleted");
+        fetchVacancies();
+      }).catch(() => {})
+    }
+  });
 }
 
 onMounted(() => {
