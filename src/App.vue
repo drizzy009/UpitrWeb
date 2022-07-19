@@ -40,6 +40,7 @@ function fetchRequiredData () {
 onMounted(() => {
   try {
     const token = TokenService.getToken();
+    
     if (isAuthenticated.value) {
       fetchRequiredData();
     }

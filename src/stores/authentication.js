@@ -12,6 +12,7 @@ export const useAuthentication = defineStore({
         authenticating: false,
         isAuthenticated: false,
         errorMessage: "",
+        returnUrl: "",
     }),
     getters: {},
     actions: {
