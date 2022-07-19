@@ -62,15 +62,16 @@
               Advanced Filter
             </IconButton>
 
-            <button
+            <IconButton
               type="button"
+              @click="downloadVacancies"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+            </IconButton>
 
             <button
               type="button"
@@ -466,8 +467,9 @@
   </TransitionRoot>
 </template>
 <script setup>
-import { useRouter } from "vue-router";
 import { ref, onMounted, inject } from "vue";
+import { useRouter } from "vue-router";
+import { utils, writeFile } from 'xlsx';
 import { useToast } from "vue-toastification";
 import {
   TrashIcon,
@@ -493,7 +495,7 @@ import {
   TransitionChild,
 } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/outline";
-import { ConvertDateToDays } from "../../util/Formatter";
+import { GetUnixTime, FormatDate, ConvertDateToDays } from "../../util/Formatter";
 import { useDepartments } from "../../stores/department";
 import VacancyService from "../../service/vacancies.service";
 
@@ -506,7 +508,9 @@ const processing = ref(false);
 const departmentList = ref([]);
 
 const toast = useToast();
+const router = useRouter();
 const swal = inject('$swal');
+const $loading = inject("$loading");
 
 const serverResponse = ref({
   to: 0,
@@ -530,7 +534,41 @@ const searchForm = ref({
   department: "",
 });
 
-const router = useRouter();
+function downloadVacancies() {
+  const loader = $loading.show();
+  VacancyService.all(`page_size=${serverResponse.value.total}`)
+    .then((result) => {
+      const { data } = result.data.data;
+      let sno = 0;
+
+      const exportData = data.map(vacancy => {
+        return {
+          SN: ++sno,
+          Title: vacancy.title,
+          Code: vacancy.code,
+          Description: vacancy.description,
+          Department: vacancy.department.name,
+          "Head Count": vacancy.head_count,
+          "Job Function": vacancy.job_function.name,
+          Industry: vacancy.industry.name,
+          "Employment Type": vacancy.employment_type.name,
+          "Education Level": vacancy.education_level.name,
+          "Experience Level": vacancy.experience_level.name,
+          "Due Date": FormatDate(vacancy.deadline, "MM-DD-YYYY"),
+        }
+      });
+
+      const time = GetUnixTime();
+      const sheet = utils.json_to_sheet(exportData);
+      const workbook = utils.book_new();
+      utils.book_append_sheet(workbook, sheet, 'Vacancies');
+      writeFile(workbook, `vacancies_list_${time}.xlsx`);
+    })
+    .catch(() => {})
+    .finally(() => {
+      loader.hide();
+    });
+}
 
 function onSearchChange(value) {
   if (value.length > 3) {

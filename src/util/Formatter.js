@@ -1,6 +1,10 @@
 import moment from 'moment';
 import numeral from 'numeral';
 
+export const GetUnixTime = () => {
+    return moment().unix();
+}
+
 export const FormatMoney = (numberValue) => {
     return numeral(numberValue).format('0,0.00');
 }

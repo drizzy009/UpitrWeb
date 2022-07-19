@@ -40,15 +40,16 @@
             />
           </IconButton>
 
-          <button
+          <IconButton
             type="button"
+            @click="downloadApplicants"
             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
           >
             <DownloadIcon
               class="flex-shrink-0 w-5 h-5 text-indigo"
               aria-hidden="true"
             />
-          </button>
+          </IconButton>
 
           <button
             type="button"
@@ -533,9 +534,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, inject } from "vue";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { utils, writeFile } from 'xlsx';
 import {
   Dialog,
   Menu,
@@ -564,7 +566,7 @@ import {
 import ApplicantView from "./ApplicantView.vue";
 import VacancyService from "../../service/vacancies.service";
 import ApplicantService from "../../service/applicant.service";
-import { FormatMoney, FormatShortDate } from "../../util/Formatter";
+import { GetUnixTime, FormatMoney, FormatShortDate } from "../../util/Formatter";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import { useVacancies } from "../../stores/vacancies";
 // import { PageSizes } from "../../util/Constants";
@@ -576,6 +578,8 @@ const props = defineProps({
 const { industries, jobFunctions, degreeClassifications } = storeToRefs(
   useMiscellaneous()
 );
+
+const $loading = inject("$loading");
 
 var tabIndex = ref(0);
 const vacancyId = ref(0);
@@ -638,6 +642,39 @@ const genderList = ref([
     name: "Male",
   },
 ]);
+
+function downloadApplicants() {
+  const loader = $loading.show();
+  ApplicantService.getByVacancyId(Number(props.id), `page_size=${serverResponse.value.total}`)
+    .then((result) => {
+      const { data } = result.data.data;
+      let sno = 0;
+
+      const exportData = data.map(data => {
+        return {
+          SN: ++sno,
+          Name: `${data.candidate.firstname} ${data.candidate.lastname} ${data.candidate.middlename}`,
+          Email: data.candidate.email,
+          "Phone No.": data.candidate.phone,
+          Gender: genderList.value.find(g => g.id === data.candidate.gender_id).name,
+          "Job Function": data.candidate.job_function.name,
+          Industry: data.candidate.industry.name,
+          "Years of Experience": data.candidate.years_of_experience,
+          "Applied On": FormatShortDate(data.candidate.created_at),
+        }
+      });
+
+      const time = GetUnixTime();
+      const sheet = utils.json_to_sheet(exportData);
+      const workbook = utils.book_new();
+      utils.book_append_sheet(workbook, sheet, 'Applicants');
+      writeFile(workbook, `applicants_list_${time}.xlsx`);
+    })
+    .catch(() => {})
+    .finally(() => {
+      loader.hide();
+    });
+}
 
 function backToDetail() {
   router.push({ name: "VacancyDetail", params: { id: vacancyId.value } });
@@ -769,7 +806,7 @@ function refreshData() {
 }
 
 function onSelectedItems(items) {
-  console.log(items);
+  // console.log(items);
 }
 
 onMounted(() => {

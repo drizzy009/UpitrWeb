@@ -43,17 +43,18 @@
               Advanced Filter
             </IconButton>
 
-            <button
+            <IconButton
               type="button"
+              @click="downloadCandidates"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+            </IconButton>
 
-            <button
+            <IconButton
               type="button"
               @click="refreshData"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
@@ -62,7 +63,7 @@
                 class="flex-shrink-0 w-5 h-5 text-green"
                 aria-hidden="true"
               />
-            </button>
+            </IconButton>
           </div>
         </div>
       </div>
@@ -519,6 +520,9 @@
   </main>
 </template>
 <script setup>
+import { ref, onMounted, inject } from "vue";
+import { storeToRefs } from "pinia";
+import { utils, writeFile } from 'xlsx';
 import {
   Menu,
   Dialog,
@@ -538,13 +542,10 @@ import {
   DotsVerticalIcon,
   ClipboardListIcon,
 } from "@heroicons/vue/solid";
-import { ref, onMounted } from "vue";
-import { storeToRefs } from "pinia";
-// import { useRouter } from "vue-router";
 import { XIcon, UserCircleIcon } from "@heroicons/vue/outline";
 import { useVacancies } from "../../stores/vacancies";
 import { useMiscellaneous } from "../../stores/miscellaneous";
-import { FormatAge, FormatLongDate2 } from "../../util/Formatter";
+import { GetUnixTime, FormatAge, FormatLongDate2 } from "../../util/Formatter";
 import CandidateService from "../../service/candidate.service";
 
 const vacancyStore = useVacancies();
@@ -572,6 +573,8 @@ const genderList = ref([
     name: "Male",
   },
 ]);
+
+const $loading = inject("$loading");
 
 // const candidateList = ref([]);
 const openFilter = ref(false);
@@ -606,6 +609,38 @@ const searchForm = ref({
   stage: "",
   page_size: "",
 });
+
+function downloadCandidates() {
+  const loader = $loading.show();
+  CandidateService.all(`page_size=${serverResponse.value.total}`)
+    .then((result) => {
+      const { data } = result.data.data;
+      let sno = 0;
+
+      const exportData = data.map(candidate => {
+        return {
+          SN: ++sno,
+          Name: `${candidate.firstname} ${candidate.lastname} ${candidate.middlename}`,
+          Email: candidate.email,
+          "Phone No.": candidate.phone,
+          Gender: genderList.value.find(g => g.id === candidate.gender_id).name,
+          "Job Function": candidate.job_function.name,
+          Industry: candidate.industry.name,
+          "Years of Experience": candidate.years_of_experience,
+        }
+      });
+
+      const time = GetUnixTime();
+      const sheet = utils.json_to_sheet(exportData);
+      const workbook = utils.book_new();
+      utils.book_append_sheet(workbook, sheet, 'Candidates');
+      writeFile(workbook, `candidates_list_${time}.xlsx`);
+    })
+    .catch(() => {})
+    .finally(() => {
+      loader.hide();
+    });
+}
 
 function formatLabel(label) {
   if (label.includes("Prev")) {
@@ -659,16 +694,6 @@ function navigateTo(link) {
       processing.value = false;
     });
 }
-
-// function nextPage() {
-//   const slug = `page=${serverResponse.value.current_page + 1}&`;
-//   getCandidates(slug);
-// }
-
-// function previousPage() {
-//   const slug = `page=${serverResponse.value.current_page - 1}&`;
-//   getCandidates(slug);
-// }
 
 function closeSearch() {
   openFilter.value = false;

@@ -823,12 +823,12 @@ const {
 
 const swal = inject("$swal");
 const $loading = inject("$loading");
+const { departments } = storeToRefs(useDepartments());
 
 const benefit = ref(null);
 const description = ref(null);
 const requirements = ref(null);
 const responsibilities = ref(null);
-const { departments } = storeToRefs(useDepartments());
 const stepNo = ref(1);
 const vacancyId = ref(0);
 const interviewId = ref(0);

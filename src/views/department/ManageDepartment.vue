@@ -56,15 +56,17 @@
               />
             </button> -->
 
-            <button
+            <IconButton
               type="button"
+              :processing="downloading"
+              @click="downloadDepartment"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+            </IconButton>
 
             <button
               type="button"
@@ -253,6 +255,8 @@
   </main>
 </template>
 <script setup>
+import { ref, inject, onMounted, watch } from "vue";
+import { utils, writeFile } from 'xlsx';
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import {
@@ -270,21 +274,43 @@ import {
   SearchIcon,
   DotsVerticalIcon,
 } from "@heroicons/vue/solid";
-import { ref, inject, onMounted, watch } from "vue";
 import CreateDepartment from './CreateDepartment.vue';
 import EditDepartment from './EditDepartment.vue';
 import { useDepartments } from "../../stores/department";
 import DepartmentService from "../../service/department.service";
+import moment from "moment";
+
+const departmentStore = useDepartments();
+const { departments, processing } = storeToRefs(useDepartments());
+
+const toast = useToast();
+const swal = inject('$swal');
 
 const keyword = ref("");
-const swal = inject('$swal');
-const toast = useToast();
-const departmentStore = useDepartments();
+const downloading = ref(false);
 const openAddDepartment = ref(false);
 const openEditDepartment = ref(false);
 const selectedDepartment = ref(false);
 const departmentList = ref([]);
-const { departments, processing } = storeToRefs(useDepartments());
+
+function downloadDepartment() {
+  downloading.value = true;
+  let sno = 0;
+  const exportData = departmentList.value.map(department => {
+    return {
+      SN: ++sno,
+      Name: department.name,
+      Description: department.description,
+    }
+  });
+
+  const time = moment().unix();
+  const sheet = utils.json_to_sheet(exportData);
+  const workbook = utils.book_new();
+  utils.book_append_sheet(workbook, sheet, 'departments');
+  writeFile(workbook, `department_list_${time}.xlsx`);
+  downloading.value = false;
+}
 
 function onSearchChange(value) {
   if (value.length > 3) {

@@ -45,15 +45,16 @@
               New Activities
             </IconButton>
 
-            <button
+            <IconButton
               type="button"
+              @click="downloadActivities"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-            </button>
+            </IconButton>
 
             <button
               type="button"
@@ -134,6 +135,7 @@
 </template>
 <script setup>
 import { ref, inject, onMounted } from "vue";
+import { utils, writeFile } from 'xlsx';
 import {
   SearchIcon,
   RefreshIcon,
@@ -144,13 +146,16 @@ import { useToast } from "vue-toastification";
 import CreateActivity from "./CreateActivity.vue";
 import ActivityService from "../../service/activity.service";
 import CalendarComponent from "../../components/commons/calendar/CalendarComponent.vue";
-const openAddActivity = ref(false);
+import { GetUnixTime, FormatLongDate } from "../../util/Formatter";
 
 const toast = useToast();
 const swal = inject("$swal");
+const $loading = inject("$loading");
+
+const keyword = ref("");
 const loading = ref(false);
 const processing = ref(false);
-const keyword = ref("");
+const openAddActivity = ref(false);
 const serverResponse = ref({
   to: 0,
   from: 0,
@@ -165,6 +170,39 @@ const serverResponse = ref({
   last_page_url: null,
   first_page_url: null,
 });
+
+function downloadActivities() {
+  const loader = $loading.show();
+  ActivityService.all(`page_size=${serverResponse.value.total}`)
+    .then((result) => {
+      const { data } = result.data.data;
+      let sno = 0;
+
+      const exportData = data.map(activity => {
+        return {
+          SN: ++sno,
+          Title: activity.title,
+          Location: activity.location,
+          Description: activity.description,
+          From: FormatLongDate(activity.start),
+          To: FormatLongDate(activity.end),
+          "Related To": activity.job.title,
+          "Activity Type": activity.activity_type,
+          Status: activity.status,
+        }
+      });
+
+      const time = GetUnixTime();
+      const sheet = utils.json_to_sheet(exportData);
+      const workbook = utils.book_new();
+      utils.book_append_sheet(workbook, sheet, 'Activities');
+      writeFile(workbook, `activities_list_${time}.xlsx`);
+    })
+    .catch(() => {})
+    .finally(() => {
+      loader.hide();
+    });
+}
 
 function onRefreshClicked () {
   keyword.value = "";
