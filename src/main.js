@@ -66,6 +66,7 @@ app.use(VTooltip);
 app.use(VueLoading, {
     color: 'blue'
 });
+
 app.use(VueSweetalert2);
 
 app.component('SideBar', SideBar);

@@ -22,10 +22,10 @@
                 alt=""
               />
             </div>
-            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-3 md:gap-3">
+            <div class="flex-1 min-w-0 px-4 md:grid md:grid-cols-4 md:gap-2">
               <div>
                 <p class="text-sm font-medium text-indigo-600 truncate">
-                  {{ applicant.candidate.firstname }} {{ applicant.candidate.lastname }}
+                  {{ applicant.candidate.firstname }} {{ applicant.candidate.lastname }} {{ applicant.candidate.middlename }}
                 </p>
                 <p class="flex items-center mt-2 text-sm text-gray-500">
                   <MailIcon
@@ -34,7 +34,7 @@
                   />
                   <span class="truncate">{{ applicant.candidate.email }}</span>
                 </p>
-              </div>
+              </div>              
               <div class="hidden md:block">
                 <div>
                   <p class="text-sm text-gray-900">
@@ -44,7 +44,7 @@
                     {{FormatAge(applicant.candidate.dob)}} years old
                   </p>
                 </div>
-              </div>
+              </div>              
               <div class="hidden md:block">
                 <div>
                   <p class="text-sm text-gray-900">
@@ -56,6 +56,11 @@
                     {{applicant.candidate.city.name}}, {{applicant.candidate.city.region.name}}
                   </p>
                 </div>
+              </div>
+              <div>
+                <p class="text-sm truncate">
+                  Current Stage: <span class="font-medium">{{ applicant.job_workflow_stage.name }}</span>
+                </p>
               </div>
             </div>
           </div>

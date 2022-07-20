@@ -50,6 +50,22 @@ const VacancyService = {
         });
     });
   },
+  changeWorkflowStageBulk(payload) {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`/${basePath}/bulk-move`, payload)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
 };
 
 export default VacancyService;

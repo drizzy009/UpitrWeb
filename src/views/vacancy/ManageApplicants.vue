@@ -147,6 +147,8 @@
                     <div class="px-1 py-1">
                       <MenuItem v-slot="{ active }">
                         <button
+                          type="button"
+                          @click="sendNotification"
                           :class="[
                             active
                               ? 'bg-indigo-500 text-white'
@@ -173,6 +175,7 @@
                     <div class="px-1 py-1">
                       <MenuItem v-slot="{ active }">
                         <button
+                          @click="openWorkflow"
                           :class="[
                             active
                               ? 'bg-indigo-500 text-white'
@@ -428,12 +431,12 @@
                             </h3>
                             <MultiSelect
                               searchable
-                              value="id"
+                              value="order"
                               label="name"
-                              valueProp="id"
+                              valueProp="order"
                               placeholder="Select a stage"
                               v-model="searchForm.stage"
-                              :options="workflowStage"
+                              :options="workflowStages"
                             ></MultiSelect>
                           </div>
 
@@ -531,11 +534,14 @@
       </Dialog>
     </TransitionRoot>
   </template>
+  <SendNotification :applicants="applicantIds" :toggle="openNotification" @toggle-notification="toggleOpenNotification"></SendNotification>
+  <WorkflowModal :applicants="applicantIds" :toggle="openWorkflowModal" @toggleWorkflowModal = "toggleWorkflow" :workflowStages="workflowStages"></WorkflowModal>
 </template>
 
 <script setup>
 import { ref, onMounted, inject } from "vue";
 import { storeToRefs } from "pinia";
+import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import { utils, writeFile } from 'xlsx';
 import {
@@ -569,6 +575,8 @@ import ApplicantService from "../../service/applicant.service";
 import { GetUnixTime, FormatMoney, FormatShortDate } from "../../util/Formatter";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import { useVacancies } from "../../stores/vacancies";
+import WorkflowModal from "./WorkflowModal.vue";
+import SendNotification from "./SendNotification.vue";
 // import { PageSizes } from "../../util/Constants";
 
 const props = defineProps({
@@ -579,6 +587,8 @@ const { industries, jobFunctions, degreeClassifications } = storeToRefs(
   useMiscellaneous()
 );
 
+const toast = useToast();
+// const swal = inject('$swal');
 const $loading = inject("$loading");
 
 var tabIndex = ref(0);
@@ -586,13 +596,17 @@ const vacancyId = ref(0);
 const interviewId = ref(0);
 const loading = ref(false);
 const openFilter = ref(false);
+const openNotification = ref(false);
+const openWorkflowModal = ref(false);
 const loadingApplicants = ref(false);
 const router = useRouter();
 const published = ref(false);
 const processing = ref(false);
 const vacancyDetail = ref(null);
 const remoteOffice = ref("On-site");
-// const { workflowStages } = useVacancies()
+const selectedApplicants = ref([]);
+const applicantIds = ref([]);
+const { workflowStages } = useVacancies()
 const vacancyStore = useVacancies();
 const searchForm = ref({
   keyword: "",
@@ -623,14 +637,6 @@ const serverResponse = ref({
   first_page_url: null,
 });
 
-const workflowStage = [
-  { name: "Sourced", id: 1 },
-  { name: "Applied", id: 2 },
-  { name: "Assessment", id: 3 },
-  { name: "Offered", id: 4 },
-  { name: "Hired", id: 5 },
-  { name: "Disqualified", id: 6 },
-];
 
 const genderList = ref([
   {
@@ -642,6 +648,43 @@ const genderList = ref([
     name: "Male",
   },
 ]);
+
+function openWorkflow() {
+ if (selectedApplicants.value.length > 0) {
+    applicantIds.value = [];
+    selectedApplicants.value.forEach(applicant => {
+      applicantIds.value.push(applicant.id);
+    });
+
+    openWorkflowModal.value = true;
+    return;
+  }
+
+  toast.warning('Select at least one applicant');
+}
+
+function toggleWorkflow(data) {
+  if (data.loadApplicants) refreshData();
+  openWorkflowModal.value = !openWorkflowModal.value;
+}
+
+function toggleOpenNotification () {
+  openNotification.value = !openNotification.value;
+}
+
+function sendNotification() {
+  if (selectedApplicants.value.length > 0) {
+    applicantIds.value = [];
+    selectedApplicants.value.forEach(applicant => {
+      applicantIds.value.push(applicant.id);
+    })
+
+    openNotification.value = true;
+    return;
+  }
+
+  toast.warning('Select at least one applicant');
+}
 
 function downloadApplicants() {
   const loader = $loading.show();
@@ -806,7 +849,7 @@ function refreshData() {
 }
 
 function onSelectedItems(items) {
-  // console.log(items);
+  selectedApplicants.value = items;
 }
 
 onMounted(() => {
