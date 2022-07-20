@@ -23,6 +23,7 @@
         <div>
           <h1 class="text-2xl font-bold text-gray-900">
             {{ candidateDetail.firstname }} {{ candidateDetail.lastname }}
+            {{ candidateDetail.middlename }}
           </h1>
           <p class="text-sm font-medium text-gray-500">
             {{ candidateDetail.headline }}
@@ -32,6 +33,22 @@
       <div
         class="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3"
       >
+        <IconButton
+          v-if="selected.name === 'Assessment'"
+          @click="openAssessmentModal"
+          class="inline-flex items-center border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
+        >
+          <CalendarIcon class="-ml-1 mr-2 h-5 w-5"></CalendarIcon>
+          Schedule Assessment
+        </IconButton>
+        <IconButton
+          v-if="selected.name === 'Interview'"
+          @click="openInterviewModal"
+          class="inline-flex items-center border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
+        >
+          <CalendarIcon class="-ml-1 mr-2 h-5 w-5"></CalendarIcon>
+          Schedule Interview
+        </IconButton>
         <Listbox as="div" v-model="selected">
           <ListboxLabel class="sr-only"> Change candidate status </ListboxLabel>
           <div class="relative">
@@ -425,8 +442,9 @@
     :applicant-id="id"
     :interview-id="interviewId"
     :toggle="openInterview"
-    @toggleInterview="closeInteviewModal"
+    @toggleInterview="closeInterviewModal"
   ></ApplicantInterview>
+  <ScheduleModal :title="scheduleTitle" :toggle="openSchedule"></ScheduleModal>
 </template>
 <script setup>
 import { ref, onMounted, inject } from "vue";
@@ -435,6 +453,7 @@ import {
   PaperClipIcon,
   UserCircleIcon,
   ChevronDownIcon,
+  CalendarIcon,
 } from "@heroicons/vue/solid";
 import {
   Listbox,
@@ -454,6 +473,7 @@ import ExperienceView from "../candidate/ExperienceView.vue";
 import AssessmentView from "../candidate/AssessmentView.vue";
 import InterviewResultView from "./InterviewResultView.vue";
 import ApplicantInterview from "./ApplicantInterview.vue";
+import ScheduleModal from "./ScheduleModal.vue";
 
 import InterviewResult from "./InterviewResult.vue";
 
@@ -470,6 +490,8 @@ const { workflowStages } = useVacancies();
 const totalScore = ref(0);
 const selectedTab = ref(0);
 const loading = ref(false);
+const scheduleTitle = ref("");
+const openSchedule = ref(false);
 const openInterview = ref(false);
 const interviewResults = ref([]);
 const candidateDetail = ref(null);
@@ -478,6 +500,7 @@ const showResultDetail = ref(false);
 const educationList = ref([]);
 const experienceList = ref([]);
 const assessmentList = ref([]);
+const selected = ref(workflowStages[0]);
 
 const tabs = ref([
   {
@@ -512,13 +535,22 @@ const tabs = ref([
   },
 ]);
 
+function openAssessmentModal() {
+  openSchedule.value = true;
+  scheduleTitle.value = "Schedule Assessment"
+}
+
+function openInterviewModal() {
+  openSchedule.value = true;
+  scheduleTitle.value = "Schedule Interview"
+}
+
+
 function setActiveTab(index) {
   selectedTab.value = index;
 }
 
-const selected = ref(workflowStages[0]);
-
-function closeInteviewModal(loadResults) {
+function closeInterviewModal(loadResults) {
   if (loadResults === true) getApplicantInterview(Number(props.id));
   openInterview.value = !openInterview.value;
 }
@@ -564,8 +596,8 @@ function getApplicantInfo(id) {
       getCandidateExperiences(candidateDetail.value.id);
       if (!(stage.name === "Interview")) tabs.value[4].disabled = true;
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
+      // console.error(err);
     })
     .finally(() => {
       loading.value = false;
@@ -626,7 +658,6 @@ function getCandidateExperiences(id) {
 
 function getCandidateAssessments(id) {
   CandidateService.getAssessments(id).then((response) => {
-    console.log(response);
     const { data } = response.data;
     assessmentList.value = data;
   });

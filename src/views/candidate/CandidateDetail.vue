@@ -212,12 +212,6 @@ import ExperienceView from "./ExperienceView.vue";
 import JobApplicationsView from "./JobApplicationsView.vue";
 import CandidateLoading from '../../components/layout/CandidateDetailSkeleton.vue';
 
-// const memoryOptions = [
-//   { name: "Definitely", inStock: true, icon: StarIcon },
-//   { name: "Yes", inStock: true, icon: ThumbUpIcon },
-//   { name: "No", inStock: true, icon: ThumbDownIcon },
-// ];
-
 const router = useRouter();
 const candidateDetail = ref(null);
 const loading = ref(false);

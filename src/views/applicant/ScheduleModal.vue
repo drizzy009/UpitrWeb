@@ -1,11 +1,11 @@
 <template>
-  <AppModal :processing="savingActivity" :showModal="showAddActivity" @closeModal="closeCreateActivity" @submit="saveActivity" title="Add Activity">
+  <AppModal :processing="savingSchedule" :showModal="showAddSchedule" @closeModal="closeSchedule" @submit="saveSchedule" :title="title">
     <div class="grid grid-cols-6">
       <div class="col-span-6">
         <label
           for="activityTitle"
           class="block mb-2 text-sm font-medium text-gray-700"
-        >Activity Title</label>
+        >Title</label>
         <FormInput :error="v$.title.$error" id="activityTitle" v-model="formData.title"></FormInput>
       </div>
       <div class="col-span-6 mt-2 mb-2 md:mt-4">
@@ -163,13 +163,15 @@ const {
 const emits = defineEmits(['toggleActivity', 'loadActivity']);
 const props = defineProps({
   toggle: Boolean,
+  title: String,
+  scheduleType: Number
 });
 
 const loadingCandidate = ref(false);
 const showVacancy = ref(false);
 const showCandidate = ref(false);
-const savingActivity = ref(false);
-const showAddActivity = ref(false);
+const savingSchedule = ref(false);
+const showAddSchedule = ref(false);
 const options = ref([]);
 const vacancyList = ref([]);
 const candidateList = ref([]);
@@ -274,14 +276,14 @@ function clearForm() {
   })
 }
 
-function closeCreateActivity() {
-  showAddActivity.value = false
+function closeSchedule() {
+  showAddSchedule.value = false
   clearForm();
   emits('toggleActivity');
 }
 
-async function saveActivity() {
-  savingActivity.value = true;
+async function saveSchedule() {
+  savingSchedule.value = true;
   formData.value.job_id = Number(formData.value.job_id);
   formData.value.importance_id = Number(formData.value.importance_id);
   formData.value.related_to_id = Number(formData.value.related_to_id);
@@ -292,7 +294,7 @@ async function saveActivity() {
   ActivityService.create(formData.value).then(() => {
     toast.success("Activity successfully created");
     emits('loadActivity');
-    closeCreateActivity();
+    closeSchedule();
   }).catch(error => {
     const { data } = error;
     if (data.code === "062") {
@@ -301,13 +303,13 @@ async function saveActivity() {
       showErrorMessage(data.message);
     }
   }).finally(() => {
-    savingActivity.value = false;
+    savingSchedule.value = false;
   })
  // const valid = await v$.value.$validate();
 }
 
 watch(() => props.toggle, (newValue) => {
-  showAddActivity.value = newValue;
+  showAddSchedule.value = newValue;
 });
 
 watch(() => formData.value.related_to_id, (value) => {
