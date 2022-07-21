@@ -330,6 +330,7 @@ import {
   BellIcon,
   HomeIcon,
   ClockIcon,
+  UsersIcon,
   MenuAlt1Icon,
   BriefcaseIcon,
   UserGroupIcon,
@@ -366,27 +367,17 @@ const navigation = [
     href: "/activity/all",
     icon: ClockIcon,
   },
-  // {
-  //   name: "Users",
-  //   tag: "ManageUsers",
-  //   href: "/users/all",
-  //   icon: UserCircleIcon
-  // },
   {
     name: "Departments",
     tag: "ManageDepartments",
     href: "/department/all",
     icon: OfficeBuildingIcon,
   },
-  // {
-  //   name: "Reports",
-  //   href: "#",
-  //   icon: ChartPieIcon
-  // },
 ];
 
 const secondaryNavigation = [
   { name: "Settings", href: "/settings", icon: CogIcon },
+  { name: "Roles", href: "/role", icon: UsersIcon },
   // { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
 ];
 

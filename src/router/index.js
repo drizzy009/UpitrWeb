@@ -23,6 +23,7 @@ import ManageActivities from "../views/activities/ManageActivities.vue";
 import CreateCandidate from "../views/candidate/CreateCandidate.vue";
 import CandidateDetail from "../views/candidate/CandidateDetail.vue";
 import SettingsView from "../views/settings/SettingsView.vue";
+import ManageRole from "../views/role/ManageRole.vue";
 
 import ManageDepartments from "../views/department/ManageDepartment.vue";
 
@@ -274,6 +275,21 @@ const router = createRouter({
             pageTitle: "Settings",
           },
           component: SettingsView,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "role",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "Role",
+          path: "role",
+          meta: {
+            pageTitle: "Manage Role",
+          },
+          component: ManageRole,
         },
       ],
     },

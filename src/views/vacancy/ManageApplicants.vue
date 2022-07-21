@@ -577,7 +577,6 @@ import { useMiscellaneous } from "../../stores/miscellaneous";
 import { useVacancies } from "../../stores/vacancies";
 import WorkflowModal from "./WorkflowModal.vue";
 import SendNotification from "./SendNotification.vue";
-// import { PageSizes } from "../../util/Constants";
 
 const props = defineProps({
   id: String,
