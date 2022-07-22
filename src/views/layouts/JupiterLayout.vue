@@ -329,6 +329,7 @@ import {
   CogIcon,
   BellIcon,
   HomeIcon,
+  UserIcon,
   ClockIcon,
   UsersIcon,
   MenuAlt1Icon,
@@ -377,7 +378,8 @@ const navigation = [
 
 const secondaryNavigation = [
   { name: "Settings", href: "/settings", icon: CogIcon },
-  { name: "Roles", href: "/role", icon: UsersIcon },
+  { name: "Roles", href: "/role", icon: UserIcon },
+  { name: "Users", href: "/user", icon: UsersIcon },
   // { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
 ];
 

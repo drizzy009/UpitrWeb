@@ -70,8 +70,6 @@
 </template>
 <script setup>
 import { ref, watch, inject, onMounted } from "vue";
-import moment from "moment";
-// import { FormatLongDate } from "../../util/Formatter";
 import InterviewService from "../../service/interview.service";
 import AppModalLarge from "../../components/commons/modal/AppModalLarge.vue";
 

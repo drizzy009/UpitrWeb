@@ -17,7 +17,7 @@ export const useRole = defineStore({
         fetchAllRoles() {
             this.processing = true;
             RoleService.all().then(response => {
-                this.roles = response.data.data
+                this.roles = response.data.data.data
             }).catch((error) => {
                 this.errorMessage = error.data.message
                 this.error = true;

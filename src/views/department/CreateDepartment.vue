@@ -76,12 +76,12 @@ async function saveDepartment() {
   if (valid) {
     savingDepartment.value = true;
     DepartmentService.create(formData.value)
-      .then(async () => {
+      .then(() => {
         toast.success("Department successfully created");
         departmentStore.fetchAllDepartments();
         formData.value.name = "";
         formData.value.description = "";
-        await v$.value.$reset();
+        v$.value.$reset();
       })
       .catch(() => {})
       .finally(() => {

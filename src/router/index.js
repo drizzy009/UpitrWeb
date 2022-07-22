@@ -23,7 +23,12 @@ import ManageActivities from "../views/activities/ManageActivities.vue";
 import CreateCandidate from "../views/candidate/CreateCandidate.vue";
 import CandidateDetail from "../views/candidate/CandidateDetail.vue";
 import SettingsView from "../views/settings/SettingsView.vue";
+
 import ManageRole from "../views/role/ManageRole.vue";
+import CreateRole from "../views/role/CreateRole.vue";
+
+import ManageUser from "../views/user/ManageUser.vue";
+import CreateUser from "../views/user/CreateUser.vue";
 
 import ManageDepartments from "../views/department/ManageDepartment.vue";
 
@@ -284,12 +289,43 @@ const router = createRouter({
       component: () => import("../views/layouts/JupiterLayout.vue"),
       children: [
         {
-          name: "Role",
+          name: "ManageRole",
           path: "role",
           meta: {
-            pageTitle: "Manage Role",
+            pageTitle: "Manage Roles",
           },
           component: ManageRole,
+        },
+        {
+          name: "NewRole",
+          path: "role/new",
+          meta: {
+            pageTitle: "Create New Role",
+          },
+          component: CreateRole,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "user",
+      component: () => import("../views/layouts/JupiterLayout.vue"),
+      children: [
+        {
+          name: "ManageUser",
+          path: "user",
+          meta: {
+            pageTitle: "Manage Users",
+          },
+          component: ManageUser,
+        },
+        {
+          name: "NewUser",
+          path: "user/new",
+          meta: {
+            pageTitle: "Create New User",
+          },
+          component: CreateUser,
         },
       ],
     },

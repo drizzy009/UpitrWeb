@@ -15,6 +15,7 @@ export const FormatAge = (dateValue) => {
 }
 
 export const FormatLongDate = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).format('MMM-DD-YYYY h:mm:ss a');
 }
 

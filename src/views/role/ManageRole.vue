@@ -33,8 +33,8 @@
             <!-- Profile -->
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
-            <IconButton
-              type="button"
+            <a
+              href="/role/new"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
@@ -42,7 +42,7 @@
                 aria-hidden="true"
               />
               New Role
-            </IconButton>
+            </a>
 
             <!-- <button
               type="button"
@@ -109,8 +109,8 @@
                 </th>
               </tr>
             </thead>
-            <tbody v-if="roles.data.length > 0 && !processing" class="bg-white divide-y divide-gray-200">
-              <tr v-for="(role, index) in roles.data" :key="role.id">
+            <tbody v-if="roles.length > 0 && !processing" class="bg-white divide-y divide-gray-200">
+              <tr v-for="(role, index) in roles" :key="role.id">
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
                     <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) }}</span>
@@ -237,9 +237,9 @@
   </main>
 </template>
 <script setup>
-import { ref, inject } from "vue";
-import { utils, writeFile } from 'xlsx';
+import { ref, inject, onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import { utils, writeFile } from 'xlsx';
 import { useToast } from "vue-toastification";
 import {
   Menu,
@@ -266,7 +266,6 @@ const { roles } = storeToRefs(useRole());
 const toast = useToast();
 const swal = inject('$swal');
 
-const keyword = ref("");
 const processing = ref(false);
 const downloading = ref(false);
 
@@ -277,7 +276,6 @@ function downloadRole() {
     return {
       SN: ++sno,
       Name: role.name,
-      Description: role.description,
     }
   });
 
@@ -301,15 +299,19 @@ function deleteRole(id) {
     if (result.isConfirmed) {
       RoleService.delete(id).then(() => {
         toast("Role successfully deleted");
-        roleStore.fetchAllRoles();
+        refreshData();
       }).catch(() => {})
     }
   });
 }
 
 function refreshData() {
-  keyword.value = "";
+  // keyword.value = "";
+  roleStore.fetchAllPermissions();
   roleStore.fetchAllRoles();
 }
 
+onMounted(() => {
+  refreshData();
+})
 </script>

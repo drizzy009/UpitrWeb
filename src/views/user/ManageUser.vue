@@ -1,13 +1,13 @@
 <template>
   <main class="flex-1 pb-8">
-     <!-- Page header -->
+    <!-- Page header -->
     <div class="bg-white shadow">
       <div class="px-4 sm:px-6 lg:max-w-9xl lg:mx-auto lg:px-8">
         <div
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
           <div class="flex-1 min-w-0">
-            <form class="flex w-full md:ml-0">
+            <form class="flex w-full md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
               <div
                 class="relative w-full text-gray-400 focus-within:text-gray-600"
@@ -18,32 +18,31 @@
                 >
                   <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
-                <input
+                <!-- <input
                   v-debounce:500ms="onSearchChange"
                   id="search-field"
                   name="search-field"
                   class="block w-full h-full py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 border-transparent focus:outline-none focus:ring-0 focus:border-transparent sm:text-sm"
-                  placeholder="Search Departments"
+                  placeholder="Search Roles"
                   type="text"
                   v-model="keyword"
-                />
+                /> -->
               </div>
             </form>
 
             <!-- Profile -->
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
-            <IconButton
-              type="button"
-              @click="toggleAddDepartment"
+            <a
+              href="/user/new"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
                 aria-hidden="true"
               />
-              New Department
-            </IconButton>
+              New User
+            </a>
 
             <!-- <button
               type="button"
@@ -59,7 +58,7 @@
             <IconButton
               type="button"
               :processing="downloading"
-              @click="downloadDepartment"
+              @click="downloadRole"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
@@ -85,7 +84,7 @@
     <template v-if="processing">
       <SkeletonLoading v-for="n in 2" :key="n"></SkeletonLoading>
     </template>
-    <div class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
+    <div v-if="!processing" class="px-4 mx-auto mt-6 max-w-9xl sm:px-6 lg:px-6">
       <div class="flex flex-col mt-2">
         <div
           class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg"
@@ -103,31 +102,67 @@
                   scope="col"
                   class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
+                  Designation
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
                   Name
                 </th>
                 <th
                   scope="col"
                   class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
-                  Description
+                  Username
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
+                  Department
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
+                  Is Active
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
+                  Last Login
                 </th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                   <span class="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
-            <tbody v-if="departmentList.length > 0 && !processing" class="bg-white divide-y divide-gray-200">
-              <tr v-for="(department, index) in departmentList" :key="department.id">
+            <tbody
+              v-if="serverResponse.data.length > 0 && !processing"
+              class="bg-white divide-y divide-gray-200"
+            >
+              <tr v-for="(user, index) in serverResponse.data" :key="user.id">
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
-                    <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) }}</span>
+                    <span class="inline-flex px-2 text-xs font-semibold">{{ (index + 1) + (serverResponse.current_page - 1) * serverResponse.per_page }}</span>
                   </div>
                 </td>
                 <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
                   <div class="flex items-center">
                     <div class="">
-                      <div class="font-medium text-gray-900">
-                        {{ department.name }}
+                      <div class="font-medium text-gray-900 capitalize">
+                        {{ user.designation.name }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="">
+                      <div class="font-medium text-gray-900 capitalize">
+                        {{ user.firstname }} {{ user.lastname }}
                       </div>
                     </div>
                   </div>
@@ -136,7 +171,34 @@
                   <div class="flex items-center">
                     <div class="">
                       <div class="font-medium text-gray-900">
-                        {{ department.description }}
+                        {{ user.username }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="">
+                      <div class="font-medium text-gray-900 capitalize">
+                        {{ user.department.name }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="">
+                      <div class="font-medium text-gray-900">
+                        {{ user.is_active ? "Yes" : "No" }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="">
+                      <div class="font-medium text-gray-900">
+                        {{ user.last_login === null ? 'n/a' : FormatLongDate(user.last_login) }}
                       </div>
                     </div>
                   </div>
@@ -168,7 +230,7 @@
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
                             <a
-                              @click="editDepartment(department)"
+                              @click="editUser(user)"
                               :class="[
                                 active
                                   ? 'bg-gray-100 text-gray-900'
@@ -187,7 +249,7 @@
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
                             <a
-                              @click="deleteDepartment(department.id)"
+                              @click="deleteUser(user.id)"
                               :class="[
                                 active
                                   ? 'bg-red-100 text-red-900'
@@ -211,7 +273,7 @@
             </tbody>
           </table>
           <!-- Pagination -->
-          <!-- <nav
+         <nav
             class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
             aria-label="Pagination"
           >
@@ -219,52 +281,46 @@
               <p class="text-sm text-gray-700">
                 Showing
                 {{ " " }}
-                <span class="font-medium">1</span>
+                <span class="font-medium">{{ serverResponse.from }}</span>
                 {{ " " }}
                 to
                 {{ " " }}
-                <span class="font-medium">10</span>
+                <span class="font-medium">{{ serverResponse.to }}</span>
                 {{ " " }}
                 of
                 {{ " " }}
-                <span class="font-medium">20</span>
+                <span class="font-medium">{{ serverResponse.total }}</span>
                 {{ " " }}
                 results
               </p>
             </div>
             <div class="flex justify-between flex-1 sm:justify-end">
-              <a
-                href="#"
-                class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Previous
-              </a>
-              <a
-                href="#"
-                class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Next
-              </a>
+              <div v-for="link in serverResponse.links" :key="link">
+                <AppButton
+                  @click="navigateTo(link.url)"
+                  :disabled="link.url === null || processing"
+                  :class="
+                    link.active
+                      ? 'bg-indigo-700 text-white hover:bg-gray-50 hover:text-gray-700'
+                      : 'text-gray-700 bg-white'
+                  "
+                  class="relative inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  {{ formatLabel(link.label) }}
+                </AppButton>
+              </div>
             </div>
-          </nav> -->
+          </nav>
         </div>
       </div>
     </div>
-    <CreateDepartment :toggle="openAddDepartment" @toggleDepartment="toggleAddDepartment"></CreateDepartment>
-    <EditDepartment :departmentDetail="selectedDepartment" :toggle="openEditDepartment" @toggleDepartment="toggleEditDepartment"></EditDepartment>
   </main>
 </template>
 <script setup>
-import { ref, inject, onMounted, watch } from "vue";
-import { utils, writeFile } from 'xlsx';
-import { storeToRefs } from "pinia";
+import { ref, inject, onMounted } from "vue";
+import { utils, writeFile } from "xlsx";
 import { useToast } from "vue-toastification";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/vue";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   PlusCircleIcon,
   RefreshIcon,
@@ -274,92 +330,112 @@ import {
   SearchIcon,
   DotsVerticalIcon,
 } from "@heroicons/vue/solid";
-import CreateDepartment from './CreateDepartment.vue';
-import EditDepartment from './EditDepartment.vue';
-import { useDepartments } from "../../stores/department";
-import DepartmentService from "../../service/department.service";
+import UserService from "../../service/user.service";
+import { FormatLongDate } from "../../util/Formatter";
 import moment from "moment";
 
-const departmentStore = useDepartments();
-const { departments, processing } = storeToRefs(useDepartments());
-
 const toast = useToast();
-const swal = inject('$swal');
+const swal = inject("$swal");
 
-const keyword = ref("");
+const processing = ref(false);
 const downloading = ref(false);
-const openAddDepartment = ref(false);
-const openEditDepartment = ref(false);
-const selectedDepartment = ref(false);
-const departmentList = ref([]);
+const serverResponse = ref({
+  to: 0,
+  from: 0,
+  total: 0,
+  data: [],
+  links: [],
+  per_page: 0,
+  last_page: 0,
+  current_page: 0,
+  prev_page_url: null,
+  next_page_url: null,
+  last_page_url: null,
+  first_page_url: null,
+});
 
-function downloadDepartment() {
+function formatLabel(label) {
+  if (label.includes("Prev")) {
+    return `<< Previous`;
+  }
+
+  if (label.includes("Next")) {
+    return "Next >>";
+  }
+
+  return label;
+}
+
+function navigateTo(url) {
+  processing.value = true;
+  // serverResponse.value.data = [];
+  UserService.get(url)
+    .then((result) => {
+      serverResponse.value = result.data.data;
+    })
+    .catch(() => {})
+    .finally(() => {
+      processing.value = false;
+    });
+}
+
+function downloadRole() {
   downloading.value = true;
   let sno = 0;
-  const exportData = departmentList.value.map(department => {
+  const exportData = serverResponse.value.data.map((user) => {
     return {
       SN: ++sno,
-      Name: department.name,
-      Description: department.description,
-    }
+      Designation: user.designation.name,
+      Name: `${user.firstname} ${user.lastname}`,
+      Username: user.username,
+      Department: user.department.name,
+      "Is Active": user.is_active ? "Yes" : "No",
+      "Last Login": FormatLongDate(user.last_login),
+    };
   });
 
   const time = moment().unix();
   const sheet = utils.json_to_sheet(exportData);
   const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, sheet, 'departments');
-  writeFile(workbook, `department_list_${time}.xlsx`);
+  utils.book_append_sheet(workbook, sheet, "users");
+  writeFile(workbook, `user_list_${time}.xlsx`);
   downloading.value = false;
 }
 
-function onSearchChange(value) {
-  if (value.length > 3) {
-    departmentStore.fetchAllDepartments(`keyword=${value}`);
-  }
-}
-
-function toggleAddDepartment() {
-  openAddDepartment.value = !openAddDepartment.value;
-}
-
-function toggleEditDepartment() {
-  openEditDepartment.value = !openEditDepartment.value;
-}
-
-function editDepartment(item) {
-  selectedDepartment.value = item;
-  openEditDepartment.value = true;
-}
-
-function deleteDepartment(id) {
+function deleteUser(id) {
   swal({
     title: "Confirm Delete",
-    text: "Are you sure you want to delete this department",
+    text: "Are you sure you want to delete this user",
     icon: "question",
     showCancelButton: true,
     cancelButtonText: "No",
     confirmButtonText: "Yes",
   }).then((result) => {
     if (result.isConfirmed) {
-      DepartmentService.delete(id).then(() => {
-        toast("Department successfully deleted");
-        departmentStore.fetchAllDepartments();
-      }).catch(() => {})
+      UserService.delete(id)
+        .then(() => {
+          toast("User successfully deleted");
+          refreshData();
+        })
+        .catch(() => {});
     }
   });
 }
 
 function refreshData() {
-  keyword.value = "";
-  departmentStore.fetchAllDepartments();
+  processing.value = true;
+  UserService.all()
+    .then((response) => {
+      const { data } = response.data;
+      serverResponse.value = data;
+    })
+    .catch(() => {})
+    .finally(() => {
+      processing.value = false;
+    });
 }
 
-watch(() => departments.value, (newValue) => {
-  departmentList.value = [];
-  departmentList.value = newValue.data;
-});
-
 onMounted(() => {
-  departmentList.value = departments.value.data;
-})
+  refreshData();
+});
 </script>
