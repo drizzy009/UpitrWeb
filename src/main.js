@@ -2,8 +2,8 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { vue3Debounce } from 'vue-debounce';
 import { QuillEditor } from '@vueup/vue-quill';
+import { VTooltip, Tooltip } from 'floating-vue';
 import rate from 'vue-rate';
-import VTooltip from 'v-tooltip';
 import Toast from 'vue-toastification';
 import Editor from '@tinymce/tinymce-vue';
 import Datepicker from '@vuepic/vue-datepicker';
@@ -34,7 +34,8 @@ import CoreService from  './service/core.service';
 // import TokenService from './service/token.service';
 import { useAppStore } from './stores/app';
 
-import 'vue-rate/dist/vue-rate.css'
+import 'floating-vue/dist/style.css'
+import 'vue-rate/dist/vue-rate.css';
 import "vue-toastification/dist/index.css";
 import 'vue3-easy-data-table/dist/style.css';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -59,10 +60,10 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
 app.use(rate);
+app.use(Toast, options);
 app.use(pinia);
 app.use(router);
 app.use(CKEditor);
-app.use(VTooltip);
 app.use(VueLoading, {
     color: 'blue'
 });
@@ -85,14 +86,16 @@ app.component('PasswordInput', PasswordInput);
 app.component('DataTable', Vue3EasyDataTable);
 app.component('TextInputGroup', TextInputGroup);
 app.component('SkeletonLoading', SkeletonLoading);
-app.component('DatePicker', Datepicker);
 app.component("TagInput", TagInput);
 app.component('HtmlEditor', Editor);
+app.component('DatePicker', Datepicker);
 app.component('QuillEditor', QuillEditor);
 app.component('MultiSelect', Multiselect);
 app.component('star-rating', vue3StarRatings);
-app.use(Toast, options);
+app.component('VTooltip', Tooltip);
+
 app.directive('debounce', vue3Debounce({ lock: true}));
+app.directive('tooltip', VTooltip);
 const appStore = useAppStore();
 
 router.beforeEach((to) =>

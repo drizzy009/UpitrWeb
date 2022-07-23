@@ -70,7 +70,7 @@
             </div>
           </div>
           <div>
-            <a :href="`/candidate/detail/${person.candidate.id}`">
+            <a v-tooltip="'View candidate\'s detail'" :href="`/candidate/detail/${person.candidate.id}`">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"

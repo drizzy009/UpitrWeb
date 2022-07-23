@@ -35,6 +35,7 @@
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <a
               href="/user/new"
+              v-tooltip="'Add new user'"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
@@ -57,8 +58,9 @@
 
             <IconButton
               type="button"
-              :processing="downloading"
               @click="downloadRole"
+              :processing="downloading"
+              v-tooltip="'Download to excel'"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
@@ -70,6 +72,7 @@
             <button
               type="button"
               @click="refreshData"
+              v-tooltip="'Refresh page'"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon

@@ -549,7 +549,7 @@
                           class="block text-sm font-medium text-gray-700"
                           >Keywords</label
                         >
-                        <TagInput @on-tags-changed="keywordsChange" v-model="jobDetail.keywords"></TagInput>
+                        <TagInput @on-tags-changed="keywordsChange" :tags="jobDetail.keywords"></TagInput>
                         <!-- <FormInput
                           name="keywords"
                           id="keywords"

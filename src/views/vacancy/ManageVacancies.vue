@@ -39,6 +39,7 @@
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <IconButton
+              v-tooltip="'Click here to add new vacancy'"
               type="button"
               @click="goto('CreateVacancy')"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
@@ -52,6 +53,7 @@
 
             <IconButton
               type="button"
+              v-tooltip="'Filter with more fields'"
               @click="open = true"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
@@ -64,6 +66,7 @@
 
             <IconButton
               type="button"
+              v-tooltip="'Download to excel'"
               @click="downloadVacancies"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
@@ -75,6 +78,7 @@
 
             <button
               type="button"
+              v-tooltip="'Refresh data'"
               @click="refreshData"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
@@ -171,12 +175,12 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+                <td class="px-3 py-4 pl-2 text-sm text-gray-500 whitespace-nowrap">
                   <div class="text-gray-900">
                     <span class="inline-flex px-2 text-xs font-semibold leading-5 text-indigo-800 bg-indigo-100 rounded-full">{{ vacancy.employment_type.name }}</span>
                   </div>
                 </td>
-                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+                <td class="px-3 py-4 pl-2 text-sm text-gray-500 whitespace-nowrap">
                   <div
                     class="flex items-center mt-2 text-sm text-gray-500 sm:mt-0"
                   >
@@ -191,7 +195,7 @@
                   </div>
                   <!-- <div class="text-gray-500">{{ vacancy.department }}</div> -->
                 </td>
-                <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+                <td class="px-3 py-4 pl-2 text-sm text-gray-500 whitespace-nowrap">
                   <div
                     class="flex items-center mt-2 text-sm text-gray-500 sm:mt-0"
                   >

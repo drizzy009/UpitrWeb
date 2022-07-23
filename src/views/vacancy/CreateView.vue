@@ -548,7 +548,6 @@
                         >
                         <TagInput
                           @on-tags-changed="keywordsChange"
-                          v-model="jobDetail.keywords"
                         ></TagInput>
                         <!-- <FormInput
                           name="keywords"

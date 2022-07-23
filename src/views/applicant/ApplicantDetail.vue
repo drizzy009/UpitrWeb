@@ -34,19 +34,21 @@
         class="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3"
       >
         <IconButton
-          v-if="selected.name === 'Assessment'"
           @click="openAssessmentModal"
-          class="inline-flex items-center border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
+          v-if="selected.name === 'Assessment'"
+          v-tooltip="`Schedule assessment for ${candidateDetail.firstname} ${candidateDetail.lastname}`"
+          class="inline-flex items-center text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
         >
-          <CalendarIcon class="-ml-1 mr-2 h-5 w-5"></CalendarIcon>
+          <CalendarIcon class="w-5 h-5 mr-2 -ml-1"></CalendarIcon>
           Schedule Assessment
         </IconButton>
         <IconButton
-          v-if="selected.name === 'Interview'"
           @click="openInterviewModal"
-          class="inline-flex items-center border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
+          v-if="selected.name === 'Interview'"
+          v-tooltip="`Schedule interview for ${candidateDetail.firstname} ${candidateDetail.lastname}`"
+          class="inline-flex items-center text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
         >
-          <CalendarIcon class="-ml-1 mr-2 h-5 w-5"></CalendarIcon>
+          <CalendarIcon class="w-5 h-5 mr-2 -ml-1"></CalendarIcon>
           Schedule Interview
         </IconButton>
         <Listbox as="div" v-model="selected">
@@ -412,8 +414,9 @@
                         <div class="text-right sm:col-span-3">
                           <AppButton
                             label="Start Interview"
-                            class="bg-green-600 hover:bg-green-700 focus:bg-green-500"
                             @click="openInterview = true"
+                            class="bg-green-600 hover:bg-green-700 focus:bg-green-500"
+                            v-tooltip="`Start interview for ${candidateDetail.firstname} ${candidateDetail.lastname}`"
                           ></AppButton>
                         </div>
                       </div>

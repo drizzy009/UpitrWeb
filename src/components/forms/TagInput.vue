@@ -5,9 +5,9 @@
       'tags--focus': isInputActive,
       'tags--error': isError,
     }"
-    class="tags mt-2"
+    class="tags"
   >
-    <div class="tags-content relative rounded-md shadow-sm">
+    <div class="relative rounded-md shadow-sm tags-content">
       <span v-for="(tag, index) in innerTags" :key="index" class="tags-tag">
         <slot
           v-if="$slots.item"
@@ -241,6 +241,7 @@ export default {
     },
     tagChange() {
       this.$emit("on-tags-changed", this.innerTags);
+      // this.$emit("update:modelValue", this.innerTags);
     },
   },
 };
@@ -249,7 +250,7 @@ export default {
 <style>
 .tags {
   border-radius: 5px;
-  min-height: 32px;
+  height: 35px;
   line-height: 1.4 !important;
   background-color: #fff;
   border: 1px solid #9ca3af;
@@ -259,6 +260,8 @@ export default {
   -webkit-appearance: textfield;
   display: flex;
   flex-wrap: wrap;
+  overflow-wrap: normal;
+  overflow-y: auto;
 }
 .tags--focus {
   outline: 0;

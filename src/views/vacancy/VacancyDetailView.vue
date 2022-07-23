@@ -55,6 +55,7 @@
           <span class="hidden ml-3 sm:block">
             <button
               type="button"
+              v-tooltip="'View all applicants'"
               @click="viewApplicants"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
             >
@@ -390,7 +391,6 @@ function getVacancyCandidates(stageId) {
   loadingCandidates.value = true;
   VacancyService.candidatesByStageId(vacancyId.value, stageId).then((response) => {
     serverResponse.value = response.data.data;
-    console.log(serverResponse.value)
   }).catch(() => {})
   .finally(() => {
     loadingCandidates.value = false;

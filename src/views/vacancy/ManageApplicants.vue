@@ -42,6 +42,7 @@
 
           <IconButton
             type="button"
+            v-tooltip="'Download to excel'"
             @click="downloadApplicants"
             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
           >
@@ -54,6 +55,7 @@
           <button
             type="button"
             @click="refreshData"
+            v-tooltip="'Refresh data'"
             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
           >
             <RefreshIcon

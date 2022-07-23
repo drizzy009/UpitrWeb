@@ -36,6 +36,7 @@
             <IconButton
               type="button"
               @click="toggleAddDepartment"
+              v-tooltip="'Add new department'"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <PlusCircleIcon
@@ -60,6 +61,7 @@
               type="button"
               :processing="downloading"
               @click="downloadDepartment"
+              v-tooltip="'Download to excel'"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
               <DownloadIcon
@@ -71,6 +73,7 @@
             <button
               type="button"
               @click="refreshData"
+              v-tooltip="'Refresh page'"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-200 hover:bg-green-200"
             >
               <RefreshIcon

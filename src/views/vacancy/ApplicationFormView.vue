@@ -150,7 +150,7 @@
                                 >Option Items</label
                               >
                               <div class="mt-1">
-                                <TagInput @on-tags-changed="onItemsChange" v-model="items"></TagInput>
+                                <TagInput @on-tags-changed="onItemsChange"></TagInput>
                               </div>
                             </div>
                           </div>
