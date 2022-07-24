@@ -5,80 +5,72 @@
         <div
           class="flex flex-col justify-center min-h-full py-12 bg-white sm:px-6 lg:px-8"
         >
-          <div class="mt-8">
-            <div class="px-4 py-8 shadow sm:rounded-lg sm:px-10">
-              <form class="space-y-6 sm:mx-auto sm:w-full sm:max-w-lg">
-                <div>
-                  <label
-                    for="roleName"
-                    class="block text-sm font-medium text-gray-700"
-                  >
-                    Role Name
-                  </label>
-                  <div class="mt-1">
-                    <FormInput
-                      v-model="roleName"
-                      id="roleName"
-                      name="roleName"
-                    />
-                  </div>
-                </div>
-                <div class="text-right">
-                  <AppButton
-                    :processing="processing"
-                    @click="saveRoles"
-                    type="button"
-                  >
-                    Submit
-                  </AppButton>
-                </div>
-              </form>
-
-              <div class="flex flex-wrap mt-6 lg:w-full">
-                <div
-                  class="w-full p-4 mx-auto my-4 lg:w-1/4 md:1/3"
-                  v-for="(permission, index) in permissionLists"
-                  :key="permission.id"
+          <div class="px-4 py-2 shadow sm:rounded-lg sm:px-10">
+            <form class="space-y-6 sm:mx-auto sm:w-full sm:max-w-lg">
+              <div>
+                <label
+                  for="roleName"
+                  class="block text-sm font-medium text-gray-700"
                 >
-                  <div class="w-full">
-                     <label
-                        class="text-base font-medium text-gray-900 capitalize"
-                      >
-                        <span class="pr-2">{{ index + 1 }}.</span>
-                        {{ permission.name }}</label
-                      >
-                      <fieldset class="mt-4">
-                        <div class="space-y-4">
-                          <div
-                            :key="option"
-                            class="flex items-center"
-                            v-for="option in permission.permissions"
-                          >
-                            <input
-                              type="checkbox"
-                              :id="option.id"
-                              :name="option.name"
-                              :checked="option.checked"
-                              v-model="option.checked"
-                              class="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                            />
-                            <label
-                              :for="option.id"
-                              class="block ml-3 text-sm font-medium text-gray-700"
-                            >
-                              {{ option.name }}
-                            </label>
-                          </div>
-                        </div>
-                      </fieldset>
-                  </div>
+                  Role Name
+                </label>
+                <div class="mt-1">
+                  <FormInput v-model="roleName" id="roleName" name="roleName" />
                 </div>
               </div>
-              <div class="mt-6">
-                <div class="relative">
-                  <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-gray-300"></div>
-                  </div>
+              <div class="text-right">
+                <AppButton
+                  :processing="processing"
+                  @click="saveRoles"
+                  type="button"
+                >
+                  Submit
+                </AppButton>
+              </div>
+            </form>
+
+            <div class="flex flex-wrap mt-6 lg:w-full">
+              <div
+                class="w-full p-4 mx-auto my-4 lg:w-1/4 md:1/3"
+                v-for="(permission, index) in permissionLists"
+                :key="permission.id"
+              >
+                <div class="w-full">
+                  <label class="text-base font-medium text-gray-900 capitalize">
+                    <span class="pr-2">{{ index + 1 }}.</span>
+                    {{ permission.name }}</label
+                  >
+                  <fieldset class="mt-4">
+                    <div class="space-y-4">
+                      <div
+                        :key="option"
+                        class="flex items-center"
+                        v-for="option in permission.permissions"
+                      >
+                        <input
+                          type="checkbox"
+                          :id="option.id"
+                          :name="option.name"
+                          :checked="option.checked"
+                          v-model="option.checked"
+                          class="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                        />
+                        <label
+                          :for="option.id"
+                          class="block ml-3 text-sm font-medium text-gray-700"
+                        >
+                          {{ option.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6">
+              <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                  <div class="w-full border-t border-gray-300"></div>
                 </div>
               </div>
             </div>

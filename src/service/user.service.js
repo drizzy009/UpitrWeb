@@ -18,6 +18,22 @@ const UserService = {
         });
     });
   },
+  profile() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get('/account')
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
   all(slug = "") {
     return new Promise((resolve, reject) => {
       axios

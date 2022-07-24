@@ -26,9 +26,11 @@ import SettingsView from "../views/settings/SettingsView.vue";
 
 import ManageRole from "../views/role/ManageRole.vue";
 import CreateRole from "../views/role/CreateRole.vue";
+import EditRole from "../views/role/EditRole.vue";
 
 import ManageUser from "../views/user/ManageUser.vue";
 import CreateUser from "../views/user/CreateUser.vue";
+import EditUser from "../views/user/EditUser.vue";
 
 import ManageDepartments from "../views/department/ManageDepartment.vue";
 
@@ -304,6 +306,15 @@ const router = createRouter({
           },
           component: CreateRole,
         },
+        {
+          name: "EditRole",
+          path: "role/edit/:id",
+          meta: {
+            pageTitle: "Edit Role",
+          },
+          component: EditRole,
+          props: true
+        },
       ],
     },
     {
@@ -326,6 +337,15 @@ const router = createRouter({
             pageTitle: "Create New User",
           },
           component: CreateUser,
+        },
+        {
+          name: "EditUser",
+          path: "user/edit/:id",
+          meta: {
+            pageTitle: "Edit User",
+          },
+          component: EditUser,
+          props: true,
         },
       ],
     },

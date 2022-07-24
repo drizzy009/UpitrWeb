@@ -7,7 +7,7 @@
           class="py-3 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
         >
           <div class="flex-1 min-w-0">
-            <form class="flex w-full md:ml-0" action="#" method="GET">
+            <!-- <form class="flex w-full md:ml-0" action="#" method="GET">
               <label for="search-field" class="sr-only">Search</label>
               <div
                 class="relative w-full text-gray-400 focus-within:text-gray-600"
@@ -18,7 +18,7 @@
                 >
                   <SearchIcon class="w-5 h-5" aria-hidden="true" />
                 </div>
-                <!-- <input
+                <input
                   v-debounce:500ms="onSearchChange"
                   id="search-field"
                   name="search-field"
@@ -26,11 +26,9 @@
                   placeholder="Search Roles"
                   type="text"
                   v-model="keyword"
-                /> -->
+                />
               </div>
-            </form>
-
-            <!-- Profile -->
+            </form> -->
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <a
@@ -155,7 +153,7 @@
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
                             <a
-                              @click="editRole(role)"
+                              :href="`/role/edit/${role.id}`"
                               :class="[
                                 active
                                   ? 'bg-gray-100 text-gray-900'
@@ -256,7 +254,6 @@ import {
   DownloadIcon,
   PencilAltIcon,
   TrashIcon,
-  SearchIcon,
   DotsVerticalIcon,
 } from "@heroicons/vue/solid";
 import { useRole } from "../../stores/role";

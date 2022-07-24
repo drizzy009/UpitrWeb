@@ -1,6 +1,6 @@
 <template>
   <main class="flex-1">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-6 lg:px-6 bg-white">
+    <div class="px-4 mx-auto mt-6 bg-white max-w-7xl sm:px-6 lg:px-6">
       <div class="pt-10 pb-16">
         <div class="px-4 sm:px-6 md:px-0">
           <div class="py-6">
@@ -12,7 +12,7 @@
                 <select
                   id="tabs"
                   name="tabs"
-                  class="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  class="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option
                     v-for="tab in tabs"
@@ -25,7 +25,7 @@
               </div>
               <div class="hidden sm:block">
                 <nav
-                  class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200"
+                  class="relative z-0 flex divide-x divide-gray-200 rounded-lg shadow"
                   aria-label="Tabs"
                 >
                   <a
@@ -60,7 +60,7 @@
               <!-- Description list with inline editing -->
               <div class="mt-10 divide-y divide-gray-200">
                 <div class="space-y-1">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  <h3 class="text-lg font-medium leading-6 text-gray-900">
                     Profile
                   </h3>
                   <p class="max-w-2xl text-sm text-gray-500">
@@ -73,16 +73,16 @@
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                       <dt class="text-sm font-medium text-gray-500">Name</dt>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
-                        <span class="flex-grow">Chelsea Hagon</span>
-                        <span class="ml-4 flex-shrink-0">
-                          <button
+                        <span class="flex-grow">{{ loginInfo.firstname }} {{ loginInfo.lastname }} {{ loginInfo.middlename }}</span>
+                        <span class="flex-shrink-0 ml-4">
+                          <!-- <button
                             type="button"
-                            class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            class="font-medium text-purple-600 bg-white rounded-md hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                           >
                             Update
-                          </button>
+                          </button> -->
                         </span>
                       </dd>
                     </div>
@@ -92,16 +92,16 @@
                     >
                       <dt class="text-sm font-medium text-gray-500">Email</dt>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
-                        <span class="flex-grow">chelsea.hagon@example.com</span>
-                        <span class="ml-4 flex-shrink-0">
-                          <button
+                        <span class="flex-grow">{{ loginInfo.email }}</span>
+                        <span class="flex-shrink-0 ml-4">
+                          <!-- <button
                             type="button"
-                            class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            class="font-medium text-purple-600 bg-white rounded-md hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                           >
                             Update
-                          </button>
+                          </button> -->
                         </span>
                       </dd>
                     </div>
@@ -109,29 +109,21 @@
                       class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-b sm:border-gray-200"
                     >
                       <dt class="text-sm font-medium text-gray-500">
-                        Job title
+                        Department
                       </dt>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
-                        <span class="flex-grow">Human Resources Manager</span>
-                        <span class="ml-4 flex-shrink-0">
-                          <button
-                            type="button"
-                            class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                          >
-                            Update
-                          </button>
-                        </span>
+                        <span class="flex-grow">{{ loginInfo.department.name }}</span>
                       </dd>
                     </div>
                   </dl>
                 </div>
               </div>
 
-              <div class="mt-10 divide-y divide-gray-200">
+              <!-- <div class="mt-10 divide-y divide-gray-200">
                 <div class="space-y-1">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  <h3 class="text-lg font-medium leading-6 text-gray-900">
                     Account
                   </h3>
                   <p class="max-w-2xl text-sm text-gray-500">
@@ -145,13 +137,13 @@
                         Language
                       </dt>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
                         <span class="flex-grow">English</span>
-                        <span class="ml-4 flex-shrink-0">
+                        <span class="flex-shrink-0 ml-4">
                           <button
                             type="button"
-                            class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            class="font-medium text-purple-600 bg-white rounded-md hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                           >
                             Update
                           </button>
@@ -165,15 +157,15 @@
                         Date format
                       </dt>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
                         <span class="flex-grow">DD-MM-YYYY</span>
                         <span
-                          class="ml-4 flex-shrink-0 flex items-start space-x-4"
+                          class="flex items-start flex-shrink-0 ml-4 space-x-4"
                         >
                           <button
                             type="button"
-                            class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            class="font-medium text-purple-600 bg-white rounded-md hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                           >
                             Update
                           </button>
@@ -182,7 +174,7 @@
                           >
                           <button
                             type="button"
-                            class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            class="font-medium text-purple-600 bg-white rounded-md hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                           >
                             Remove
                           </button>
@@ -201,7 +193,7 @@
                         Automatic timezone
                       </SwitchLabel>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
                         <Switch
                           v-model="automaticTimezoneEnabled"
@@ -236,7 +228,7 @@
                         Auto-update applicant data
                       </SwitchLabel>
                       <dd
-                        class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        class="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                       >
                         <Switch
                           v-model="autoUpdateApplicantDataEnabled"
@@ -261,15 +253,15 @@
                     </SwitchGroup>
                   </dl>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div v-if="tabIndex == 1">
               <div
-                class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+                class="flex flex-col justify-center min-h-full py-12 sm:px-6 lg:px-8"
               >
                 <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                  <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                    <form class="space-y-6" action="#" method="POST">
+                  <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+                    <form class="space-y-6">
                       <div>
                         <label
                           for="oldPassword"
@@ -278,12 +270,10 @@
                           Old Password
                         </label>
                         <div class="mt-1">
-                          <input
+                          <PasswordInput
                             id="oldPassword"
                             name="oldPassword"
-                            type="password"
-                            required=""
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            v-model="formData.current_password"
                           />
                         </div>
                       </div>
@@ -295,12 +285,11 @@
                           New Password
                         </label>
                         <div class="mt-1">
-                          <input
+                          <PasswordInput
                             id="newPassword"
                             name="newPassword"
-                            type="password"
-                            required=""
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            v-tooltip="'Required 8 minimum characters, numbers and special character'"
+                            v-model="formData.password"
                           />
                         </div>
                       </div>
@@ -312,23 +301,25 @@
                           Confirm New Password
                         </label>
                         <div class="mt-1">
-                          <input
+                          <PasswordInput
                             id="confirmPassword"
                             name="confirmPassword"
-                            type="password"
-                            required=""
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            v-tooltip="'Required 8 minimum characters, numbers and special character'"
+                            v-model="formData.password_confirmation"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <button
+                        <AppButton
                           type="button"
-                          class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          :processing="processing"
+                          @click="changePassword"
+                          :disabled="v$.$invalid"
+                          class="justify-center w-full"
                         >
                           Change Password
-                        </button>
+                        </AppButton>
                       </div>
                     </form>
 
@@ -344,13 +335,13 @@
               </div>
             </div>
             <div v-if="tabIndex == 2">
-              <div class="bg-white shadow overflow-hidden sm:rounded-md">
+              <div class="overflow-hidden bg-white shadow sm:rounded-md">
                 <ul role="list" class="divide-y divide-gray-200">
                   <li v-for="position in positions" :key="position.id">
                     <a href="#" class="block hover:bg-gray-50">
-                      <div class="px-4 py-4 flex items-center sm:px-6">
+                      <div class="flex items-center px-4 py-4 sm:px-6">
                         <div
-                          class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between"
+                          class="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between"
                         >
                           <div class="truncate">
                             <div class="flex text-sm">
@@ -358,12 +349,12 @@
                                 {{ position.title }}
                               </p>
                               <p
-                                class="ml-1 flex-shrink-0 font-normal text-gray-500"
+                                class="flex-shrink-0 ml-1 font-normal text-gray-500"
                               >
                                 in {{ position.department }}
                               </p>
                             </div>
-                            <div class="mt-2 flex">
+                            <div class="flex mt-2">
                               <div
                                 class="flex items-center text-sm text-gray-500"
                               >
@@ -381,21 +372,21 @@
                               </div>
                             </div>
                           </div>
-                          <div class="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">
-                            <div class="flex overflow-hidden -space-x-1">
+                          <div class="flex-shrink-0 mt-4 sm:mt-0 sm:ml-5">
+                            <div class="flex -space-x-1 overflow-hidden">
                               <img
                                 v-for="applicant in position.applicants"
                                 :key="applicant.email"
-                                class="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                class="inline-block w-6 h-6 rounded-full ring-2 ring-white"
                                 :src="applicant.imageUrl"
                                 :alt="applicant.name"
                               />
                             </div>
                           </div>
                         </div>
-                        <div class="ml-5 flex-shrink-0">
+                        <div class="flex-shrink-0 ml-5">
                           <ChevronRightIcon
-                            class="h-5 w-5 text-gray-400"
+                            class="w-5 h-5 text-gray-400"
                             aria-hidden="true"
                           />
                         </div>
@@ -414,9 +405,33 @@
 
 <script setup>
 import { ref } from "vue";
-import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
+import { useToast } from "vue-toastification";
+import { storeToRefs } from "pinia";
+import useVuelidate from "@vuelidate/core";
+import { required, helpers, alphaNum, minLength } from "@vuelidate/validators";
+// import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { CalendarIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import { useAuthentication } from "../../stores/authentication";
+import AccountService from "../../service/account.service";
+
+const toast = useToast();
 var tabIndex = ref(1);
+const { loginInfo } = storeToRefs(useAuthentication());
+
+const processing = ref(false);
+const formData = ref({
+  password: '',
+  password_confirmation: '',
+  current_password: '',
+});
+
+const rules = {
+  password: { minLength: minLength(8), required: helpers.withMessage("New password required", required, alphaNum) },
+  current_password: { required: helpers.withMessage("Old password required", required) },
+  password_confirmation: { minLength: minLength(8), required: helpers.withMessage("Confirm password required", required, alphaNum) },
+}
+
+const v$ = useVuelidate(rules, formData);
 
 const tabs = [
   { name: "General", href: "#", current: true },
@@ -518,8 +533,37 @@ function changeTab(tabIdx) {
   tabIndex.value = tabIdx;
 }
 
-const automaticTimezoneEnabled = ref(true);
-const autoUpdateApplicantDataEnabled = ref(false);
+function showErrorMessage(errorMessage) {
+  toast.error(errorMessage);
+}
+
+function showErrorMessages(errors) {
+  var errorMessage = "";
+  Object.keys(errors).forEach((key) => {
+    errorMessage += `${errors[key][0]}\n`;
+  });
+
+  toast.error(errorMessage);
+}
+// const automaticTimezoneEnabled = ref(true);
+// const autoUpdateApplicantDataEnabled = ref(false);
+
+function changePassword() {
+  console.clear();
+  processing.value = true;
+  AccountService.changePassword(formData.value).then(() => {
+    toast.success("Password successfully changed");
+  }).catch((error) => {
+    const { data } = error;
+    if (data.code === "062") {
+      showErrorMessages(data.data);
+    } else {
+      showErrorMessage(data.message);
+    }
+  }).finally(() => {
+    processing.value = false;
+  })
+}
 </script>
 
 <style></style>
