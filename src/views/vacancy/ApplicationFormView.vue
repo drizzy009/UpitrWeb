@@ -31,34 +31,6 @@
                   >
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <ApplicantField @selected-option="updateApplicantForm" :items="item.options" :itemKey="item.key"></ApplicantField>
-                    <!-- <RadioGroup v-model="item.model" class="mt-2">
-                      <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                        <RadioGroupOption
-                          as="template"
-                          v-for="option in item.options"
-                          :key="option.optionName"
-                          :value="option"
-                          v-slot="{ active, checked }"
-                        >
-                          <div
-                            :class="[
-                              'cursor-pointer focus:outline-none',
-                              active
-                                ? 'ring-2 ring-offset-2 ring-green-500'
-                                : '',
-                              checked
-                                ? 'bg-green-400 border-transparent text-white hover:bg-green-500'
-                                : 'bg-[#E1E6EB] border-gray-200 text-gray-900 hover:bg-gray-50',
-                              'border rounded-full py-1 px-1 flex items-center justify-center text-sm font-medium sm:flex-1',
-                            ]"
-                          >
-                            <RadioGroupLabel as="span">
-                              {{ option.optionName }}
-                            </RadioGroupLabel>
-                          </div>
-                        </RadioGroupOption>
-                      </div>
-                    </RadioGroup> -->
                   </div>
                 </div>
               </div>
@@ -291,11 +263,10 @@ function addQuestion() {
     const id = result.data.data.id;
     Object.assign(currentQuestion, {id});
     questions.value.push(currentQuestion);
-    toast.info('Question successfully added');
+    toast.success('Question successfully added');
     questionPanel.value = !questionPanel.value;
     question.value = "";
   }).catch(() => {
-    // console.log(error);
     toast.error('Unable to add question, please try again later');
   })
   .finally(() => {
@@ -351,7 +322,7 @@ function deleteQuestion(id) {
   deletingQuestion.value = true;
   VacancyService.deleteQuestion(id).then(() => {
     questions.value = questions.value.filter(item => item.id !== id);
-    toast.info('Question successfully deleted');
+    toast.success('Question successfully deleted');
   }).catch(() => {
     toast.error('Unable to delete question, please try again later');
   })
@@ -376,7 +347,7 @@ watch(() => props.existingQuestions, (value) => {
 watch(() => questionType.value, (value) => {
   const getType = questionTypes.value.find(item => item.id === Number(value));
   selectedType.value = getType;
-  showOption.value = getType.has_options === 1;
+  showOption.value = getType.has_options === true;
 });
 
 watch(() => props.vacancySettings, (fieldData) => {

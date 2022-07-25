@@ -39,7 +39,7 @@
 <script>
 const validators = {
   email: new RegExp(
-    /^[a-z][a-z0-9_\.]{2,50}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/
+    /^[a-z][a-z0-9_.]{2,50}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/
   ),
   url: new RegExp(
     /^(https?|ftp|rmtp|mms):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i
