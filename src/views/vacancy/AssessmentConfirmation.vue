@@ -71,6 +71,7 @@ const emits = defineEmits(["toggleDepartment", "save"]);
 const props = defineProps({
   toggle: Boolean,
   processing: Boolean,
+  assessmentInfo: Object
 });
 
 const showAddConfirmation = ref(false);
@@ -90,13 +91,6 @@ const rules = {
 
 const v$ = useVuelidate(rules, formData);
 
-watch(
-  () => props.toggle,
-  (newValue) => {
-    showAddConfirmation.value = newValue;
-  }
-);
-
 function closeConfirmation() {
   showAddConfirmation.value = false;
   emits("toggleDepartment");
@@ -108,6 +102,25 @@ async function submit() {
     emits('save', formData.value);
   }
 }
+
+watch(
+  () => props.toggle,
+  (newValue) => {
+    showAddConfirmation.value = newValue;
+  }
+);
+
+watch(
+  () => props.assessmentInfo,
+  (value) => {
+    if (value !== null) {
+      formData.value.duration = value.duration;
+      formData.value.is_timed = value.is_timed;
+      formData.value.pass_score = value.pass_score;
+      formData.value.questions_per_candidate = value.questions_per_candidate;
+    }
+  }
+);
 </script>
 
 <style></style>

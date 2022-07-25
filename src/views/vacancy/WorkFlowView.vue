@@ -196,7 +196,7 @@
       </div>
     </div>
   </div>
-  <AssessmentConfirmationVue :toggle="toggleConfirmation" :processing="savingAssessment" @save="saveAssessments"></AssessmentConfirmationVue>
+  <AssessmentConfirmationVue :assessmentInfo="jobAssessment" :toggle="toggleConfirmation" :processing="savingAssessment" @save="saveAssessments"></AssessmentConfirmationVue>
 </template>
 
 <script setup>
@@ -218,6 +218,20 @@ const props = defineProps({
   jobId: Number,
   interviewId: Number
 });
+
+const swal = inject("$swal");
+
+const toast = useToast();
+const router = useRouter();
+const assessmentId = ref(0);
+const showMainPanel = ref(true);
+const showInterview = ref(false);
+const showAssessment = ref(false);
+const savingAssessment = ref(false);
+const toggleConfirmation = ref(false);
+
+const assessments = ref([]);
+const jobAssessment = ref(null);
 
 const tabList = [
   {
@@ -258,18 +272,6 @@ const tabList = [
   },
 ];
 
-const toast = useToast();
-const router = useRouter();
-const assessmentId = ref(0);
-const swal = inject("$swal");
-const showMainPanel = ref(true);
-const showInterview = ref(false);
-const showAssessment = ref(false);
-const savingAssessment = ref(false);
-const toggleConfirmation = ref(false);
-
-const assessments = ref([]);
-
 function assessmentsPayload(assessmentId) {
   const questions = assessments.value.map(item => {
     const newOptions = item.options.map(item => {
@@ -297,36 +299,36 @@ function deleteQuestion(id) {
   VacancyAssessmentQuestionService.delete(id);
 }
 
-function getAssessment(id) {
-  VacancyAssessmentQuestionService.all(`assessment=${id}`).then(result => {
-    const { data } = result.data;
+// function getAssessment(id) {
+//   VacancyAssessmentQuestionService.all(`assessment=${id}`).then(result => {
+//     const { data } = result.data;
     
-    let sno = 0;
-    const cbtQuestions = [];
-      data.forEach(item => {
-        const optionList = item.assesment_question_options;
-        const list = optionList.map((o) => {
-          return {
-            id: o.id,
-            value: o.value,
-            is_answer: o.is_answer,
-          }
-        });
+//     let sno = 0;
+//     const cbtQuestions = [];
+//       data.forEach(item => {
+//         const optionList = item.assesment_question_options;
+//         const list = optionList.map((o) => {
+//           return {
+//             id: o.id,
+//             value: o.value,
+//             is_answer: o.is_answer,
+//           }
+//         });
 
-        sno += sno;
-        const question = {
-          sno,
-          id: item.id,
-          name: item.question,
-          model: `question-${sno}`,
-          options: list
-        }
+//         sno += sno;
+//         const question = {
+//           sno,
+//           id: item.id,
+//           name: item.question,
+//           model: `question-${sno}`,
+//           options: list
+//         }
 
-        cbtQuestions.push(question);
-      });
-      assessments.value = cbtQuestions;
-  })
-}
+//         cbtQuestions.push(question);
+//       });
+//       assessments.value = cbtQuestions;
+//   })
+// }
 
 function showErrorMessage(errorMessage) {
   swal({
@@ -471,9 +473,15 @@ onMounted(() => {
     showMainPanel.value = false;
   }
 
-  if (assessmentId.value > 0) {
-    getAssessment(assessmentId.value);
-  }
+  // if (assessmentId.value > 0) {
+  //   getAssessment(assessmentId.value);
+  // }
+
+  VacancyAssessmentService.single(Number(props.jobId)).then(result => {
+    const { data } = result.data
+    jobAssessment.value = data;
+    assessmentId.value = data.id;
+  })
 });
 </script>
 

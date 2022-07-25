@@ -75,7 +75,7 @@ export default {
         return [
           13, // Enter
           188, // Comma ','
-          32, // Space
+          // 32, // Space
         ];
       },
     },
