@@ -4,6 +4,7 @@ import JobListView from "../views/job/ListView.vue";
 import JobDetailView from "../views/job/DetailView.vue";
 
 import LoginView from "../views/authentication/LoginView.vue";
+import SetPasswordView from "../views/authentication/SetPasswordView.vue";
 import ResetPasswordView from "../views/authentication/ResetPasswordView.vue";
 import ForgotPasswordView from "../views/authentication/ForgotPasswordView.vue";
 
@@ -125,6 +126,22 @@ const router = createRouter({
             pageTitle: "Reset Password",
           },
           component: ResetPasswordView,
+          props: route => ({ query: route.query.email })
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "set-password",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
+      children: [
+        {
+          name: "SetPassword",
+          path: "set-password",
+          meta: {
+            pageTitle: "Set Password",
+          },
+          component: SetPasswordView,
           props: route => ({ query: route.query.email })
         },
       ],
