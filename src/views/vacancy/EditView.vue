@@ -138,8 +138,7 @@
                         <label
                           for="department"
                           class="block text-sm font-medium text-gray-700"
-                          >Department</label
-                        >
+                          >Department</label>
                         <MultiSelect
                           searchable
                           v-model="jobDetail.department_id"
@@ -549,7 +548,16 @@
                           class="block text-sm font-medium text-gray-700"
                           >Keywords</label
                         >
-                        <TagInput @on-tags-changed="keywordsChange" :tags="jobDetail.keywords"></TagInput>
+                        <MultiSelect
+                          searchable
+                          mode="tags"
+                          v-model="jobKeywords"
+                          placeholder="add keywords"
+                          label="name"
+                          :options="jobKeywords"
+                          :create-option="true"
+                        ></MultiSelect>
+                        <!-- <TagInput @on-tags-changed="keywordsChange" :tags="jobDetail.keywords"></TagInput> -->
                         <!-- <FormInput
                           name="keywords"
                           id="keywords"
