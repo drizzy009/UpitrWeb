@@ -544,7 +544,7 @@ function openAssessmentModal() {
 }
 
 function openInterviewModal() {
-  openSchedule.value = true;
+  openSchedule.value = !openSchedule.value;
   scheduleTitle.value = "Interview"
 }
 

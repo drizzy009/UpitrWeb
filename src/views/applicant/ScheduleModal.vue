@@ -137,11 +137,9 @@ const props = defineProps({
   candidateDetail: Object
 });
 
-const loadingCandidate = ref(false);
-const showVacancy = ref(false);
-const showCandidate = ref(false);
 const savingSchedule = ref(false);
 const showAddSchedule = ref(false);
+const loadingCandidate = ref(false);
 const options = ref([]);
 const vacancyList = ref([]);
 const candidateList = ref([]);
@@ -247,8 +245,8 @@ function clearForm() {
 }
 
 function closeSchedule() {
-  showAddSchedule.value = false
   clearForm();
+  // showAddSchedule.value = false
   emits('toggleActivity');
 }
 

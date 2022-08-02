@@ -105,6 +105,7 @@ const props = defineProps({
 const emits = defineEmits(["closeModal", "submit"]);
 
 function closeDialog() {
+  console.log('close dialog');
   open.value = false;
   emits("closeModal");
 }
