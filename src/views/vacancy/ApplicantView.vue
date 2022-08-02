@@ -65,12 +65,12 @@
             </div>
           </div>
           <div>
-            <span v-tooltip="'View applicant\'s detail'" class="cursor-pointer" @click="gotoDetailPage(applicant.id)">
+            <a v-tooltip="'View applicant\'s detail'" class="cursor-pointer" @click="gotoDetailPage(applicant.id)">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
               />
-            </span>
+            </a>
           </div>
         </div>
       </div>

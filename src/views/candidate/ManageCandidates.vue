@@ -679,7 +679,7 @@ function onSearchChange(value) {
 
 function navigateTo(link) {
   processing.value = true;
-  // serverResponse.value.data = [];
+  const loader = $loading.show();
   var url = `${link}&page_size=10&`;
   Object.keys(searchForm.value).forEach((key) => {
     if (searchForm.value[key] !== "") {
@@ -694,6 +694,7 @@ function navigateTo(link) {
     .catch(() => {})
     .finally(() => {
       processing.value = false;
+      loader.hide();
     });
 }
 

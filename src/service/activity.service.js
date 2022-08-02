@@ -66,6 +66,22 @@ const ActivityService = {
         });
     });
   },
+  interview(payload) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`/${basePath}/interview`, payload)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
   update(id, payload) {
     return new Promise((resolve, reject) => {
       axios

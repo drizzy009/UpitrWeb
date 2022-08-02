@@ -89,14 +89,24 @@
                                 class="block text-sm font-medium text-gray-700"
                                 >Question Type</label
                               >
-                              <SelectInput
+                              <MultiSelect
+                                searchable
+                                value="id"
+                                label="name"
+                                valueProp="id"
+                                id="questionType"
+                                v-model="questionType"
+                                :options="questionTypes"
+                                class="mt-2"
+                              ></MultiSelect>
+                              <!-- <SelectInput
                                 placeholder="Select Question Type"
                                 id="question-type"
                                 name="question-type"
                                 :items="questionTypes"
                                 v-model="questionType"
                               >
-                              </SelectInput>
+                              </SelectInput> -->
                             </div>
                             <div class="col-span-6 sm:col-span-6">
                               <label
@@ -122,7 +132,16 @@
                                 >Option Items</label
                               >
                               <div class="mt-1">
-                                <TagInput @on-tags-changed="onItemsChange"></TagInput>
+                                <MultiSelect
+                                  searchable
+                                  mode="tags"
+                                  v-model="options"
+                                  placeholder="add keywords"
+                                  label="name"
+                                  :options="options"
+                                  :create-option="true"
+                                ></MultiSelect>
+                                <!-- <TagInput @on-tags-changed="onItemsChange"></TagInput> -->
                               </div>
                             </div>
                           </div>
@@ -220,7 +239,7 @@ const question = ref("");
 const questionType = ref(0);
 const selectedType = ref(null);
 const showOption = ref(false);
-const options = ref("");
+const options = ref([]);
 
 const applicatantFields = ref({
   job_id: 0,
@@ -254,8 +273,8 @@ function addQuestion() {
     job_question_type_id: Number(questionType.value)
   };
 
-  if (selectedType.value.has_options === 1 && options.value !== "") {
-    Object.assign(currentQuestion, {question_options: options.value.split(',')});
+  if (selectedType.value.has_options === 1 && options.value.length > 0) {
+    Object.assign(currentQuestion, {question_options: options.value});
   }
 
   savingQuestion.value = true;
@@ -272,12 +291,6 @@ function addQuestion() {
   .finally(() => {
     savingQuestion.value = false;
   })
-}
-
-function onItemsChange(items) {
-  if (items.length > 0) {
-    options.value = items.join();
-  }
 }
 
 function saveApplicantInfo() {
@@ -347,7 +360,8 @@ watch(() => props.existingQuestions, (value) => {
 watch(() => questionType.value, (value) => {
   const getType = questionTypes.value.find(item => item.id === Number(value));
   selectedType.value = getType;
-  showOption.value = getType.has_options === true;
+  console.log(getType);
+  showOption.value = getType.has_options === 1;
 });
 
 watch(() => props.vacancySettings, (fieldData) => {

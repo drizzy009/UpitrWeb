@@ -848,10 +848,6 @@ const processing = ref(false);
 const loadingCity = ref(false);
 const loadingRegion = ref(false);
 
-function keywordsChange(items) {
-  jobKeywords.value = items;
-}
-
 function onRemoteChange(evt) {
   jobDetail.value.isRemote = evt.target.checked;
 }

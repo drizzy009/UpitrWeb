@@ -345,7 +345,6 @@ import {
   DownloadIcon,
   PencilAltIcon,
   TrashIcon,
-  SearchIcon,
   DotsVerticalIcon,
 } from "@heroicons/vue/solid";
 import UserService from "../../service/user.service";

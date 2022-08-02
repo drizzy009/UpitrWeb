@@ -33,7 +33,7 @@
       <div
         class="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3"
       >
-        <IconButton
+        <!-- <IconButton
           @click="openAssessmentModal"
           v-if="selected.name === 'Assessment'"
           v-tooltip="`Schedule assessment for ${applicantData.firstname} ${applicantData.lastname}`"
@@ -41,7 +41,7 @@
         >
           <CalendarIcon class="w-5 h-5 mr-2 -ml-1"></CalendarIcon>
           Schedule Assessment
-        </IconButton>
+        </IconButton> -->
         <IconButton
           @click="openInterviewModal"
           v-if="selected.name === 'Interview'"
@@ -447,7 +447,7 @@
     :toggle="openInterview"
     @toggleInterview="closeInterviewModal"
   ></ApplicantInterview>
-  <ScheduleModal :applicant-detail="applicantData" :title="scheduleTitle" :toggle="openSchedule"></ScheduleModal>
+  <ScheduleModal :applicant-id="id" :vacancy="selectedVacancy" :candidate-detail="applicantData" :title="scheduleTitle" :toggle="openSchedule"></ScheduleModal>
 </template>
 <script setup>
 import { ref, onMounted, inject } from "vue";
