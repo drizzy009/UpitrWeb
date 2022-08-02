@@ -25,7 +25,7 @@
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              {{ vacancyDetail.employment_type.name }}
+              <!-- {{ vacancyDetail.employment_type.name }} -->
             </div>
             <div class="flex items-center mt-2 text-sm text-gray-500">
               <LocationMarkerIcon
