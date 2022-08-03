@@ -35,15 +35,17 @@
                   <span class="truncate">{{ person.candidate.email }}</span>
                 </p>
               </div>
-              <div class="hidden md:block">
-                <div>
-                  <p class="text-sm text-gray-900">
-                    {{person.candidate.job_function.name}} in
+              <div v-if="person.candidate.job_function" class="hidden md:block">
+                <p class="text-sm text-gray-900">
+                    {{ person.candidate.job_function.name}} in
                   </p>
                   <p class="mt-2 text-sm text-gray-900">
-                    {{person.candidate.industry.name}} with {{person.candidate.years_of_experience}} years of experience
+                    {{person.candidate.industry.name}} with 
+                    {{person.candidate.years_of_experience || ''}} years of experience
                   </p>
-                </div>
+              </div>
+              <div v-else>
+                {{ " " }}
               </div>
               <div class="hidden md:block">
                 <div>
@@ -62,9 +64,10 @@
                     {{ " " }}
                     {{formatAppDate(person.candidate.created_at)}}
                   </p>
-                  <p class="flex items-center mt-2 text-sm text-gray-500">
-                    {{person.candidate.city.name}}, {{person.candidate.city.region.name}}
+                  <p v-if="person.candidate.city !== null" class="flex items-center mt-2 text-sm text-gray-500">
+                    {{ person.candidate.city.name || ''}}, {{person.candidate.city.region.name || ''}}
                   </p>
+                  <p v-else>{{ " " }}</p>
                 </div>
               </div>
             </div>

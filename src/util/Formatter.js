@@ -10,6 +10,7 @@ export const FormatMoney = (numberValue) => {
 }
 
 export const FormatAge = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     const ageFraction = moment().diff(moment(dateValue), 'years', true);
     return Math.floor(ageFraction);
 }
@@ -20,27 +21,33 @@ export const FormatLongDate = (dateValue) => {
 }
 
 export const FormatDate = (dateValue, formatString) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).format(formatString);
 }
 
 
 export const FormatShortDate = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).format('DD-MM-YYYY');
 }
 
 export const FormatMonthYear = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).format('MMM, YYYY');
 }
 
 export const ConvertDateToDays = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).endOf('days').fromNow();
 }
 
 export const FormatLongDate2 = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).format('MMMM Do, YYYY');
 }
 
 export const FormatTime = (dateValue) => {
+    if (dateValue === "" || dateValue === null || dateValue === undefined) return "";
     return moment(dateValue).format('h:mm:ss a');
 }
 
