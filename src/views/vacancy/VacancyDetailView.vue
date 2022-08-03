@@ -409,6 +409,8 @@ function getVacancyDetail(id) {
     vacancyStore.setSelectedVacancy(data);
     published.value = data.is_published;
     const workflowStages = data.job_workflow.job_workflow_stages;
+    vacancyStore.setWorkflowStages(workflowStages);
+
     if ('interviews' in data) {
         try {
           interviewId.value = data.interviews[0].id;
@@ -419,6 +421,7 @@ function getVacancyDetail(id) {
     tabs.value = workflowStages.map(item => {
       return item;
     })
+    
     if (vacancyDetail.value.is_remote !== null) {
       remoteOffice.value = vacancyDetail.value.is_remote ? "Remote" : "On-site";
     }
