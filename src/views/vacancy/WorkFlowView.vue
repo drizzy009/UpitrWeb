@@ -50,7 +50,7 @@
                         </NumberInput>
                       </div>
 
-                      <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                      <div class="col-span-6 sm:col-span-6 lg:col-span-3">
                         <label
                           for="pass-score"
                           class="block mb-2 text-sm font-medium text-gray-700"
@@ -86,6 +86,7 @@
                         >
                         <DatePicker
                           id="dueDate"
+                          class="block w-100"
                           :error="v$.deadline.$error"
                           v-model="formData.deadline"
                         ></DatePicker>
@@ -141,7 +142,7 @@
               v-if="assessments.length > 0 && !showUpload"
               class="flex rounded-md"
             >
-              <div class="w-full max-h-screen space-y-1 overflow-y-scroll">
+              <div class="w-full max-h-screen space-y-1 overflow-y-auto">
                 <AssessmentView
                   @answerSelected="updateAnswer"
                   @removeQuestion="deleteQuestion"
