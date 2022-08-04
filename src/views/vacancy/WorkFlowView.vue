@@ -597,12 +597,12 @@ function saveAssessmentQuestions() {
 
 async function saveAssessment() {
   savingAssessment.value = true;
-  const valid = await v$.value.$validate();
-
-  if (!valid) {
-    toast.error("Please enter all required fields");
-    return;
-  }
+  // const valid = await v$.value.$validate();
+  // if (!valid) {
+  //   toast.error("Please enter all required fields");
+  //   savingAssessment.value = false;
+  //   return;
+  // }
 
   const payload = Object.assign(formData.value, { job_id: props.jobId });
 

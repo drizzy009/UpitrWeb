@@ -430,8 +430,6 @@ function getVacancyInterviewSections(id) {
   InterviewService.getVacancyInterview(id)
     .then((response) => {
       const { data } = response.data;
-      console.clear();
-      console.dir(data);
       interviewKit.value = data;
       sections.value = data.interview_sections;
       if (sections.value.length > 0) {
