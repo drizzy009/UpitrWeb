@@ -467,7 +467,6 @@ function getAssessmentQuestions() {
     `page_size=100&assessment=${assessmentId.value}`
   ).then((response) => {
     const { data } = response.data;
-    console.log(data);
     if (data.length > 0) {
       let serial = 0;
       const questions = data.map((item) => {
@@ -543,7 +542,7 @@ function getAssessment() {
       }
     })
     .catch((err) => {
-      console.error(err);
+      // console.error(err);
     })
     .finally(() => {
       loading.value = false;
@@ -697,6 +696,7 @@ function uploadAssessment(data) {
         });
 
         newOptions[answer - 1].is_answer = true;
+        console.log(newOptions);
 
         sno += sno;
         const question = {
@@ -712,6 +712,7 @@ function uploadAssessment(data) {
       assessments.value = cbtQuestions;
       if (cbtQuestions.length > 0) {
         showSaveQuestions.value = true;
+        showUpload.value = false;
       }
       // if (cbtQuestions.length > 0) {
       //   const assessmentQuestion = assessmentsPayload(assessmentId.value, cbtQuestions);

@@ -7,18 +7,19 @@
     <div class="grid grid-cols-6 gap-4">
       <div class="col-start-1 col-end-6">
         <label class="text-base font-medium text-gray-900">
-          <span class="pr-3">{{ index + 1 }}.</span> {{ question.name }}</label>
+          <span class="pr-3">{{ index + 1 }}.</span> {{ question.name }}</label
+        >
         <fieldset class="mt-4">
           <div class="space-y-4">
             <div
-              :key="option"
+              :key="option.id"
               class="flex items-center"
               v-for="option in question.options"
             >
               <input
                 type="radio"
                 :id="option.id"
-                :name="question.name"
+                :name="question.id"
                 :checked="option.is_answer"
                 v-bind:value="option.is_answer"
                 @change="optionChange(question.id, option)"
@@ -60,7 +61,7 @@ function onDelete(id) {
 }
 
 function optionChange(id, item) {
-  emits('answerSelected', { questionId: id, optionId: item.id})
+  emits("answerSelected", { questionId: id, optionId: item.id });
 }
 </script>
 
