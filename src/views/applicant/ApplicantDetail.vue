@@ -1,6 +1,6 @@
 <template>
   <CandidateLoading v-if="loading"></CandidateLoading>
-  <main v-if="!loading && candidateDetail !== null" class="flex-1 pb-8">
+  <main v-if="!loading && applicantData !== null" class="flex-1 pb-8">
     <div
       class="px-4 mx-auto mt-4 max-w-9xl sm:px-6 md:flex md:items-center md:justify-between md:space-x-5"
     >
@@ -8,9 +8,9 @@
         <div class="flex-shrink-0">
           <div class="relative">
             <img
-              v-if="candidateDetail.photo"
+              v-if="applicantData.photo"
               class="w-16 h-16 rounded-full"
-              :src="candidateDetail.photo"
+              :src="applicantData.photo"
               alt=""
             />
             <UserCircleIcon v-else class="w-16 h-16 text-indigo-400" />
@@ -22,30 +22,30 @@
         </div>
         <div>
           <h1 class="text-2xl font-bold text-gray-900">
-            {{ candidateDetail.firstname }} {{ candidateDetail.lastname }}
-            {{ candidateDetail.middlename }}
+            {{ applicantData.firstname }} {{ applicantData.lastname }}
+            {{ applicantData.middlename }}
           </h1>
           <p class="text-sm font-medium text-gray-500">
-            {{ candidateDetail.headline }}
+            {{ applicantData.headline }}
           </p>
         </div>
       </div>
       <div
         class="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3"
       >
-        <IconButton
+        <!-- <IconButton
           @click="openAssessmentModal"
           v-if="selected.name === 'Assessment'"
-          v-tooltip="`Schedule assessment for ${candidateDetail.firstname} ${candidateDetail.lastname}`"
+          v-tooltip="`Schedule assessment for ${applicantData.firstname} ${applicantData.lastname}`"
           class="inline-flex items-center text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
         >
           <CalendarIcon class="w-5 h-5 mr-2 -ml-1"></CalendarIcon>
           Schedule Assessment
-        </IconButton>
+        </IconButton> -->
         <IconButton
           @click="openInterviewModal"
           v-if="selected.name === 'Interview'"
-          v-tooltip="`Schedule interview for ${candidateDetail.firstname} ${candidateDetail.lastname}`"
+          v-tooltip="`Schedule interview for ${applicantData.firstname} ${applicantData.lastname}`"
           class="inline-flex items-center text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
         >
           <CalendarIcon class="w-5 h-5 mr-2 -ml-1"></CalendarIcon>
@@ -181,8 +181,8 @@
                             <dd
                               class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
-                              {{ candidateDetail.firstname }}
-                              {{ candidateDetail.lastname }}
+                              {{ applicantData.firstname }}
+                              {{ applicantData.lastname }}
                             </dd>
                           </div>
                           <div
@@ -194,7 +194,7 @@
                             <dd
                               class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
-                              Backend Developer
+                              {{ selectedVacancy.title }}
                             </dd>
                           </div>
                           <div
@@ -206,7 +206,7 @@
                             <dd
                               class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
-                              {{ candidateDetail.email }}
+                              {{ applicantData.email }}
                             </dd>
                           </div>
                           <div
@@ -218,7 +218,7 @@
                             <dd
                               class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
-                              {{ candidateDetail.summary }}
+                              {{ applicantData.summary }}
                             </dd>
                           </div>
                           <div
@@ -248,7 +248,7 @@
                                   </div>
                                   <div class="flex-shrink-0 ml-4">
                                     <a
-                                      :href="candidateDetail.cover_letter"
+                                      :href="applicantData.cover_letter"
                                       target="_blank"
                                       class="font-medium text-indigo-600 hover:text-indigo-500"
                                     >
@@ -270,7 +270,7 @@
                                   </div>
                                   <div class="flex-shrink-0 ml-4">
                                     <a
-                                      :href="candidateDetail.resume"
+                                      :href="applicantData.resume"
                                       target="_blank"
                                       class="font-medium text-indigo-600 hover:text-indigo-500"
                                     >
@@ -290,7 +290,7 @@
                             <dd
                               class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
-                              <p>{{ candidateDetail.skills }}</p>
+                              <p>{{ applicantData.skills }}</p>
                             </dd>
                           </div>
                         </dl>
@@ -416,7 +416,7 @@
                             label="Start Interview"
                             @click="openInterview = true"
                             class="bg-green-600 hover:bg-green-700 focus:bg-green-500"
-                            v-tooltip="`Start interview for ${candidateDetail.firstname} ${candidateDetail.lastname}`"
+                            v-tooltip="`Start interview for ${applicantData.firstname} ${applicantData.lastname}`"
                           ></AppButton>
                         </div>
                       </div>
@@ -447,7 +447,7 @@
     :toggle="openInterview"
     @toggleInterview="closeInterviewModal"
   ></ApplicantInterview>
-  <ScheduleModal :title="scheduleTitle" :toggle="openSchedule"></ScheduleModal>
+  <ScheduleModal :applicant-id="id" :vacancy="selectedVacancy" :candidate-detail="applicantData" :title="scheduleTitle" :toggle="openSchedule"></ScheduleModal>
 </template>
 <script setup>
 import { ref, onMounted, inject } from "vue";
@@ -488,7 +488,7 @@ const props = defineProps({
 
 const toast = useToast();
 const swal = inject("$swal");
-const { workflowStages } = useVacancies();
+const { workflowStages, selectedVacancy } = useVacancies();
 
 const totalScore = ref(0);
 const selectedTab = ref(0);
@@ -497,7 +497,7 @@ const scheduleTitle = ref("");
 const openSchedule = ref(false);
 const openInterview = ref(false);
 const interviewResults = ref([]);
-const candidateDetail = ref(null);
+const applicantData = ref(null);
 const interviewSection = ref(null);
 const showResultDetail = ref(false);
 const educationList = ref([]);
@@ -540,12 +540,12 @@ const tabs = ref([
 
 function openAssessmentModal() {
   openSchedule.value = true;
-  scheduleTitle.value = "Schedule Assessment"
+  scheduleTitle.value = "Assessment"
 }
 
 function openInterviewModal() {
-  openSchedule.value = true;
-  scheduleTitle.value = "Schedule Interview"
+  openSchedule.value = !openSchedule.value;
+  scheduleTitle.value = "Interview"
 }
 
 
@@ -590,13 +590,13 @@ function getApplicantInfo(id) {
   ApplicantService.singleByApplicantId(id)
     .then((response) => {
       const { data } = response.data;
-      candidateDetail.value = data.candidate;
+      applicantData.value = data.candidate;
       const stageId = data.job_workflow_stage.order;
       const stage = workflowStages.find((item) => item.id === stageId);
       selected.value = stage;
-      getCandidateEducations(candidateDetail.value.id);
-      getCandidateAssessments(candidateDetail.value.id);
-      getCandidateExperiences(candidateDetail.value.id);
+      getCandidateEducations(applicantData.value.id);
+      getCandidateAssessments(applicantData.value.id);
+      getCandidateExperiences(applicantData.value.id);
       if (!(stage.name === "Interview")) tabs.value[4].disabled = true;
     })
     .catch(() => {

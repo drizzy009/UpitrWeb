@@ -782,6 +782,7 @@ function getVacancyDetail(id) {
     .then((response) => {
       const { data } = response.data;
       vacancyDetail.value = data;
+      vacancyStore.setSelectedVacancy(data);
       published.value = data.is_published;
       if ('interviews' in data) {
         try {

@@ -25,7 +25,7 @@
                 class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                 aria-hidden="true"
               />
-              {{ vacancyDetail.employment_type.name }}
+              <!-- {{ vacancyDetail.employment_type.name }} -->
             </div>
             <div class="flex items-center mt-2 text-sm text-gray-500">
               <LocationMarkerIcon
@@ -198,7 +198,7 @@
                 </div>
               </div>
 
-              <CandidateView v-if="serverResponse.data.length > 0" :serverData="serverResponse"></CandidateView>
+              <CandidateView :interview-id="interviewId" :is-applicant="true" v-if="serverResponse.data.length > 0" :serverData="serverResponse"></CandidateView>
               <div v-if="loadingCandidates" class="px-4 py-2 mx-auto max-w-9xl sm:px-6 lg:px-8">
                 <SkeletonLoading></SkeletonLoading>
               </div>
@@ -292,6 +292,7 @@ import {
   ArrowNarrowRightIcon,
 } from "@heroicons/vue/solid";
 import CandidateView from "./CandidateView.vue";
+import { useVacancies } from "../../stores/vacancies";
 import VacancyService from "../../service/vacancies.service";
 import { FormatMoney, FormatShortDate } from "../../util/Formatter";
 // import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
@@ -299,6 +300,8 @@ import { FormatMoney, FormatShortDate } from "../../util/Formatter";
 const props = defineProps({
   id: Number
 });
+
+const vacancyStore = useVacancies();
 
 var tabIndex = ref(0);
 const vacancyId = ref(0);
@@ -309,6 +312,7 @@ const published = ref(false);
 const processing = ref(false);
 const vacancyDetail = ref(null);
 const remoteOffice = ref("On-site");
+const interviewId = ref();
 
 const serverResponse = ref({
   to: 0,
@@ -402,12 +406,22 @@ function getVacancyDetail(id) {
   VacancyService.single(id).then((response) => {
     const { data } = response.data;
     vacancyDetail.value = data;
+    vacancyStore.setSelectedVacancy(data);
     published.value = data.is_published;
     const workflowStages = data.job_workflow.job_workflow_stages;
-    console.log(workflowStages);
+    vacancyStore.setWorkflowStages(workflowStages);
+
+    if ('interviews' in data) {
+        try {
+          interviewId.value = data.interviews[0].id;
+        } catch (error) {
+          // log error
+        }
+      }
     tabs.value = workflowStages.map(item => {
       return item;
     })
+    
     if (vacancyDetail.value.is_remote !== null) {
       remoteOffice.value = vacancyDetail.value.is_remote ? "Remote" : "On-site";
     }

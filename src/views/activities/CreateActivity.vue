@@ -160,16 +160,17 @@ const {
   activityRelations,
   activityImportance
 } = storeToRefs(useMiscellaneous());
+
 const emits = defineEmits(['toggleActivity', 'loadActivity']);
 const props = defineProps({
   toggle: Boolean,
 });
 
-const loadingCandidate = ref(false);
 const showVacancy = ref(false);
 const showCandidate = ref(false);
 const savingActivity = ref(false);
 const showAddActivity = ref(false);
+const loadingCandidate = ref(false);
 const options = ref([]);
 const vacancyList = ref([]);
 const candidateList = ref([]);
@@ -275,8 +276,8 @@ function clearForm() {
 }
 
 function closeCreateActivity() {
-  showAddActivity.value = false
   clearForm();
+  showAddActivity.value = false
   emits('toggleActivity');
 }
 

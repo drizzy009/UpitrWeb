@@ -48,8 +48,8 @@ onMounted(() => {
     if (!isAuthenticated.value || token === null) {
       router.push({ name: 'Login' });
     }
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    // console.log(error);
   }
 })
 

@@ -138,8 +138,7 @@
                         <label
                           for="department"
                           class="block text-sm font-medium text-gray-700"
-                          >Department</label
-                        >
+                          >Department</label>
                         <MultiSelect
                           searchable
                           v-model="jobDetail.department_id"
@@ -549,7 +548,16 @@
                           class="block text-sm font-medium text-gray-700"
                           >Keywords</label
                         >
-                        <TagInput @on-tags-changed="keywordsChange" :tags="jobDetail.keywords"></TagInput>
+                        <MultiSelect
+                          searchable
+                          mode="tags"
+                          v-model="jobKeywords"
+                          placeholder="add keywords"
+                          label="name"
+                          :options="jobKeywords"
+                          :create-option="true"
+                        ></MultiSelect>
+                        <!-- <TagInput @on-tags-changed="keywordsChange" :tags="jobDetail.keywords"></TagInput> -->
                         <!-- <FormInput
                           name="keywords"
                           id="keywords"
@@ -751,6 +759,7 @@ import { required, helpers } from "@vuelidate/validators";
 import { CheckIcon } from "@heroicons/vue/solid";
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
+// import { useAppStore } from '../../stores/app';
 import { useDepartments } from "../../stores/department";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import MiscService from "../../service/miscellaneous.service";
@@ -760,6 +769,23 @@ import { FormatDate } from "../../util/Formatter";
 const props = defineProps({
   id: Number
 });
+
+// const appStore = useAppStore();
+// const { pageTitle } = storeToRefs(useAppStore());
+const { departments } = storeToRefs(useDepartments());
+const {
+  countries,
+  currencies,
+  industries,
+  jobFunctions,
+  educationLevels,
+  employmentTypes,
+  experienceLevels,
+} = storeToRefs(useMiscellaneous());
+
+const swal = inject("$swal");
+const $loading = inject("$loading");
+
 
 const vacancySettings = ref(null);
 const settingsId = ref(0);
@@ -791,6 +817,21 @@ const jobDetail = ref({
   head_count: "",
 });
 
+const benefit = ref(null);
+const description = ref(null);
+const requirements = ref(null);
+const responsibilities = ref(null);
+const stepNo = ref(1);
+const vacancyId = ref(0);
+const interviewId = ref(0);
+const cities = ref([]);
+const jobKeywords = ref([]);
+const countryStates = ref([]);
+const departmentList = ref([]);
+const processing = ref(false);
+const loadingCity = ref(false);
+const loadingRegion = ref(false);
+
 const rules = {
   deadline: { required: helpers.withMessage("Deadline", required) },
   code: { required: helpers.withMessage("Internal Code", required) },
@@ -810,39 +851,6 @@ const steps = ref([
   { id: 2, name: "Application form", href: "#", status: "upcoming" },
   { id: 3, name: "Workflow", href: "#", status: "upcoming" },
 ]);
-
-const {
-  countries,
-  currencies,
-  industries,
-  jobFunctions,
-  educationLevels,
-  employmentTypes,
-  experienceLevels,
-} = storeToRefs(useMiscellaneous());
-
-const swal = inject("$swal");
-const $loading = inject("$loading");
-const { departments } = storeToRefs(useDepartments());
-
-const benefit = ref(null);
-const description = ref(null);
-const requirements = ref(null);
-const responsibilities = ref(null);
-const stepNo = ref(1);
-const vacancyId = ref(0);
-const interviewId = ref(0);
-const cities = ref([]);
-const jobKeywords = ref([]);
-const countryStates = ref([]);
-const departmentList = ref([]);
-const processing = ref(false);
-const loadingCity = ref(false);
-const loadingRegion = ref(false);
-
-function keywordsChange(items) {
-  jobKeywords.value = items;
-}
 
 function onRemoteChange(evt) {
   jobDetail.value.isRemote = evt.target.checked;
@@ -931,7 +939,6 @@ onMounted(() => {
   const loader = $loading.show();
   VacancyService.single(Number(props.id)).then(result => {
     const { data } = result.data;
-    // jobDetail.value = data;
     vacancyDetail.value = data;
     jobDetail.value.department_id = data.department.id;
     jobDetail.value.country_id = data.city.region.country.id;
@@ -958,13 +965,19 @@ onMounted(() => {
     description.value.setHTML(data.description || '');
     requirements.value.setHTML(data.requirements || '');
     responsibilities.value.setHTML(data.responsibilities || '');
-    interviewId.value = data.interviews[0].id;
-  
+
+
+    // appStore.setPageTitle(`Edit Vacancy - ${jobDetail.value.title}`);
+    
     if ("job_settings" in data) {
       if (data.job_settings.length > 0) {
         vacancySettings.value = data.job_settings[0];
         settingsId.value = data.job_settings[0].id;
       }
+    }
+
+    if ("interviews" in data) {
+      interviewId.value = data.interviews[0].id;
     }
   }).catch((error) => {
     // console.error(error);

@@ -44,7 +44,19 @@
         ></NumberInput>
       </div>
       <div class="col-span-6 mt-2 md:mt-4">
-        <div class="flex items-start mt-6">
+        <label
+          for="dueDate"
+          class="block mb-2 text-sm font-medium text-gray-700"
+          >Deadline</label
+        >
+        <DatePicker
+          id="dueDate"
+          :error="v$.deadline.$error"
+          v-model="formData.deadline"
+        ></DatePicker>
+      </div>
+      <div class="col-span-6">
+        <div class="flex items-start mt-4">
           <div class="flex items-center h-5">
             <input
               type="checkbox"
@@ -67,6 +79,7 @@
 import { ref, watch } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { FormatLongDate } from '../../util/Formatter';
 const emits = defineEmits(["toggleDepartment", "save"]);
 const props = defineProps({
   toggle: Boolean,
@@ -76,6 +89,7 @@ const props = defineProps({
 
 const showAddConfirmation = ref(false);
 const formData = ref({
+  deadline: '',
   duration: 0,
   is_timed: false,
   pass_score: 0,
@@ -83,6 +97,7 @@ const formData = ref({
 });
 
 const rules = {
+  deadline: { required },
   duration: { required },
   is_timed: { required },
   pass_score: { required },
@@ -99,6 +114,7 @@ function closeConfirmation() {
 async function submit() {
   const valid = await v$.value.$validate();
   if (valid) {
+    formData.value.deadline = FormatLongDate(formData.value.deadline);
     emits('save', formData.value);
   }
 }
@@ -118,6 +134,7 @@ watch(
       formData.value.is_timed = value.is_timed;
       formData.value.pass_score = value.pass_score;
       formData.value.questions_per_candidate = value.questions_per_candidate;
+      formData.value.deadline = value.deadline;
     }
   }
 );

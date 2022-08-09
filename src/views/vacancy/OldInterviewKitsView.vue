@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="space-y-8 bg-white divide-y divide-gray-200">
+  <div class="space-y-8 bg-white divide-y divide-gray-200">
     <div v-if="showEmptyKit" class="mt-6">
       <button
         type="button"
@@ -30,109 +30,96 @@
       </button>
     </div>
 
-    <div
-      v-if="showAddKit"
-      id="newInterviewKit"
-      class="mt-6 md:grid md:grid-cols-12 md:gap-6"
-    >
-      <div class="max-h-screen px-4 py-2 space-y-1 overflow-y-auto bg-gray-100 md:col-span-10">
-        <div
-          v-for="(section, index) in sections"
-          :key="index"
-          class="pt-6 my-4 border-2 rounded shadow bg-gray-50"
-        >
-          <div class="px-6">
+    <div v-if="showAddKit" id="newInterviewKit" class="mt-4">
+      <div
+        v-for="(section, index) in sections"
+        :key="index"
+        class="pt-8 mb-4 md:grid md:grid-cols-12 md:gap-6"
+      >
+        <div class="mt-5 md:mt-0 md:col-span-10">
+          <div class="px-6 shadow bg-gray-50">
             <FormInput v-model="section.title" placeholder="Section Name" />
           </div>
-          <div
-            v-for="(questionItem, index) in section.interview_questions"
-            :key="index"
-          >
-            <div class="grid grid-cols-6 gap-4 px-6 pt-4">
-              <div class="col-start-1 col-end-7">
-                <QuillEditor
-                    theme="snow"
-                    contentType="html"
-                    v-model:content="questionItem.question"
-                    id="question"
-                    name="question"
-                    class="block w-full bg-white border border-gray-300 rounded-md shadow-sm h-28 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Question"
-                  />
-              </div>
-              <div class="col-span-1 col-end-8">
-                <div class="flex flex-col ml-2">
-                    <SaveIcon
-                      v-tooltip="'Save Question'"
-                      @click="saveQuestion(section, questionItem, index)"
-                      :disabled="questionItem.question === '' || savingQuestion"
-                      class="w-5 h-5 mb-2 text-green-500 cursor-pointer"
-                    ></SaveIcon>
-                    <TrashIcon
-                      v-tooltip="'Delete Question'"
-                      @click="deleteQuestion(section, index)"
-                      class="w-5 h-5 text-red-500 cursor-pointer"
-                    ></TrashIcon>
+          <div v-for="(questionItem, index) in section.questions" :key="index">
+            <div class="mb-4 overflow-hidden shadow sm:rounded-md">
+              <div class="px-4 py-2 shadow bg-gray-50 sm:p-6">
+                <div class="grid grid-cols-6 gap-6">
+                  <div class="col-span-6 sm:col-span-6">
+                    <input
+                      v-model="questionItem.title"
+                      type="text"
+                      placeholder="Title"
+                      class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
                   </div>
+                  <div class="col-span-6 sm:col-span-6">
+                    <textarea
+                      id="question"
+                      v-model="questionItem.question"
+                      name="question"
+                      rows="2"
+                      class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      placeholder="Question"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="px-4 py-3 bg-gray-100 sm:px-6">
+                <AppButton
+                  type="button"
+                  :processing="savingQuestion"
+                  @click="saveQuestion(section, questionItem, index)"
+                  :disabled="
+                    section.id === 0 ||
+                    section.title === '' ||
+                    section.question === ''
+                  "
+                  class="inline-flex justify-center w-auto px-4 py-2 mr-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 rounded-md sm:text-sm sm:leading-5"
+                >
+                  Save Question
+                </AppButton>
+                <span
+                  @click="deleteQuestion(section, index)"
+                  class="inline-flex justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-red-700 transition duration-150 ease-in-out cursor-pointer sm:text-sm sm:leading-5"
+                >
+                  Delete Question
+                </span>
               </div>
             </div>
-            <div class="px-6 py-3">
-              <div class="flex flex-row col-start-1 col-end-7">
-                  <!-- <textarea
-                    id="question"
-                    v-model="questionItem.question"
-                    name="question"
-                    rows="2"
-                    class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Question"
-                  /> -->
-                </div>
-            </div>
-          </div>
-          <div class="flex flex-row px-6 mt-3 mb-4 text-sm text-green-700">
-            <PlusCircleIcon class="w-5 h-5 mr-1"></PlusCircleIcon>
-            <a class="cursor-pointer" @click="addNewQuestion(index)"
-              >Add new question</a
-            >
-          </div>
-          <div class="p-4 px-6">
-            <AppButton
-              type="button"
-              :processing="savingSection"
-              @click="saveSection(section, index)"
-              class="inline-flex justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 rounded-md sm:text-sm sm:leading-5"
-            >
-              Save Section
-            </AppButton>
-            <span
-              @click="deleteSection(index)"
-              class="inline-flex justify-center w-auto px-4 py-2 text-base font-medium leading-6 text-red-700 transition duration-150 ease-in-out cursor-pointer sm:text-sm sm:leading-5"
-            >
-              Delete Section
-            </span>
           </div>
         </div>
-      </div>
-      <div class="md:col-span-2">
-        <ul>
-          <li
-            @click="addNewSection"
-            class="mt-4 mb-2 text-sm font-medium text-green-600 cursor-pointer"
-          >
-            Add a new section
-          </li>
-          <li
-            @click="addNewSection"
-            class="mt-4 mb-2 text-sm font-medium text-blue-600 cursor-pointer"
-          >
-            Preview interview kit
-          </li>
-        </ul>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <ul>
+            <li
+              @click="saveSection(section, index)"
+              class="mb-2 text-sm font-medium text-green-700 cursor-pointer"
+            >
+              Save Section
+            </li>
+            <li
+              @click="addNewQuestion(index)"
+              class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer"
+            >
+              Add New Question
+            </li>
+            <!-- <li @click="openModal()" class="mb-2 text-sm font-medium text-indigo-700 cursor-pointer">Preview Interview</li> -->
+            <li
+              @click="deleteSection(index)"
+              :disabled="deletingSection"
+              class="mb-2 text-sm font-medium text-red-700 cursor-pointer"
+            >
+              Delete Section
+            </li>
+            <li
+              @click="addNewSection"
+              class="mt-4 mb-2 text-sm font-medium text-green-600 cursor-pointer"
+            >
+              Add New Section
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-  <div v-if="loading">
-    <SkeletonLoading v-for="n in 5" :key="n"></SkeletonLoading>
   </div>
 
   <TransitionRoot as="template" :show="open">
@@ -223,8 +210,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { PlusCircleIcon } from "@heroicons/vue/solid";
-import { SaveIcon, CheckIcon, TrashIcon } from "@heroicons/vue/outline";
+import { CheckIcon } from "@heroicons/vue/outline";
 import InterviewService from "../../service/interview.service";
 import VacancyInterviewSectionService from "../../service/vacancy-interview-section.service";
 import VacancySectionQuestionService from "../../service/vacancy-interview-section-question.service";
@@ -232,16 +218,13 @@ import VacancySectionQuestionService from "../../service/vacancy-interview-secti
 // import { MenuIcon, TrashIcon } from "@heroicons/vue/solid";
 
 const toast = useToast();
-
 const open = ref(false);
-const loading = ref(false);
 const savingQuestion = ref(false);
 const savingSection = ref(false);
 const deletingSection = ref(false);
 const showAddKit = ref(false);
 const showEmptyKit = ref(true);
 const interviewSectionId = ref(0);
-const interviewKit = ref(null);
 
 const sections = ref([]);
 
@@ -256,7 +239,7 @@ function toggleEmptyKit() {
   let section = {
     id: 0,
     title: "",
-    interview_questions: [
+    questions: [
       {
         id: 0,
         title: "",
@@ -273,8 +256,8 @@ function saveSection(section, index) {
     savingSection.value = true;
     if (section.id === 0) {
       if (
-        // section.questions[0].title === "" ||
-        section.interview_questions[0].question === ""
+        section.questions[0].title === "" ||
+        section.questions[0].question === ""
       ) {
         toast.warning("Please add at least one question");
         savingSection.value = false;
@@ -284,15 +267,15 @@ function saveSection(section, index) {
       const payload = {
         title: section.title,
         interview_id: props.interviewId,
-        questions: section.interview_questions,
+        questions: section.questions,
       };
 
       VacancyInterviewSectionService.create(payload)
         .then((response) => {
           const { data } = response.data;
           sections.value[index].id = data.id;
-          sections.value[index].interview_questions = [];
-          sections.value[index].interview_questions = data.interview_questions;
+          sections.value[index].questions = [];
+          sections.value[index].questions = data.interview_questions;
           toast.success("Interview section successfully saved");
         })
         .catch(() => {})
@@ -327,7 +310,7 @@ function addNewSection() {
   let section = {
     id: 0,
     title: "",
-    interview_questions: [
+    questions: [
       {
         id: 0,
         title: "",
@@ -344,7 +327,7 @@ function addNewQuestion(sectionIndex) {
     title: "",
     question: "",
   };
-  sections.value[sectionIndex].interview_questions.push(question);
+  sections.value[sectionIndex].questions.push(question);
 }
 
 // function openModal() {
@@ -352,7 +335,6 @@ function addNewQuestion(sectionIndex) {
 // }
 
 function saveQuestion(section, question, questionIndex) {
-  if (question.question === "") return;
   savingQuestion.value = true;
   const payload = {
     title: question.title,
@@ -376,7 +358,7 @@ function saveQuestion(section, question, questionIndex) {
     .then((response) => {
       const { data } = response.data;
       const index = sections.value.indexOf(section);
-      sections.value[index].interview_questions[questionIndex].id = data.id;
+      sections.value[index].questions[questionIndex].id = data.id;
       toast.info("Question successfully saved");
     })
     .catch(() => {})
@@ -386,17 +368,15 @@ function saveQuestion(section, question, questionIndex) {
 }
 
 function deleteQuestion(section, index) {
-  const getQuestion = section.interview_questions[index];
+  const getQuestion = section.questions[index];
   if ("id" in getQuestion) {
-    if (getQuestion.id !== 0) {
-      VacancySectionQuestionService.delete(Number(getQuestion.id)).then(() => {
-        toast.info("Question successfully deleted");
-      });
-    }
+    VacancySectionQuestionService.delete(Number(getQuestion.id)).then(() => {
+      toast.info("Question successfully deleted");
+    });
   }
 
-  section.interview_questions.splice(index, 1);
-
+  section.questions.splice(index, 1);
+  
   // if (section.questions.value.length == 0 && interviewSectionId.value === 0) {
   //   showEmptyKit.value = true;
   //   showAddKit.value = false;
@@ -426,21 +406,16 @@ function deleteSection(index) {
 }
 
 function getVacancyInterviewSections(id) {
-  loading.value = true;
-  InterviewService.getVacancyInterview(id)
-    .then((response) => {
-      const { data } = response.data;
-      interviewKit.value = data;
-      sections.value = data.interview_sections;
-      if (sections.value.length > 0) {
-        showAddKit.value = true;
-        showEmptyKit.value = false;
-      }
-    })
-    .catch(() => {})
-    .finally(() => {
-      loading.value = false;
-    });
+  InterviewService.getVacancyInterview(id).then(response => {
+    const { data } = response.data;
+    console.log(data);
+    // interviewKit.value.title = data.title
+    // sections.value = data.interview_sections
+    // if (sections.value.length > 0) {
+    //   showAddKit.value = true;
+    //   showEmptyKit.value = false;
+    // }
+  })
 }
 
 onMounted(() => {

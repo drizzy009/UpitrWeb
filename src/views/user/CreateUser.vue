@@ -152,7 +152,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
@@ -163,6 +163,7 @@ import { useMiscellaneous } from "../../stores/miscellaneous";
 import UserService from "../../service/user.service";
 
 const toast = useToast();
+const roleStore = useRole();
 const { departments } = storeToRefs(useDepartments());
 const { designations } = storeToRefs(useMiscellaneous());
 const { roles } = storeToRefs(useRole());
@@ -216,4 +217,8 @@ function saveRoles() {
       processing.value = false;
     });
 }
+
+onMounted(() => {
+  roleStore.fetchAllRoles();
+})
 </script>

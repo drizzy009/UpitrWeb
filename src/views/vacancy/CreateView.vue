@@ -546,9 +546,18 @@
                           class="block text-sm font-medium text-gray-700"
                           >Keywords</label
                         >
-                        <TagInput
+                        <!-- <TagInput
                           @on-tags-changed="keywordsChange"
-                        ></TagInput>
+                        ></TagInput> -->
+                        <MultiSelect
+                          searchable
+                          mode="tags"
+                          v-model="jobKeywords"
+                          placeholder="add keywords"
+                          label="name"
+                          :options="jobKeywords"
+                          :create-option="true"
+                        ></MultiSelect>
                         <!-- <FormInput
                           name="keywords"
                           id="keywords"

@@ -117,6 +117,12 @@
                   scope="col"
                   class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                 >
+                  Email
+                </th>
+                <th
+                  scope="col"
+                  class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
                   Username
                 </th>
                 <th
@@ -166,6 +172,15 @@
                     <div class="">
                       <div class="font-medium text-gray-900 capitalize">
                         {{ user.firstname }} {{ user.lastname }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="">
+                      <div class="font-medium text-gray-900">
+                        {{ user.email }}
                       </div>
                     </div>
                   </div>
@@ -330,7 +345,6 @@ import {
   DownloadIcon,
   PencilAltIcon,
   TrashIcon,
-  SearchIcon,
   DotsVerticalIcon,
 } from "@heroicons/vue/solid";
 import UserService from "../../service/user.service";

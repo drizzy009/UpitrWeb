@@ -1,7 +1,16 @@
 <template>
-  <AppModal :processing="savingSchedule" :showModal="showAddSchedule" @closeModal="closeSchedule" @submit="saveSchedule" :title="title">
+  <AppModal :processing="savingSchedule" :showModal="showAddSchedule" @closeModal="closeSchedule" @submit="saveSchedule" :title="`Schedule ${title}`">
     <div class="grid grid-cols-6">
       <div class="col-span-6">
+        <label
+          for="relatedTo"
+          class="block mb-2 text-sm font-medium text-gray-700"
+        >Related To</label>
+        <div>
+          {{ selectedVacancy.title }} - {{ candidateDetail.firstname}} {{ candidateDetail.lastname }} {{ candidateDetail.middlename}}
+        </div>
+      </div>
+      <div class="col-span-6 mt-2 md:mt-4 ">
         <label
           for="activityTitle"
           class="block mb-2 text-sm font-medium text-gray-700"
@@ -16,6 +25,7 @@
               class="block text-sm font-medium text-gray-700"
             >Activity Type</label>
             <MultiSelect
+              disabled="true"
               value="value"
               label="name"
               valueProp="value"
@@ -40,54 +50,6 @@
             />
           </div>
         </div>
-      </div>
-      <div class="col-span-6 mt-2 md:mt-4">
-        <label
-          for="relatedTo"
-          class="block mb-2 text-sm font-medium text-gray-700"
-        >Related To</label>
-        <MultiSelect
-          id="relatedTo"
-          value="value"
-          label="name"
-          valueProp="value"
-          placeholder="Select..."
-          :options="activityRelations"
-          v-model="formData.related_to_id"
-        ></MultiSelect>
-      </div>
-      <div v-if="showVacancy" class="col-span-6 mt-2 md:mt-4">
-        <label
-          for="vacancy"
-          class="block mb-2 text-sm font-medium text-gray-700"
-        >Vacancy</label>
-        <MultiSelect
-          searchable
-          id="vacancy"
-          value="id"
-          label="name"
-          valueProp="id"
-          placeholder="Select a vacancy"
-          :options="vacancyList"
-          v-model="formData.job_id"
-        ></MultiSelect>
-      </div>
-      <div v-if="showCandidate" class="col-span-6 mt-2 md:mt-4">
-        <label
-          for="candidate"
-          class="block mb-2 text-sm font-medium text-gray-700"
-        >Candidate</label>
-        <MultiSelect
-          searchable
-          id="candidate"
-          value="id"
-          label="name"
-          valueProp="id"
-          :loading="loadingCandidate"
-          placeholder="Select a candidate"
-          :options="candidateList"
-          v-model="formData.job_applicant_id"
-        ></MultiSelect>
       </div>
       <div class="col-span-6 mt-2 mb-2 md:mt-4">
         <div class="flex flex-row">
@@ -147,6 +109,7 @@ import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { useMiscellaneous } from "../../stores/miscellaneous";
+import { useVacancies } from "../../stores/vacancies";
 import UserService from "../../service/user.service";
 import VacancyService from "../../service/vacancies.service";
 import ActivityService from "../../service/activity.service";
@@ -160,18 +123,23 @@ const {
   activityRelations,
   activityImportance
 } = storeToRefs(useMiscellaneous());
+
+const {
+  selectedVacancy,
+} = storeToRefs(useVacancies());
+
 const emits = defineEmits(['toggleActivity', 'loadActivity']);
 const props = defineProps({
   toggle: Boolean,
   title: String,
-  scheduleType: Number
+  vacancy: Object,
+  applicantId: Number,
+  candidateDetail: Object
 });
 
-const loadingCandidate = ref(false);
-const showVacancy = ref(false);
-const showCandidate = ref(false);
 const savingSchedule = ref(false);
 const showAddSchedule = ref(false);
+const loadingCandidate = ref(false);
 const options = ref([]);
 const vacancyList = ref([]);
 const candidateList = ref([]);
@@ -277,22 +245,29 @@ function clearForm() {
 }
 
 function closeSchedule() {
-  showAddSchedule.value = false
   clearForm();
+  // showAddSchedule.value = false
   emits('toggleActivity');
 }
 
 async function saveSchedule() {
   savingSchedule.value = true;
-  formData.value.job_id = Number(formData.value.job_id);
+  formData.value.job_id = selectedVacancy.value.id;
   formData.value.importance_id = Number(formData.value.importance_id);
-  formData.value.related_to_id = Number(formData.value.related_to_id);
-  formData.value.job_applicant_id = Number(formData.value.job_applicant_id);
+  formData.value.related_to_id = activityRelations.value.find(item => item.name === "Application").value || 0;
+  formData.value.job_applicant_id = props.applicantId;
   formData.value.activity_type_id = Number(formData.value.activity_type_id);
   formData.value.status_id = 0;
 
-  ActivityService.create(formData.value).then(() => {
-    toast.success("Activity successfully created");
+  const payload = Object.assign(formData.value, {
+    applicant_id: props.applicantId,
+    candidate_id: props.candidateDetail.id,
+    assessment_id: props.vacancy.id,
+    interview_id: props.vacancy.interviews[0].id,
+  });
+
+  ActivityService.interview(payload).then(() => {
+    toast.success("Interview successfully created");
     emits('loadActivity');
     closeSchedule();
   }).catch(error => {
@@ -312,28 +287,28 @@ watch(() => props.toggle, (newValue) => {
   showAddSchedule.value = newValue;
 });
 
-watch(() => formData.value.related_to_id, (value) => {
-  const id = Number(value);
-  showVacancy.value = false;
-  showCandidate.value = false;
-  formData.value.job_applicant_id = "";
-  if (id !== -1) {
-    const relatedTo = activityRelations.value.find(item => item.value === id);
-    if (relatedTo.name.includes('Vacancy')) showVacancy.value = true;
-    if (relatedTo.name.includes('Candidate')) {
-      showVacancy.value = true;
-      showCandidate.value = true;
-      formData.value.job_applicant_id = 0;
-    }
-  }
-});
+// watch(() => formData.value.related_to_id, (value) => {
+//   const id = Number(value);
+//   showVacancy.value = false;
+//   showCandidate.value = false;
+//   formData.value.job_applicant_id = "";
+//   if (id !== -1) {
+//     const relatedTo = activityRelations.value.find(item => item.value === id);
+//     if (relatedTo.name.includes('Vacancy')) showVacancy.value = true;
+//     if (relatedTo.name.includes('Candidate')) {
+//       showVacancy.value = true;
+//       showCandidate.value = true;
+//       formData.value.job_applicant_id = 0;
+//     }
+//   }
+// });
 
-watch(() => formData.value.job_id, (value) => {
-  const id = Number(value);
-  if (id !== -1) {
-    getCandidates(id);
-  }
-});
+// watch(() => formData.value.job_id, (value) => {
+//   const id = Number(value);
+//   if (id !== -1) {
+//     getCandidates(id);
+//   }
+// });
 
 onMounted(() => {
   UserService.all().then(result => {
@@ -352,5 +327,11 @@ onMounted(() => {
       })
     }
   })
+
+  try {
+    formData.value.activity_type_id = activityTypes.value.find(item => item.name === "Interview").value;
+  } catch (error) {
+    //
+  }
 })
 </script>

@@ -4,6 +4,8 @@ import JobListView from "../views/job/ListView.vue";
 import JobDetailView from "../views/job/DetailView.vue";
 
 import LoginView from "../views/authentication/LoginView.vue";
+import SetPasswordView from "../views/authentication/SetPasswordView.vue";
+import ResetPasswordView from "../views/authentication/ResetPasswordView.vue";
 import ForgotPasswordView from "../views/authentication/ForgotPasswordView.vue";
 
 import DashboardView from "../views/dashboard/DashboardView.vue";
@@ -114,6 +116,38 @@ const router = createRouter({
     },
     {
       path: "/",
+      redirect: "reset-password",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
+      children: [
+        {
+          name: "ResetPassword",
+          path: "reset-password",
+          meta: {
+            pageTitle: "Reset Password",
+          },
+          component: ResetPasswordView,
+          props: route => ({ query: route.query.email })
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "set-password",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
+      children: [
+        {
+          name: "SetPassword",
+          path: "set-password",
+          meta: {
+            pageTitle: "Set Password",
+          },
+          component: SetPasswordView,
+          props: route => ({ query: route.query.email })
+        },
+      ],
+    },
+    {
+      path: "/",
       redirect: "applicant",
       component: () => import("../views/layouts/JupiterLayout.vue"),
       children: [
@@ -125,6 +159,7 @@ const router = createRouter({
           },
           component: ApplicantDetail,
           props: true,
+          permission: "view_applicants"
         }
       ]
     },
@@ -138,40 +173,45 @@ const router = createRouter({
           path: "vacancy/all",
           meta: {
             pageTitle: "Manage Vacancies",
+            permission: "list_vacancies"
           },
-          component: ManageVacancyView,
+          component: ManageVacancyView
         },
         {
           name: "CreateVacancy",
           path: "vacancy/create",
           meta: {
             pageTitle: "Create Vacancy",
+            permission: "create_vacancies"
           },
-          component: CreateVacancyView,
+          component: CreateVacancyView
         },
         {
           name: "EditVacancy",
           path: "vacancy/edit/:id",
           meta: {
             pageTitle: "Edit Vacancy",
+            permission: "update_vacancies"
           },
           component: EditVacancyView,
-          props: true,
+          props: true
         },
         {
           name: "VacancyDetail",
           path: "vacancy/detail/:id",
           meta: {
             pageTitle: "Vacancy Details",
+            permission: "view_vacancies"
           },
           component: VacancyDetailsView,
-          props: true,
+          props: true
         },
         {
           name: "ManageApplicants",
           path: "vacancy/applicants/:id",
           meta: {
-            pageTitle: "Manage Applicants"
+            pageTitle: "Manage Applicants",
+            permission: "list_applicants"
           },
           component: ManageApplicants,
           props: true
@@ -188,22 +228,25 @@ const router = createRouter({
           path: "candidate/all",
           meta: {
             pageTitle: "Manage Candidates",
+            permission: "list_applicants"
           },
-          component: ManageCandidates,
+          component: ManageCandidates
         },
         {
           name: "CreateCandidate",
           path: "candidate/create",
           meta: {
             pageTitle: "Create Candidate",
+            permission: "create_applicants"
           },
-          component: CreateCandidate,
+          component: CreateCandidate
         },
         {
           name: "CandidateDetail",
           path: "candidate/detail/:id",
           meta: {
             pageTitle: "Candidate Details",
+            permission: "view_applicants"
           },
           component: CandidateDetail,
           props: true,
@@ -220,8 +263,9 @@ const router = createRouter({
           path: "department/all",
           meta: {
             pageTitle: "Manage Departments",
+            permission: "list_departments"
           },
-          component: ManageDepartments,
+          component: ManageDepartments
         },
       ],
     },
@@ -295,14 +339,16 @@ const router = createRouter({
           path: "role",
           meta: {
             pageTitle: "Manage Roles",
+            permission: "list_roles"
           },
-          component: ManageRole,
+          component: ManageRole
         },
         {
           name: "NewRole",
           path: "role/new",
           meta: {
             pageTitle: "Create New Role",
+            permission: "create_roles"
           },
           component: CreateRole,
         },
@@ -311,9 +357,10 @@ const router = createRouter({
           path: "role/edit/:id",
           meta: {
             pageTitle: "Edit Role",
+            permission: "update_roles"
           },
           component: EditRole,
-          props: true
+          props: true,
         },
       ],
     },
@@ -327,25 +374,28 @@ const router = createRouter({
           path: "user",
           meta: {
             pageTitle: "Manage Users",
+            permission: "list_users"
           },
-          component: ManageUser,
+          component: ManageUser
         },
         {
           name: "NewUser",
           path: "user/new",
           meta: {
             pageTitle: "Create New User",
+            permission: "create_users"
           },
-          component: CreateUser,
+          component: CreateUser
         },
         {
           name: "EditUser",
           path: "user/edit/:id",
           meta: {
             pageTitle: "Edit User",
+            permission: "update_users"
           },
           component: EditUser,
-          props: true,
+          props: true
         },
       ],
     },

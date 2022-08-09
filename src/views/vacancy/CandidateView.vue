@@ -35,15 +35,17 @@
                   <span class="truncate">{{ person.candidate.email }}</span>
                 </p>
               </div>
-              <div class="hidden md:block">
-                <div>
-                  <p class="text-sm text-gray-900">
-                    {{person.candidate.job_function.name}} in
+              <div v-if="person.candidate.job_function" class="hidden md:block">
+                <p class="text-sm text-gray-900">
+                    {{ person.candidate.job_function.name}} in
                   </p>
                   <p class="mt-2 text-sm text-gray-900">
-                    {{person.candidate.industry.name}} with {{person.candidate.years_of_experience}} years of experience
+                    {{person.candidate.industry.name}} with 
+                    {{person.candidate.years_of_experience || ''}} years of experience
                   </p>
-                </div>
+              </div>
+              <div v-else>
+                {{ " " }}
               </div>
               <div class="hidden md:block">
                 <div>
@@ -62,15 +64,22 @@
                     {{ " " }}
                     {{formatAppDate(person.candidate.created_at)}}
                   </p>
-                  <p class="flex items-center mt-2 text-sm text-gray-500">
-                    {{person.candidate.city.name}}, {{person.candidate.city.region.name}}
+                  <p v-if="person.candidate.city !== null" class="flex items-center mt-2 text-sm text-gray-500">
+                    {{ person.candidate.city.name || ''}}, {{person.candidate.city.region.name || ''}}
                   </p>
+                  <p v-else>{{ " " }}</p>
                 </div>
               </div>
             </div>
           </div>
           <div>
-            <a v-tooltip="'View candidate\'s detail'" :href="`/candidate/detail/${person.candidate.id}`">
+            <a v-if="!isApplicant" v-tooltip="'View candidate\'s detail'" :href="`/candidate/detail/${person.candidate.id}`">
+              <ChevronRightIcon
+                class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
+                aria-hidden="true"
+              />
+            </a>
+            <a v-if="isApplicant" v-tooltip="'View applicant\'s detail'" class="cursor-pointer" @click="gotoDetailPage(person.id)">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
@@ -90,13 +99,22 @@ import {
   // CheckCircleIcon,
   ChevronRightIcon,
 } from "@heroicons/vue/solid";
+import { useRouter } from "vue-router";
 import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
-defineProps({
+const props = defineProps({
   serverData: Object,
+  isApplicant: Boolean,
+  interviewId: String
 });
+
+const router = useRouter();
 
 function formatAppDate(dateValue) {
   return FormatLongDate2(dateValue);
+}
+
+function gotoDetailPage(applicantid) {
+  router.push({ name: 'ApplicantDetail', params: {id: applicantid, interviewId: props.interviewId}});
 }
 </script>
 
