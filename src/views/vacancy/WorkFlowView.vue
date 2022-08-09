@@ -581,6 +581,7 @@ function saveAssessmentQuestions() {
         getAssessmentQuestions();
       })
       .catch((error) => {
+        console.log(error);
         const { data } = error;
         if (data.code === "062") {
           showErrorMessages(data.data);

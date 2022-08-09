@@ -241,7 +241,7 @@ const selectedType = ref(null);
 const showOption = ref(false);
 const options = ref([]);
 
-const applicatantFields = ref({
+const applicantFields = ref({
   job_id: 0,
   firstname: "Mandatory",
   lastname: "Mandatory",
@@ -262,7 +262,7 @@ const applicatantFields = ref({
 
 function updateApplicantForm(item) {
   const selectedOption = item.options.find(opt => opt.checked === true);
-  applicatantFields.value[item.key] = selectedOption.optionName;
+  applicantFields.value[item.key] = selectedOption.optionName;
 }
 
 function addQuestion() {
@@ -295,9 +295,9 @@ function addQuestion() {
 
 function saveApplicantInfo() {
   processing.value = true;
-  applicatantFields.value.job_id = props.jobId;
-  if (settingsId.value === 0) {
-    VacancySettingService.create(applicatantFields.value).then(() => {
+  applicantFields.value.job_id = props.jobId;
+  // if (settingsId.value === 0) {
+    VacancySettingService.create(applicantFields.value).then(() => {
       toast.success('Application form successfully saved');
       // emits('nextPage');
     }).catch((ex) => {
@@ -306,19 +306,19 @@ function saveApplicantInfo() {
     }).finally(() => {
       processing.value = false;
     })
-  }
+  // }
 
-  if (settingsId.value > 0) {
-    VacancySettingService.update(settingsId.value, applicatantFields.value).then(() => {
-      toast.success('Application form successfully saved');
-      // emits('nextPage');
-    }).catch(() => {
-      // console.log(ex);
-      // toast.error('Unable to save application form, please try again later');
-    }).finally(() => {
-      processing.value = false;
-    })
-  }
+  // if (settingsId.value > 0) {
+  //   VacancySettingService.update(settingsId.value, applicantFields.value).then(() => {
+  //     toast.success('Application form successfully saved');
+  //     // emits('nextPage');
+  //   }).catch(() => {
+  //     // console.log(ex);
+  //     // toast.error('Unable to save application form, please try again later');
+  //   }).finally(() => {
+  //     processing.value = false;
+  //   })
+  // }
 }
 
 function getQuestionType(question) {
@@ -379,7 +379,7 @@ watch(() => props.vacancySettings, (fieldData) => {
         } else {
           const index = field.options.findIndex((item => item.optionName === optionValue));
           field.options[index].checked = true;
-          applicatantFields.value[field.key] = optionValue;
+          applicantFields.value[field.key] = optionValue;
         }
       })
     });
@@ -403,7 +403,7 @@ function updateVacancySettings() {
         } else {
           const index = field.options.findIndex((item => item.optionName === optionValue));
           field.options[index].checked = true;
-          applicatantFields.value[field.key] = optionValue;
+          applicantFields.value[field.key] = optionValue;
         }
       })
     });
@@ -416,7 +416,7 @@ function updateVacancySettings() {
 
 onMounted(() => {
   if (props.jobId > 0) {
-    applicatantFields.value.job_id = props.jobId;
+    applicantFields.value.job_id = props.jobId;
     settingsId.value = props.settingsId;
     updateVacancySettings();
     getApplicationQuestions(props.jobId);

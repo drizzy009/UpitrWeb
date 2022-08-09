@@ -759,7 +759,6 @@ import { required, helpers } from "@vuelidate/validators";
 import { CheckIcon } from "@heroicons/vue/solid";
 import WorkFlowView from "./WorkFlowView.vue";
 import ApplicationFormView from "./ApplicationFormView.vue";
-// import { useAppStore } from '../../stores/app';
 import { useDepartments } from "../../stores/department";
 import { useMiscellaneous } from "../../stores/miscellaneous";
 import MiscService from "../../service/miscellaneous.service";
@@ -970,9 +969,9 @@ onMounted(() => {
     // appStore.setPageTitle(`Edit Vacancy - ${jobDetail.value.title}`);
     
     if ("job_settings" in data) {
-      if (data.job_settings.length > 0) {
-        vacancySettings.value = data.job_settings[0];
-        settingsId.value = data.job_settings[0].id;
+      if (data.job_settings !== null) {
+        vacancySettings.value = data.job_settings;
+        settingsId.value = data.job_settings.id;
       }
     }
 
@@ -980,7 +979,7 @@ onMounted(() => {
       interviewId.value = data.interviews[0].id;
     }
   }).catch((error) => {
-    // console.error(error);
+    console.error(error);
     let errorMessage = "Something went wrong, please try again later";
     if (error.status === 404) {
       errorMessage = "Vacancy information does not exist";
