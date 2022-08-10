@@ -160,15 +160,17 @@
                   </div>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  <div class="text-gray-900">
-                    {{ candidate.job_function.name }}
-                  </div>
-                  <div class="text-gray-500">
-                    in {{ candidate.industry.name }}
-                  </div>
-                  <div class="text-gray-500">
-                    with {{ candidate.years_of_experience }} years of experience
-                  </div>
+                  <template v-if="candidate.job_function !== null && candidate.industry !== null">
+                    <div class="text-gray-900">
+                      {{ candidate.job_function.name }}
+                    </div>
+                    <div class="text-gray-500">
+                      in {{ candidate.industry.name }}
+                    </div>
+                    <div class="text-gray-500">
+                      with {{ candidate.years_of_experience }} years of experience
+                    </div>
+                  </template>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                   <div>
@@ -620,14 +622,17 @@ function downloadCandidates() {
       let sno = 0;
 
       const exportData = data.map(candidate => {
+        const genderId = candidate.gender_id !== null ? candidate.gender_id : -1;
+        const gendaerName = genderId !== -1 ? genderList.value.find(g => g.id === candidate.gender_id).name : '';
+
         return {
           SN: ++sno,
           Name: `${candidate.firstname} ${candidate.lastname} ${candidate.middlename}`,
           Email: candidate.email,
           "Phone No.": candidate.phone,
-          Gender: genderList.value.find(g => g.id === candidate.gender_id).name,
-          "Job Function": candidate.job_function.name,
-          Industry: candidate.industry.name,
+          Gender: gendaerName,
+          "Job Function": candidate.job_function !== null ? candidate.job_function.name : '',
+          Industry: candidate.industry !== null ? candidate.industry.name : '',
           "Years of Experience": candidate.years_of_experience,
         }
       });
@@ -638,7 +643,9 @@ function downloadCandidates() {
       utils.book_append_sheet(workbook, sheet, 'Candidates');
       writeFile(workbook, `candidates_list_${time}.xlsx`);
     })
-    .catch(() => {})
+    .catch((ex) => {
+      console.log(ex);
+    })
     .finally(() => {
       loader.hide();
     });
