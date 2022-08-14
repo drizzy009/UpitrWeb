@@ -125,20 +125,20 @@
 </template>
 <script setup>
 import { ref, inject, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
 import { required, email, helpers, alphaNum, minLength } from "@vuelidate/validators";
 import { MailIcon } from "@heroicons/vue/solid";
 import AuthService from "../../service/authentication.service";
-
-const props = defineProps({
-  query: Object
-});
+import { useAuthentication } from "../../stores/authentication";
 
 const toast = useToast();
 const router = useRouter();
 const swal = inject("$swal");
+
+const { newUserEmail } = storeToRefs(useAuthentication());
 
 const processing = ref(false);
 
@@ -208,6 +208,6 @@ function sendResetPassword() {
 }
 
 onMounted(() => {
-  formData.value.email = props.query;
+  formData.value.email = newUserEmail.value;
 })
 </script>

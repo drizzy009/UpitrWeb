@@ -36,6 +36,8 @@ import EditUser from "../views/user/EditUser.vue";
 
 import ManageDepartments from "../views/department/ManageDepartment.vue";
 
+import Unauthorised from "../views/UnauthorisedView.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -51,6 +53,21 @@ const router = createRouter({
             pageTitle: "Dashboard",
           },
           component: DashboardView,
+        },
+      ],
+    },
+    {
+      path: "/",
+      redirect: "unauthorise",
+      component: () => import("../views/layouts/SaturnLayout.vue"),
+      children: [
+        {
+          name: "Unauthorise",
+          path: "unauthorise",
+          meta: {
+            pageTitle: "Unauthorise",
+          },
+          component: Unauthorised,
         },
       ],
     },
@@ -141,8 +158,7 @@ const router = createRouter({
           meta: {
             pageTitle: "Set Password",
           },
-          component: SetPasswordView,
-          props: route => ({ query: route.query.email })
+          component: SetPasswordView
         },
       ],
     },

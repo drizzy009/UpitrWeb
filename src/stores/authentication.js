@@ -13,6 +13,7 @@ export const useAuthentication = defineStore({
         isAuthenticated: false,
         errorMessage: "",
         returnUrl: "",
+        newUserEmail: "",
     }),
     getters: {},
     actions: {
@@ -45,6 +46,9 @@ export const useAuthentication = defineStore({
             this.tokenInfo = null;
             this.isAuthenticated = false;
             TokenService.destroyToken();
+        },
+        setNewUserEmail(payload) {
+            this.newUserEmail = payload;
         }
     },
     persist: true

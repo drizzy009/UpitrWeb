@@ -33,6 +33,7 @@ import SkeletonLoading from './components/layout/SkeletonLoading.vue';
 import CoreService from  './service/core.service';
 // import TokenService from './service/token.service';
 import { useAppStore } from './stores/app';
+import { useAuthentication } from './stores/authentication';
 
 import 'floating-vue/dist/style.css'
 import 'vue-rate/dist/vue-rate.css';
@@ -97,9 +98,21 @@ app.component('VTooltip', Tooltip);
 app.directive('debounce', vue3Debounce({ lock: true}));
 app.directive('tooltip', VTooltip);
 const appStore = useAppStore();
+const { loginInfo } = useAuthentication();
 
 router.beforeEach((to) =>
 {
+    if ("permission" in to.meta) {
+        const userPermission = loginInfo.role.permissions.find(permission => permission.name === to.meta.permission);
+        if (userPermission === undefined) {
+            return { name: 'Unauthorise' }
+        }
+    }
+
+    // if (!isAuthenticated) {
+    //     return { name: 'Login' }
+    // }
+
     if (to.meta?.pageTitle) {
         document.title = to.meta?.pageTitle;
         appStore.setPageTitle(to.meta?.pageTitle);

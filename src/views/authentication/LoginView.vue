@@ -105,7 +105,6 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-// import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
@@ -126,8 +125,7 @@ const rules = {
 
 const toast = useToast();
 const router = useRouter();
-// const { error, successful, authenticating, errorMessage } = storeToRefs(useAuthentication());
-const { setLoginInfo } = useAuthentication();
+const { setLoginInfo, setNewUserEmail } = useAuthentication();
 const v$ = useVuelidate(rules, loginDetail);
 
 const error = ref(false);
@@ -159,13 +157,14 @@ async function onLogin() {
   const valid = await v$.value.$validate();
   if (valid) {
     AuthService.signIn(loginDetail.value)
-      .then((result) => {
-        const { data } = result.data;
-        setLoginInfo(data);
-        if (data.first_login) {
-          router.push({ name: "SetPassword", query: { email: data.user.email } });
+      .then((response) => {
+        if (response.status === 202) {
+          setNewUserEmail(loginDetail.value.email);
+          router.push({ name: "SetPassword" });
           return;
         }
+        const { data } = response.data;
+        setLoginInfo(data);
         successful.value = true;
       })
       .catch((errorData) => {

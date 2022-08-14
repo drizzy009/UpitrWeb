@@ -39,8 +39,9 @@
           </div>
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <IconButton
-              v-tooltip="'Click here to add new vacancy'"
               type="button"
+              v-if="canCreate"
+              v-tooltip="'Click here to add new vacancy'"
               @click="goto('CreateVacancy')"
               class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
             >
@@ -241,7 +242,7 @@
                         class="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                       >
                         <div class="py-1">
-                          <MenuItem v-slot="{ active }">
+                          <MenuItem v-if="canEdit" v-slot="{ active }">
                             <a
                               :href="`edit/${vacancy.id}`"
                               :class="[
@@ -258,7 +259,7 @@
                               Edit
                             </a>
                           </MenuItem>
-                          <MenuItem v-slot="{ active }">
+                          <MenuItem v-if="canView" v-slot="{ active }">
                             <a
                               :href="`detail/${vacancy.id}`"
                               :class="[
@@ -276,7 +277,7 @@
                             </a>
                           </MenuItem>
                         </div>
-                        <div class="py-1">
+                        <div v-if="canDelete" class="py-1">
                           <MenuItem v-slot="{ active }">
                             <a
                               @click="deleteVacancy(vacancy.id)"
@@ -501,10 +502,12 @@ import {
 import { XIcon } from "@heroicons/vue/outline";
 import { GetUnixTime, FormatDate, ConvertDateToDays } from "../../util/Formatter";
 import { useDepartments } from "../../stores/department";
+import { useAuthentication } from "../../stores/authentication";
 import VacancyService from "../../service/vacancies.service";
 
 const departmentStore = useDepartments();
 const { departments } = departmentStore;
+const { loginInfo } = useAuthentication()
 
 const open = ref(false);
 const loading = ref(false);
@@ -514,7 +517,18 @@ const departmentList = ref([]);
 const toast = useToast();
 const router = useRouter();
 const swal = inject('$swal');
+const canView = ref(false);
+const canEdit = ref(false);
+const canCreate = ref(false);
+const canDelete = ref(false);
 const $loading = inject("$loading");
+
+const vacancyPermission = {
+  Create: "create_vacancies",
+  Edit: "update_vacancies",
+  View: "view_vacancies",
+  Delete: "delete_vacancies"
+}
 
 const serverResponse = ref({
   to: 0,
@@ -693,7 +707,20 @@ function deleteVacancy(id) {
   });
 }
 
+function checkPermission() {
+  const view = loginInfo.role.permissions.find(p => p.name === vacancyPermission.View);
+  const edit = loginInfo.role.permissions.find(p => p.name === vacancyPermission.Edit);
+  const create = loginInfo.role.permissions.find(p => p.name === vacancyPermission.Create);
+  const deleteVacancy = loginInfo.role.permissions.find(p => p.name === vacancyPermission.Delete);
+
+  canView.value = view !== undefined;
+  canEdit.value = edit !== undefined;
+  canCreate.value = create !== undefined;
+  canDelete.value = deleteVacancy !== undefined;
+}
+
 onMounted(() => {
+  checkPermission();
   departmentList.value = departments.data;
   fetchVacancies();
 });
