@@ -18,6 +18,22 @@ const UserService = {
         });
     });
   },
+  getUserTypes() {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/${basePath}/user-types`)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          } else {
+            reject(new Error(error));
+          }
+        });
+    });
+  },
   getRegions(id) {
     return new Promise((resolve, reject) => {
       axios

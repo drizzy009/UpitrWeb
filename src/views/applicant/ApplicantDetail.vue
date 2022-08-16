@@ -51,7 +51,7 @@
           <CalendarIcon class="w-5 h-5 mr-2 -ml-1"></CalendarIcon>
           Schedule Interview
         </IconButton>
-        <Listbox as="div" v-model="selected">
+        <Listbox v-if="canUpdateApplicant" as="div" v-model="selected">
           <ListboxLabel class="sr-only"> Change candidate status </ListboxLabel>
           <div class="relative">
             <div
@@ -145,7 +145,7 @@
                   'ring-white',
                   selected
                     ? 'bg-indigo-200'
-                    : 'text-white hover:bg-indigo/[0.12] hover:text-indigo-700',
+                    : 'hover:bg-indigo/[0.12] hover:text-indigo-700',
                   tab.disabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 ]"
               >
@@ -467,6 +467,7 @@ import {
 } from "@headlessui/vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { useVacancies } from "../../stores/vacancies";
+import { useAuthentication } from "../../stores/authentication";
 import CandidateLoading from "../../components/layout/CandidateDetailSkeleton.vue";
 import ApplicantService from "../../service/applicant.service";
 import InterviewService from "../../service/interview.service";
@@ -488,7 +489,10 @@ const props = defineProps({
 
 const toast = useToast();
 const swal = inject("$swal");
+const { loginInfo } = useAuthentication();
 const { workflowStages, selectedVacancy } = useVacancies();
+
+const canUpdateApplicant = ref(false);
 
 const totalScore = ref(0);
 const selectedTab = ref(0);
@@ -666,7 +670,14 @@ function getCandidateAssessments(id) {
   });
 }
 
+function checkPermission() {
+  const updateApplicant = loginInfo.role.permissions.find(p => p.name === "update_applicants");
+
+  canUpdateApplicant.value = updateApplicant !== undefined;
+}
+
 onMounted(() => {
+  checkPermission();
   if (props.id !== undefined) {
     getApplicantData();
   }

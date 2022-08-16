@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="flex mt-5 xl:mt-0 xl:ml-4">
-          <span class="hidden ml-3 sm:block">
+          <span v-if="canViewApplicantsList" class="hidden ml-3 sm:block">
             <button
               type="button"
               v-tooltip="'View all applicants'"
@@ -67,7 +67,7 @@
             </button>
           </span>
 
-          <div class="relative z-0 sm:ml-3">
+          <div v-if="canPublishVacancy" class="relative z-0 sm:ml-3">
             <IconButton
               type="submit"
               @click="publishVacancy"
@@ -198,7 +198,7 @@
                 </div>
               </div>
 
-              <CandidateView :interview-id="interviewId" :is-applicant="true" v-if="serverResponse.data.length > 0" :serverData="serverResponse"></CandidateView>
+              <CandidateView :canViewDetail="canViewApplicant" :interview-id="interviewId" :is-applicant="true" v-if="serverResponse.data.length > 0" :serverData="serverResponse"></CandidateView>
               <div v-if="loadingCandidates" class="px-4 py-2 mx-auto max-w-9xl sm:px-6 lg:px-8">
                 <SkeletonLoading></SkeletonLoading>
               </div>
@@ -293,6 +293,7 @@ import {
 } from "@heroicons/vue/solid";
 import CandidateView from "./CandidateView.vue";
 import { useVacancies } from "../../stores/vacancies";
+import { useAuthentication } from "../../stores/authentication";
 import VacancyService from "../../service/vacancies.service";
 import { FormatMoney, FormatShortDate } from "../../util/Formatter";
 // import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
@@ -301,18 +302,29 @@ const props = defineProps({
   id: Number
 });
 
+const router = useRouter();
 const vacancyStore = useVacancies();
+const { loginInfo } = useAuthentication();
+
+const canViewApplicant = ref(false);
+const canViewApplicantsList = ref(false);
+const canPublishVacancy = ref(false);
 
 var tabIndex = ref(0);
 const vacancyId = ref(0);
 const loading = ref(false);
-const loadingCandidates = ref(false);
-const router = useRouter();
 const published = ref(false);
 const processing = ref(false);
+const loadingCandidates = ref(false);
 const vacancyDetail = ref(null);
 const remoteOffice = ref("On-site");
 const interviewId = ref();
+
+const vacancyPermission = {
+  Edit: "update_vacancies",
+  ListApplicants: "list_applicants",
+  ViewApplicants: "view_applicants"
+}
 
 const serverResponse = ref({
   to: 0,
@@ -437,7 +449,18 @@ function convertToMoney(value) {
   return FormatMoney(value);
 }
 
+function checkPermission() {
+  const applicantsList = loginInfo.role.permissions.find(p => p.name === vacancyPermission.ListApplicants);
+  const publish = loginInfo.role.permissions.find(p => p.name === vacancyPermission.Edit);
+  const viewApplicant = loginInfo.role.permissions.find(p => p.name === vacancyPermission.ViewApplicants);
+
+  canViewApplicantsList.value = applicantsList !== undefined;
+  canViewApplicant.value = viewApplicant !== undefined;
+  canPublishVacancy.value = publish !== undefined;
+}
+
 onMounted(() => {
+  checkPermission();
   if (props.id !== undefined) {
     vacancyId.value = props.id;
     getVacancyDetail(vacancyId.value);

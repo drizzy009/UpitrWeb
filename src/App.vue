@@ -18,6 +18,7 @@ const departmentStore = useDepartments();
 const { isAuthenticated } = storeToRefs(useAuthentication());
 
 function fetchRequiredData () {
+    miscStore.fetchUserTypes();
     miscStore.fetchCountries();
     miscStore.fetchCurrencies();
     miscStore.fetchIndustries();

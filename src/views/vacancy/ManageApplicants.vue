@@ -32,7 +32,6 @@
           <IconButton
             label="Advanced Filter"
             @click="openFilter = true"
-            class="text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
           >
             <FilterIcon
               class="flex-shrink-0 w-5 h-5 text-indigo"
@@ -44,7 +43,7 @@
             type="button"
             v-tooltip="'Download to excel'"
             @click="downloadApplicants"
-            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
+            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded"
           >
             <DownloadIcon
               class="flex-shrink-0 w-5 h-5 text-indigo"

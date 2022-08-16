@@ -72,7 +72,7 @@
               >
                 <div class="px-2 space-y-1">
                   <router-link
-                    v-for="item in navigation"
+                    v-for="item in userNavigation"
                     :key="item.name"
                     :to="item.href"
                     :class="[
@@ -94,7 +94,7 @@
                 <div class="pt-6 mt-6">
                   <div class="px-2 space-y-1">
                     <router-link
-                      v-for="item in secondaryNavigation"
+                      v-for="item in userSecondaryNavigation"
                       :key="item.name"
                       :to="item.href"
                       class="flex items-center px-2 py-2 text-base font-medium text-indigo-100 rounded-md group hover:text-white hover:bg-indigo-600"
@@ -145,7 +145,7 @@
         >
           <div class="px-2 space-y-1">
             <router-link
-              v-for="item in navigation"
+              v-for="item in userNavigation"
               :key="item.name"
               :to="item.href"
               :class="[
@@ -167,7 +167,7 @@
           <div class="pt-6 mt-6">
             <div class="px-2 space-y-1">
               <router-link
-                v-for="item in secondaryNavigation"
+                v-for="item in userSecondaryNavigation"
                 :key="item.name"
                 :to="item.href"
                 class="flex items-center px-2 py-2 text-sm font-medium leading-6 text-indigo-100 rounded-md group hover:text-white hover:bg-indigo-600"
@@ -351,45 +351,51 @@ const router = useRouter();
 const authStore = useAuthentication();
 const { loginInfo } = storeToRefs(useAuthentication());
 
-const navigation = [
+const userNavigation = ref([]);
+const navigation = ref([
   {
     name: "Home",
     tag: "Dashboard",
     href: "/dashboard",
     icon: HomeIcon,
+    permission: '',
   },
   {
     name: "Vacancies",
     tag: "ManageVacancies",
     href: "/vacancy/all",
     icon: BriefcaseIcon,
+    permission: 'list_vacancies',
   },
   {
     name: "Candidates",
     tag: "ManageCandidates",
     href: "/candidate/all",
     icon: UserGroupIcon,
+    permission: 'list_applicants',
   },
   {
     name: "Activities",
     tag: "ManageActivities",
     href: "/activity/all",
     icon: ClockIcon,
+    permission: '',
   },
   {
     name: "Departments",
     tag: "ManageDepartments",
     href: "/department/all",
     icon: OfficeBuildingIcon,
+    permission: 'list_departments',
   },
-];
+]);
 
-const secondaryNavigation = [
-  { name: "Settings", href: "/settings", icon: CogIcon },
-  { name: "Roles", href: "/role", icon: UserIcon },
-  { name: "Users", href: "/user", icon: UsersIcon },
-  // { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
-];
+const userSecondaryNavigation = ref([]);
+const secondaryNavigation = ref([
+  { name: "Settings", href: "/settings", icon: CogIcon, permission: '' },
+  { name: "Roles", href: "/role", icon: UserIcon, permission: 'list_roles' },
+  { name: "Users", href: "/user", icon: UsersIcon, permission: 'list_users' },
+]);
 
 const appStore = useAppStore();
 const sidebarOpen = ref(false);
@@ -399,8 +405,27 @@ function onLogout() {
   router.push({ name: 'Login' });
 }
 
+function checkPermission() {
+  const newNavigation = navigation.value.map(item => {
+    if (item.permission === "") return item;
+
+    const userPermission = loginInfo.value.role.permissions.find(p => p.name === item.permission);
+    if (userPermission !== undefined) return item;
+  })
+    
+  userNavigation.value = newNavigation.filter(item => item !== undefined);
+
+  const newSecondaryNavigation = secondaryNavigation.value.map(item => {
+    if (item.permission === "") return item;
+
+    const userPermission = loginInfo.value.role.permissions.find(p => p.name === item.permission);
+    if (userPermission !== undefined) return item;
+  })
+
+  userSecondaryNavigation.value = newSecondaryNavigation.filter(item => item !== undefined);
+}
+
 onMounted(() => {
-  // console.clear();
-  // console.log(loginInfo.value);
+  checkPermission();
 });
 </script>

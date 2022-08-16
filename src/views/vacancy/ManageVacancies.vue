@@ -43,7 +43,7 @@
               v-if="canCreate"
               v-tooltip="'Click here to add new vacancy'"
               @click="goto('CreateVacancy')"
-              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
+              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded"
             >
               <PlusCircleIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
@@ -56,7 +56,7 @@
               type="button"
               v-tooltip="'Filter with more fields'"
               @click="open = true"
-              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
+              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded"
             >
               <FilterIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
@@ -69,7 +69,7 @@
               type="button"
               v-tooltip="'Download to excel'"
               @click="downloadVacancies"
-              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-200 hover:bg-indigo-200"
+              class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded"
             >
               <DownloadIcon
                 class="flex-shrink-0 w-5 h-5 text-indigo"
@@ -507,7 +507,7 @@ import VacancyService from "../../service/vacancies.service";
 
 const departmentStore = useDepartments();
 const { departments } = departmentStore;
-const { loginInfo } = useAuthentication()
+const { loginInfo } = useAuthentication();
 
 const open = ref(false);
 const loading = ref(false);

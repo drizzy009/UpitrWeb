@@ -73,13 +73,13 @@
             </div>
           </div>
           <div>
-            <a v-if="!isApplicant" v-tooltip="'View candidate\'s detail'" :href="`/candidate/detail/${person.candidate.id}`">
+            <a v-if="!isApplicant && canViewDetail" v-tooltip="'View candidate\'s detail'" :href="`/candidate/detail/${person.candidate.id}`">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
               />
             </a>
-            <a v-if="isApplicant" v-tooltip="'View applicant\'s detail'" class="cursor-pointer" @click="gotoDetailPage(person.id)">
+            <a v-if="isApplicant && canViewDetail" v-tooltip="'View applicant\'s detail'" class="cursor-pointer" @click="gotoDetailPage(person.id)">
               <ChevronRightIcon
                 class="w-5 h-5 text-gray-400 group-hover:text-gray-700"
                 aria-hidden="true"
@@ -103,8 +103,9 @@ import { useRouter } from "vue-router";
 import { FormatAge, FormatLongDate2 } from '../../util/Formatter';
 const props = defineProps({
   serverData: Object,
+  interviewId: String,
   isApplicant: Boolean,
-  interviewId: String
+  canViewDetail: Boolean,
 });
 
 const router = useRouter();
