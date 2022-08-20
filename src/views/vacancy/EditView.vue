@@ -122,7 +122,6 @@
                         >
                         <FormInput
                           v-model="jobDetail.title"
-                          :error="v$.title.$error"
                           id="title"
                         ></FormInput>
                         <!-- <input
@@ -157,7 +156,6 @@
                         >
                         <FormInput
                           v-model="jobDetail.code"
-                          :error="v$.code.$error"
                           id="code"
                         ></FormInput>
                       </div>
@@ -202,16 +200,8 @@
                           v-model="jobDetail.country_id"
                           :options="countries"
                           placeholder="Select a country"
-                          @change="onCountryChanged"
                         >
                         </MultiSelect>
-                        <!-- <SelectInput
-                          placeholder="Select Country"
-                          v-model="jobDetail.country_id"
-                          :items="countryList"
-                          id="country"
-                          @change="onCountryChanged"
-                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
@@ -572,7 +562,6 @@
                           >Head Count</label
                         >
                         <NumberInput
-                          type="number"
                           name="headcount"
                           id="headcount"
                           v-model="jobDetail.head_count"
@@ -612,7 +601,6 @@
                           >Minimum Offer</label
                         >
                         <NumberInput
-                          type="number"
                           name="min-offer"
                           id="min-offer"
                           v-model="jobDetail.salary_min"
@@ -627,7 +615,6 @@
                           >Maximum Offer</label
                         >
                         <NumberInput
-                          type="number"
                           name="max-offer"
                           id="max-offer"
                           v-model="jobDetail.salary_max"
@@ -691,7 +678,6 @@
                           >Deadline</label
                         >
                         <DateInput
-                          type="date"
                           name="deadline"
                           id="deadline"
                           v-model="jobDetail.deadline"
@@ -766,11 +752,9 @@ import VacancyService from "../../service/vacancies.service";
 import { FormatDate } from "../../util/Formatter";
 
 const props = defineProps({
-  id: Number
+  id: String
 });
 
-// const appStore = useAppStore();
-// const { pageTitle } = storeToRefs(useAppStore());
 const { departments } = storeToRefs(useDepartments());
 const {
   countries,
@@ -784,7 +768,6 @@ const {
 
 const swal = inject("$swal");
 const $loading = inject("$loading");
-
 
 const vacancySettings = ref(null);
 const settingsId = ref(0);
@@ -806,14 +789,14 @@ const jobDetail = ref({
   experience_level_id: "",
   education_level_id: "",
   salary_currency_id: "",
-  deadline: "",
+  deadline: new Date(),
   zip_code: "",
   location: "",
   industry_id: "",
   keywords: [],
-  salary_min: "",
-  salary_max: "",
-  head_count: "",
+  salary_min: 0,
+  salary_max: 0,
+  head_count: 0,
 });
 
 const benefit = ref(null);
@@ -954,9 +937,9 @@ onMounted(() => {
     jobDetail.value.title = data.title;
     jobDetail.value.location = data.location;
     jobDetail.value.keywords = data.keywords.split(',');
-    jobDetail.value.head_count = data.head_count;
-    jobDetail.value.salary_min = data.salary_min;
-    jobDetail.value.salary_max = data.salary_max;
+    jobDetail.value.head_count = Number(data.head_count);
+    jobDetail.value.salary_min = Number(data.salary_min);
+    jobDetail.value.salary_max = Number(data.salary_max);
     jobKeywords.value = jobDetail.value.keywords;
 
     vacancyId.value = data.id;
@@ -979,7 +962,6 @@ onMounted(() => {
       interviewId.value = data.interviews[0].id;
     }
   }).catch((error) => {
-    console.error(error);
     let errorMessage = "Something went wrong, please try again later";
     if (error.status === 404) {
       errorMessage = "Vacancy information does not exist";

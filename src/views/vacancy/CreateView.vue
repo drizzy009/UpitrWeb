@@ -203,16 +203,8 @@
                           v-model="jobDetail.country_id"
                           :options="countries"
                           placeholder="Select a country"
-                          @change="onCountryChanged"
                         >
                         </MultiSelect>
-                        <!-- <SelectInput
-                          placeholder="Select Country"
-                          v-model="jobDetail.country_id"
-                          :items="countryList"
-                          id="country"
-                          @change="onCountryChanged"
-                        ></SelectInput> -->
                       </div>
 
                       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
@@ -783,9 +775,9 @@ const jobDetail = ref({
   location: "",
   industry_id: "",
   keywords: [],
-  salary_min: "",
-  salary_max: "",
-  head_count: "",
+  salary_min: 0,
+  salary_max: 0,
+  head_count: 0,
 });
 
 const rules = {

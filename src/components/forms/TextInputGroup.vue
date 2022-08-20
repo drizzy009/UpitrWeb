@@ -7,7 +7,7 @@
       <i :class="leadingIcon"></i>
     </span>
     <input
-      v-bind="$attrs"
+      v-bind="attrs"
       class="px-3 py-3 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border border-slate-300 shadow outline-none focus:outline-none focus:ring w-full"
       :class="leadingIcon != null ? 'pl-10' : '' + ' ' + trailingIcon != null ? 'pr-10' : ''"
     />
@@ -20,6 +20,10 @@
   </div>
 </template>
 <script setup>
+import { useAttrs } from "vue";
+
+const attrs = useAttrs();
+
 defineProps({
   leadingIcon: String,
   trailingIcon: String,

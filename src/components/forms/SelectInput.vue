@@ -1,6 +1,6 @@
 <template>
   <div class="mt-1 relative rounded-md shadow-sm">
-    <select v-bind="$attr" :v-model="modelValue" @change="$emit('update:modelValue', $event.target.value)"
+    <select v-bind="attrs" :v-model="modelValue" @change="$emit('update:modelValue', $event.target.value)"
       class="select-input" :class="[!error ? 'select-input' : 'select-input-error']">
       <option value="-1">
         {{ placeholder }}
@@ -16,11 +16,21 @@
 </template>
 
 <script setup>
+import { useAttrs } from "vue";
+
+const attrs = useAttrs();
 defineProps({
   items: Array,
   modelValue: [String, Number],
-  error: Boolean,
-  placeholder: String
+  error: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  placeholder: {
+    type: String,
+    required: false
+  }
 })
 </script>
 
